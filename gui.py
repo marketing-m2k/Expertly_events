@@ -19,8 +19,9 @@ import main as scraper_main
 PROGRESS_PATH = scraper_main.PROGRESS_PATH
 STOP_FLAG_PATH = scraper_main.STOP_FLAG_PATH
 
-SOURCE = "Tax_Legal_Finance_Events_Master.xlsx"
-OUTPUT = "output/Events.xlsx"
+SOURCE = "Sources/Event_scrapper_-_Website_completed.xlsx"
+SOURCE_SHEET = "India"
+OUTPUT = "output/raw/Events.xlsx"
 SHEET = "Events"
 FAILURES_LOG = "output/failures.csv"
 ENGINE = "free"
@@ -100,7 +101,8 @@ class ScraperGUI:
         self.msg_label.config(text="starting...")
 
         def work():
-            scraper_main.run(SOURCE, OUTPUT, SHEET, 0, 0, FAILURES_LOG, ENGINE, resume=True)
+            scraper_main.run(SOURCE, OUTPUT, SHEET, 0, 0, FAILURES_LOG, ENGINE, resume=True,
+                              source_sheet=SOURCE_SHEET)
 
         self.worker_thread = threading.Thread(target=work, daemon=True)
         self.worker_thread.start()

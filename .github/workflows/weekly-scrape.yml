@@ -46,23 +46,26 @@ jobs:
         run: python scheduled_run.py
 
       - name: Commit updated output files
+        # Glob patterns, not per-country filenames -- adding a country to
+        # weekly_full_run.py's COUNTRIES list needs no change here, its
+        # output/raw/<Country>.xlsx and output/<Country>_2026.xlsx get
+        # picked up automatically. failures*.csv is deliberately excluded
+        # from the commit (see .gitignore) -- it's attached as a run
+        # artifact below instead, so it doesn't add a repo commit weekly.
         run: |
           git config user.name "expertly-scraper-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add output/Events.xlsx output/Events_USA.xlsx \
-                  output/Events_2026.xlsx output/Events_USA_2026.xlsx \
-                  output/weekly_summary.json output/progress.json \
-                  output/failures.csv output/failures_USA.csv
+          git add output/raw/*.xlsx output/*_2026.xlsx \
+                  output/weekly_summary.json output/progress.json
           git diff --staged --quiet || git commit -m "Weekly scrape: $(date -u +'%Y-%m-%d')"
           git push
 
-      - name: Upload run logs as an artifact
+      - name: Upload run diagnostics as an artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: weekly-run-output
           path: |
-            output/failures.csv
-            output/failures_USA.csv
+            output/failures*.csv
             output/weekly_summary.json
           retention-days: 30

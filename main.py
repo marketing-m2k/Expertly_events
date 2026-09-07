@@ -1,10 +1,12 @@
 """Scrape events from every organization's events page and write them to Excel.
 
 Usage:
-    python main.py --source "../Tax_Legal_Finance_Events_Master_100_Organizations.xlsx" ^
-                    --output "output/Events.xlsx" --limit 5 --engine free
+    python main.py --source-sheet India --output "output/raw/Events.xlsx" --limit 5 --engine free
 
     python main.py --resume   # picks up wherever the last run stopped
+
+For a full weekly re-scrape of both India and USA plus cleaning/classification,
+use weekly_full_run.py instead of calling this directly.
 """
 
 import argparse
@@ -325,7 +327,7 @@ if __name__ == "__main__":
     parser.add_argument("--source-sheet", default=None,
                          help="tab to read organizations from in --source (e.g. 'India' or 'USA'). "
                               "Defaults to --sheet if not given.")
-    parser.add_argument("--output", default="output/Events.xlsx")
+    parser.add_argument("--output", default="output/raw/Events.xlsx")
     parser.add_argument("--sheet", default="Events",
                          help="tab name to write raw scraped events into, in --output")
     parser.add_argument("--limit", type=int, default=0, help="0 = no limit, process all organizations")

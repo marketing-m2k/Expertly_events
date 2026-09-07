@@ -5,15 +5,18 @@ server.log
 
 # output/ holds the persisted scrape results -- these ARE committed by the
 # weekly GitHub Actions workflow so each run can reconcile against last
-# week's data (e.g. fill in a date that was previously missing). Only
-# genuinely disposable/regeneratable files under output/ stay ignored.
+# week's data (e.g. fill in a date that was previously missing). Patterns
+# (not per-country filenames) so adding a new country to weekly_full_run.py's
+# COUNTRIES list needs no .gitignore change: output/raw/<Country>.xlsx and
+# output/<Country>_2026.xlsx are picked up automatically.
+# Per-run diagnostics (failures*.csv) are deliberately NOT whitelisted here --
+# they're still generated during each run and used for the digest, and the
+# workflow uploads them as a run artifact, but they don't need to clutter
+# the repo with a commit every week.
 output/*
-!output/Events.xlsx
-!output/Events_USA.xlsx
-!output/Events_2026.xlsx
-!output/Events_USA_2026.xlsx
+!output/raw/
+!output/raw/*.xlsx
+!output/*_2026.xlsx
 !output/weekly_summary.json
 !output/progress.json
-!output/failures.csv
-!output/failures_USA.csv
 !output/dashboard.html
