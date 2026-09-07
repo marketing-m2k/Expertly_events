@@ -46,6 +46,16 @@ JUNK_TITLES = {
 JUNK_SUBSTRINGS = ("check eligibility", "login with", "secure your room at special rates")
 
 
+def _s(value) -> str:
+    """Coerce any cell value to a string. openpyxl hands back whatever type
+    Excel inferred for a cell -- a bare year typed into a Date column (e.g.
+    "2026") gets auto-converted to an int, which would otherwise crash the
+    string-only parsing/filtering below."""
+    if value is None:
+        return ""
+    return str(value)
+
+
 def _is_junk_title(name: str) -> bool:
     n = (name or "").strip().lower()
     if not n:
@@ -80,12 +90,12 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         return sum(1 for v in row if v)
 
     for row in ws_in.iter_rows(min_row=2, values_only=True):
-        if not row or not (row[idx["Event Name"]] or "").strip():
+        if not row or not _s(row[idx["Event Name"]]).strip():
             continue
-        date_raw = row[idx["Date"]] or ""
-        name = row[idx["Event Name"]] or ""
-        organizer = row[idx["Organizer"]] or ""
-        category = (row[idx["Category"]] or "").strip()
+        date_raw = _s(row[idx["Date"]])
+        name = _s(row[idx["Event Name"]])
+        organizer = _s(row[idx["Organizer"]])
+        category = _s(row[idx["Category"]]).strip()
         fmt = row[idx.get("Format", -1)] if "Format" in idx else None
         location = row[idx.get("Location", -1)] if "Location" in idx else None
         description = row[idx.get("Description", -1)] if "Description" in idx else None
@@ -130,7 +140,7 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
             is_relevant = any(kw in category.lower() for kw in RELEVANCE_KEYWORDS)
         else:
             # no category tag at all -- fall back to judging the event itself
-            haystack = f"{name} {description or ''}".lower()
+            haystack = f"{name} {_s(description)}".lower()
             is_relevant = any(kw in haystack for kw in RELEVANCE_KEYWORDS)
 
         if not is_relevant or _is_junk_title(name):
