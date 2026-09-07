@@ -16,6 +16,7 @@ from datetime import datetime
 
 import openpyxl
 
+from scraper import manual_overrides
 from scraper.date_utils import has_day_precision, parse_event_date, parse_event_date_range
 from scraper.excel_writer import FINAL_COLUMNS, format_sheet
 
@@ -77,6 +78,7 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
     today = datetime.now()
     events, past_events, flagged, incomplete = [], [], [], []
     orgs_seen = set()
+    overrides = manual_overrides.load()
 
     # The same event is often pulled from two different sub-pages of the same
     # institution (e.g. ICAI's CPE Directorate page and its Research
@@ -134,6 +136,17 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
 
     for out_row in dedup_rows.values():
         name = out_row[3] or ""
+
+        # a human previously reviewed this exact event (by name) in the
+        # Incomplete sheet, filled in the real date by hand, and typed
+        # "Verified" -- trust that corrected row wholesale instead of
+        # whatever this week's live scrape re-derived for it, so the
+        # manual fix survives every future automated re-scrape.
+        override = manual_overrides.get(overrides, label, name)
+        if override:
+            out_row = list(override["row"])
+            name = out_row[3] or ""
+
         category = out_row[5] or ""
         description = out_row[8]
         date_display = out_row[0] or ""

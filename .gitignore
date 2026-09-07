@@ -17,6 +17,8 @@ output/*
 !output/raw/
 !output/raw/*.xlsx
 !output/*_2026.xlsx
+!output/Master.xlsx
+!output/manual_verifications.json
 !output/weekly_summary.json
 !output/progress.json
 !output/dashboard.html
