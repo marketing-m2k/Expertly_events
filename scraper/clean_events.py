@@ -16,8 +16,8 @@ from datetime import datetime
 
 import openpyxl
 
-from scraper.date_utils import has_day_precision, parse_event_date
-from scraper.excel_writer import COLUMNS, format_sheet
+from scraper.date_utils import has_day_precision, parse_event_date, parse_event_date_range
+from scraper.excel_writer import FINAL_COLUMNS, format_sheet
 
 # An event is relevant if its category (or, when category is blank, its
 # name/description) mentions any of these — not an exact-match check, since
@@ -105,12 +105,12 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         orgs_seen.add(organizer)
 
         date_source = date_raw
-        dt = parse_event_date(date_raw, today)
+        dt, end_dt = parse_event_date_range(date_raw, today)
         if dt is None:
             # some sites never put the date in a structured field at all --
             # it's only visible embedded in the title itself, e.g. "56th
             # Annual Spring Symposium, 2026"
-            dt = parse_event_date(name, today)
+            dt, end_dt = parse_event_date_range(name, today)
             date_source = name
         # dateutil's fuzzy parser will happily invent a day for a bare
         # "APR" or "December 2026" by borrowing it from `today` -- that's a
@@ -118,9 +118,14 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         # the source text actually named a day.
         has_real_date = dt is not None and has_day_precision(date_source)
         date_display = dt.strftime("%d-%b-%Y") if has_real_date else date_raw
+        # only a genuine multi-day range gets an End Date -- a one-day event
+        # keeps End Date blank rather than repeating the same date twice.
+        end_date_display = ""
+        if has_real_date and end_dt is not None and end_dt.date() != dt.date():
+            end_date_display = end_dt.strftime("%d-%b-%Y")
 
-        out_row = [date_display, None, name, organizer, category, fmt, location,
-                   description, link, source_url]
+        out_row = [date_display, end_date_display, None, name, organizer, category, fmt,
+                   location, description, link, source_url]
 
         dedup_key = (name.strip().lower(), date_display.strip().lower())
         prior = dedup_rows.get(dedup_key)
@@ -128,9 +133,9 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
             dedup_rows[dedup_key] = out_row
 
     for out_row in dedup_rows.values():
-        name = out_row[2] or ""
-        category = out_row[4] or ""
-        description = out_row[7]
+        name = out_row[3] or ""
+        category = out_row[5] or ""
+        description = out_row[8]
         date_display = out_row[0] or ""
         dt = parse_event_date(date_display, today)
         is_dated = dt is not None and has_day_precision(date_display)
@@ -144,7 +149,7 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
             is_relevant = any(kw in haystack for kw in RELEVANCE_KEYWORDS)
 
         if not is_relevant or _is_junk_title(name):
-            out_row[1] = "Undated" if not is_dated else ("Past" if is_past else "Upcoming")
+            out_row[2] = "Undated" if not is_dated else ("Past" if is_past else "Upcoming")
             flagged.append(out_row)
             continue
 
@@ -152,15 +157,15 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
             # a real, on-topic event whose date is missing or too vague to
             # trust (e.g. "APR" with no day) -- it's verified as relevant,
             # just not complete enough to publish as a firm upcoming event.
-            out_row[1] = "Incomplete"
+            out_row[2] = "Incomplete"
             incomplete.append(out_row)
             continue
 
         if is_past:
-            out_row[1] = "Past"
+            out_row[2] = "Past"
             past_events.append(out_row)
         else:
-            out_row[1] = "Upcoming"
+            out_row[2] = "Upcoming"
             events.append(out_row)
 
     if llm_classify and (events or past_events or incomplete):
@@ -169,15 +174,15 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         candidates = events + past_events + incomplete
         print(f"Classifying {len(candidates)} events with Gemini for actual topical relevance "
               f"(an org's category tag doesn't mean every event it hosts is on-topic)...")
-        payload = [{"name": r[2], "organizer": r[3], "category": r[4], "location": r[6]} for r in candidates]
+        payload = [{"name": r[3], "organizer": r[4], "category": r[5], "location": r[7]} for r in candidates]
         verdicts = classify_all(payload)
         events, past_events, incomplete = [], [], []
         for row, is_relevant in zip(candidates, verdicts):
             if not is_relevant:
                 flagged.append(row)
-            elif row[1] == "Upcoming":
+            elif row[2] == "Upcoming":
                 events.append(row)
-            elif row[1] == "Past":
+            elif row[2] == "Past":
                 past_events.append(row)
             else:
                 incomplete.append(row)
@@ -195,16 +200,16 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
     wb.remove(wb.active)
 
     ws_summary = wb.create_sheet("Summary")
-    orgs_with_upcoming = {r[3] for r in events}
-    orgs_with_past = {r[3] for r in past_events}
+    orgs_with_upcoming = {r[4] for r in events}
+    orgs_with_past = {r[4] for r in past_events}
     total_checked = total_orgs if total_orgs is not None else len(orgs_seen)
     relevant_total = len(events) + len(past_events) + len(incomplete)
 
     org_totals = defaultdict(lambda: [0, 0])
     for r in events:
-        org_totals[r[3]][0] += 1
+        org_totals[r[4]][0] += 1
     for r in past_events:
-        org_totals[r[3]][1] += 1
+        org_totals[r[4]][1] += 1
 
     summary_rows = [
         [f"{label} Tax / Finance / Legal Events — Summary"],
@@ -240,10 +245,10 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         ("Flagged for Review", flagged),
     ):
         ws = wb.create_sheet(name)
-        ws.append(COLUMNS)
+        ws.append(FINAL_COLUMNS)
         for r in rows:
             ws.append(r)
-        format_sheet(ws)
+        format_sheet(ws, FINAL_COLUMNS)
 
     wb.save(output_path)
     print(f"Wrote {output_path}: {len(events)} upcoming verified, {len(incomplete)} upcoming incomplete, "

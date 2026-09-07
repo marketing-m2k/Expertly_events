@@ -31,8 +31,28 @@ COLUMNS = [
     "Source URL",
 ]
 
+# Used for the final cleaned/classified workbooks (clean_events.py) only --
+# the raw scraped workbooks (COLUMNS above) keep whatever single date string
+# was scraped as-is; the End Date split into its own column happens during
+# cleaning, once a date range like "1st to 18th September, 2026" has been
+# resolved into a real start/end pair.
+FINAL_COLUMNS = [
+    "Date",
+    "End Date",
+    "Status",
+    "Event Name",
+    "Organizer",
+    "Category",
+    "Format",
+    "Location",
+    "Description",
+    "Register Link",
+    "Source URL",
+]
+
 _COLUMN_WIDTHS = {
     "Date": 20,
+    "End Date": 20,
     "Status": 11,
     "Event Name": 48,
     "Organizer": 34,
@@ -49,15 +69,17 @@ _HEADER_FONT = Font(color="FFFFFF", bold=True)
 _WRAP_COLS = {"Event Name", "Description"}
 
 
-def format_sheet(ws):
+def format_sheet(ws, columns=None):
     """Apply consistent, readable formatting to a sheet already holding
-    COLUMNS-shaped rows: sized columns, wrapped long-text columns, a bold
-    header row frozen in place, the whole range turned into a filterable/
-    banded Excel Table, and clickable hyperlinks on the two link columns."""
+    columns-shaped rows (defaults to COLUMNS): sized columns, wrapped
+    long-text columns, a bold header row frozen in place, the whole range
+    turned into a filterable/banded Excel Table, and clickable hyperlinks
+    on the two link columns."""
+    columns = columns or COLUMNS
     if ws.max_row < 1:
         return
 
-    for col_idx, name in enumerate(COLUMNS, start=1):
+    for col_idx, name in enumerate(columns, start=1):
         header_cell = ws.cell(row=1, column=col_idx, value=name)
         header_cell.fill = _HEADER_FILL
         header_cell.font = _HEADER_FONT
@@ -66,9 +88,9 @@ def format_sheet(ws):
 
     wrap_alignment = Alignment(wrap_text=True, vertical="top")
     plain_alignment = Alignment(vertical="top")
-    link_col_idx = {name: i + 1 for i, name in enumerate(COLUMNS)}
+    link_col_idx = {name: i + 1 for i, name in enumerate(columns)}
     for row_idx in range(2, ws.max_row + 1):
-        for col_idx, name in enumerate(COLUMNS, start=1):
+        for col_idx, name in enumerate(columns, start=1):
             cell = ws.cell(row=row_idx, column=col_idx)
             cell.alignment = wrap_alignment if name in _WRAP_COLS else plain_alignment
         for col_name in ("Register Link", "Source URL"):
@@ -86,7 +108,7 @@ def format_sheet(ws):
     for name in list(ws.tables.keys()):
         del ws.tables[name]
 
-    last_col_letter = get_column_letter(len(COLUMNS))
+    last_col_letter = get_column_letter(len(columns))
     table_ref = f"A1:{last_col_letter}{ws.max_row}"
     safe_name = "Tbl_" + re.sub(r"\W+", "_", ws.title).strip("_")
     table = Table(displayName=safe_name, ref=table_ref)
