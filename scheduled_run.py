@@ -44,6 +44,7 @@ def build_digest() -> str:
         f"Started:  {summary.get('started_at', 'unknown')}",
         f"Finished: {summary.get('finished_at', 'unknown')}",
         f"Status:   {summary.get('status', 'unknown')}",
+        f"Master.xlsx verified events (all countries): {summary.get('master_verified_total', 'unknown')}",
     ]
 
     for label, counts in summary.get("countries", {}).items():

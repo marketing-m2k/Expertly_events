@@ -135,11 +135,18 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
     for out_row in dedup_rows.values():
         name = out_row[3] or ""
         category = out_row[5] or ""
+        fmt = out_row[6] or ""
+        location = out_row[7]
         description = out_row[8]
         date_display = out_row[0] or ""
         dt = parse_event_date(date_display, today)
         is_dated = dt is not None and has_day_precision(date_display)
         is_past = is_dated and dt.date() < today.date()
+        # a virtual/hybrid event has nowhere to announce -- Location is
+        # legitimately blank there. An In Person event with no venue yet
+        # is the "date and venue not yet announced" case: real, but not
+        # something an attendee could act on yet.
+        missing_venue = _s(fmt).strip().lower() == "in person" and not _s(location).strip()
 
         if category:
             is_relevant = any(kw in category.lower() for kw in RELEVANCE_KEYWORDS)
@@ -153,10 +160,11 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
             flagged.append(out_row)
             continue
 
-        if not is_dated:
-            # a real, on-topic event whose date is missing or too vague to
-            # trust (e.g. "APR" with no day) -- it's verified as relevant,
-            # just not complete enough to publish as a firm upcoming event.
+        if not is_dated or missing_venue:
+            # a real, on-topic event whose date is missing/too vague to
+            # trust (e.g. "APR" with no day), or an in-person event with no
+            # venue announced yet -- it's verified as relevant, just not
+            # complete enough to publish as a firm upcoming event.
             out_row[2] = "Incomplete"
             incomplete.append(out_row)
             continue
@@ -222,7 +230,7 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         [],
         ["Total events on sheet", relevant_total, "Relevant", None, "Irrelevant", len(flagged)],
         ["  – Upcoming events (verified, complete)", len(events)],
-        ["  – Upcoming events (verified, incomplete date)", len(incomplete)],
+        ["  – Upcoming events (verified, incomplete date/venue)", len(incomplete)],
         ["  – Past events (since Jan 2026)", len(past_events)],
         [],
         ["Organizations with Upcoming events", len(orgs_with_upcoming)],
