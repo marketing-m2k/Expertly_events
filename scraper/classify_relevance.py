@@ -14,7 +14,7 @@ import time
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from google.genai.errors import ClientError
+from google.genai.errors import ClientError, ServerError
 
 load_dotenv()
 
@@ -86,7 +86,15 @@ def classify_batch(client: genai.Client, rows: list[dict]) -> list[bool]:
             response = client.models.generate_content(model=MODEL, contents=prompt, config=config)
             break
         except ClientError as exc:
-            if exc.code == 429 and attempt < 3:
+            if exc.code == 429 and attempt < 3:  # rate limit -- back off and retry
+                time.sleep(20)
+                continue
+            raise
+        except ServerError as exc:
+            # transient 5xx (e.g. 503 UNAVAILABLE) -- Gemini's side, not ours;
+            # this runs unattended weekly, so it must ride these out rather
+            # than crashing the whole classification pass over one batch.
+            if attempt < 3:
                 time.sleep(20)
                 continue
             raise
