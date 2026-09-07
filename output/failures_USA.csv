@@ -1,0 +1,30 @@
+organizer,url,error
+Institute for Professionals in Taxation (IPT),https://www.ipt.org/site/content/programs-and-schools/Programs-Calendar.aspx,"Page.goto: Timeout 20000ms exceeded.
+Call log:
+  - navigating to ""https://www.ipt.org/site/content/programs-and-schools/Programs-Calendar.aspx"", waiting until ""commit""
+"
+American Taxpayer Rights Association,NA,"Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to ""NA"", waiting until ""commit""
+"
+National Association of Securities Professionals,Blocked,"Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to ""Blocked"", waiting until ""commit""
+"
+Association of Securities Professionals,Blocked,"Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to ""Blocked"", waiting until ""commit""
+"
+American Financial Exchange,NA,"Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to ""NA"", waiting until ""commit""
+"
+Financial Analysts Federation,NA,"Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to ""NA"", waiting until ""commit""
+"
+California Tax Policy Institute,NA,"Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to ""NA"", waiting until ""commit""
+"
+American Bar Association (ABA),https://www.americanbar.org/events-cle/,"Cloudflare bot-check blocks headless scraping (returns \"Just a moment...\" challenge page on every path tried, incl. connect.americanbar.org/events/calendar which is login-gated anyway) - needs manual follow-up"

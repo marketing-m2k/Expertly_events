@@ -1,5 +1,19 @@
 __pycache__/
 *.pyc
-output/
 server.log
 .env
+
+# output/ holds the persisted scrape results -- these ARE committed by the
+# weekly GitHub Actions workflow so each run can reconcile against last
+# week's data (e.g. fill in a date that was previously missing). Only
+# genuinely disposable/regeneratable files under output/ stay ignored.
+output/*
+!output/Events.xlsx
+!output/Events_USA.xlsx
+!output/Events_2026.xlsx
+!output/Events_USA_2026.xlsx
+!output/weekly_summary.json
+!output/progress.json
+!output/failures.csv
+!output/failures_USA.csv
+!output/dashboard.html

@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Event Scraper — Live Progress</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, Segoe UI, sans-serif; background: #0f1117; color: #e6e6e6; margin: 0; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #999; font-size: 13px; margin-bottom: 20px; }
+  .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+  .card { background: #1a1d29; border: 1px solid #2a2e3d; border-radius: 8px; padding: 14px 16px; }
+  .card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 6px; }
+  .card .value { font-size: 26px; font-weight: 600; }
+  .bar-wrap { background: #1a1d29; border-radius: 6px; height: 10px; overflow: hidden; margin-bottom: 24px; }
+  .bar { background: linear-gradient(90deg, #4f8cff, #7c5cff); height: 100%; width: 0%; transition: width 0.4s ease; }
+  .status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .status.running { background: #1e3a2e; color: #4ade80; }
+  .status.done { background: #2a2540; color: #a78bfa; }
+  .status.stopped { background: #3a2e1e; color: #fbbf24; }
+  .status.idle { background: #333; color: #999; }
+  .current { font-size: 14px; color: #ccc; margin-bottom: 16px; }
+  .current b { color: #fff; }
+  .controls { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; }
+  button { font: inherit; font-weight: 600; font-size: 13px; padding: 9px 20px; border-radius: 6px; border: none; cursor: pointer; }
+  #btn-start { background: #22c55e; color: #06240f; }
+  #btn-start:disabled { background: #244032; color: #4a6b57; cursor: not-allowed; }
+  #btn-stop { background: #ef4444; color: #2a0a0a; }
+  #btn-stop:disabled { background: #402424; color: #6b4a4a; cursor: not-allowed; }
+  .controls-msg { font-size: 12px; color: #888; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #999; margin: 0 0 10px; }
+  .panel { background: #1a1d29; border: 1px solid #2a2e3d; border-radius: 8px; padding: 14px 16px; max-height: 420px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td, th { text-align: left; padding: 4px 6px; border-bottom: 1px solid #262a38; }
+  th { color: #888; font-weight: 500; font-size: 11px; text-transform: uppercase; }
+  .log-line { font-family: ui-monospace, monospace; font-size: 12px; padding: 3px 0; border-bottom: 1px solid #20232f; color: #bbb; }
+  .log-line.fail { color: #f87171; }
+</style>
+</head>
+<body>
+  <h1>Event Scraper <span id="status-badge" class="status idle">idle</span></h1>
+  <div class="sub">Auto-refreshes every 2s · <span id="updated">—</span></div>
+
+  <div class="controls">
+    <button id="btn-start" onclick="startRun()">▶ Start / Resume</button>
+    <button id="btn-stop" onclick="stopRun()">■ Stop</button>
+    <select id="engine-select" style="font:inherit;padding:8px 10px;border-radius:6px;border:1px solid #2a2e3d;background:#1a1d29;color:#e6e6e6;">
+      <option value="free">Free (pattern-matching)</option>
+      <option value="gemini">Gemini (LLM, costs API credits)</option>
+    </select>
+    <span class="controls-msg" id="controls-msg"></span>
+  </div>
+
+  <div class="bar-wrap"><div class="bar" id="bar"></div></div>
+
+  <div class="cards">
+    <div class="card"><div class="label">Progress</div><div class="value" id="progress">0 / 0</div></div>
+    <div class="card"><div class="label">Events Found</div><div class="value" id="found">0</div></div>
+    <div class="card"><div class="label">Events Added</div><div class="value" id="added">0</div></div>
+    <div class="card"><div class="label">Failures</div><div class="value" id="failures">0</div></div>
+    <div class="card"><div class="label">Engine</div><div class="value" id="engine" style="font-size:18px">—</div></div>
+  </div>
+
+  <div class="current">Currently scraping: <b id="current-org">—</b> <span id="current-url" style="color:#777"></span></div>
+
+  <div class="grid2">
+    <div>
+      <h2>Recent Events Found</h2>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Event</th><th>Date</th><th>Org</th></tr></thead>
+          <tbody id="events-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h2>Log</h2>
+      <div class="panel" id="log-panel"></div>
+    </div>
+  </div>
+
+<script>
+async function startRun() {
+  setMsg('starting...');
+  const engine = document.getElementById('engine-select').value;
+  await fetch('/api/start?engine=' + engine, { method: 'POST' });
+  await refreshButtons();
+}
+async function stopRun() {
+  setMsg('stopping after current site...');
+  await fetch('/api/stop', { method: 'POST' });
+  await refreshButtons();
+}
+function setMsg(m) {
+  document.getElementById('controls-msg').textContent = m;
+}
+async function refreshButtons() {
+  try {
+    const res = await fetch('/api/status?_=' + Date.now());
+    const { running } = await res.json();
+    document.getElementById('btn-start').disabled = running;
+    document.getElementById('btn-stop').disabled = !running;
+    setMsg(running ? 'scraper is running' : '');
+  } catch (e) {
+    setMsg('control server not reachable — run server.py, not http.server');
+  }
+}
+
+async function tick() {
+  refreshButtons();
+  try {
+    const res = await fetch('progress.json?_=' + Date.now());
+    if (!res.ok) throw new Error('not found yet');
+    const s = await res.json();
+
+    const badge = document.getElementById('status-badge');
+    badge.textContent = s.status;
+    badge.className = 'status ' + s.status;
+
+    document.getElementById('updated').textContent = 'last update: ' + new Date(s.updated_at).toLocaleTimeString();
+    document.getElementById('progress').textContent = s.processed + ' / ' + s.total_sites;
+    document.getElementById('found').textContent = s.events_found;
+    document.getElementById('added').textContent = s.events_added;
+    document.getElementById('failures').textContent = s.failures;
+    document.getElementById('engine').textContent = s.engine;
+    document.getElementById('current-org').textContent = s.current_organizer || '—';
+    document.getElementById('current-url').textContent = s.current_url || '';
+
+    const pct = s.total_sites ? Math.round(100 * s.processed / s.total_sites) : 0;
+    document.getElementById('bar').style.width = pct + '%';
+
+    const evBody = document.getElementById('events-body');
+    evBody.innerHTML = (s.recent_events || []).map(e =>
+      `<tr><td>${escapeHtml(e.event_name)}</td><td>${escapeHtml(e.date)}</td><td>${escapeHtml(e.organizer)}</td></tr>`
+    ).join('');
+
+    const logPanel = document.getElementById('log-panel');
+    logPanel.innerHTML = (s.recent_log || []).map(l =>
+      `<div class="log-line ${l.includes('FAILED') ? 'fail' : ''}">${escapeHtml(l)}</div>`
+    ).join('');
+  } catch (e) {
+    document.getElementById('status-badge').textContent = 'waiting for run to start...';
+  }
+}
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+tick();
+setInterval(tick, 2000);
+</script>
+</body>
+</html>

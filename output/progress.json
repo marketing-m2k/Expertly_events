@@ -1,0 +1,17 @@
+{
+  "status": "done",
+  "engine": "free",
+  "total_sites": 216,
+  "processed": 216,
+  "current_organizer": "American Bar Association (ABA)",
+  "current_url": "",
+  "events_found": 0,
+  "events_added": 0,
+  "links_fixed": 0,
+  "failures": 0,
+  "recent_events": [],
+  "recent_log": [
+    "[216/216] American Bar Association (ABA): found 0, added 0"
+  ],
+  "updated_at": "2026-08-31T11:59:18.115950+00:00"
+}

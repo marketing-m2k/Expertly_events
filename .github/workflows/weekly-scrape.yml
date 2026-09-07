@@ -1,0 +1,68 @@
+name: Weekly event scrape
+
+on:
+  schedule:
+    # Every Monday at 03:00 UTC. GitHub Actions cron can run several
+    # minutes late under load -- that's fine for a weekly job.
+    - cron: "0 3 * * 1"
+  workflow_dispatch: {} # lets you trigger a run by hand from the Actions tab
+
+# Only one scrape at a time -- a second run writing to the same output/
+# files concurrently would race the first (same reason main.py refuses to
+# start a second local run).
+concurrency:
+  group: weekly-scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: write # needed to commit the updated output/ files back
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300 # a full ~440-org re-scrape with real page loads takes a while
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright's Chromium
+        run: playwright install --with-deps chromium
+
+      - name: Run weekly scrape + clean
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          DIGEST_TO: ${{ secrets.DIGEST_TO }}
+          DIGEST_FROM: ${{ secrets.DIGEST_FROM }}
+        run: python scheduled_run.py
+
+      - name: Commit updated output files
+        run: |
+          git config user.name "expertly-scraper-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add output/Events.xlsx output/Events_USA.xlsx \
+                  output/Events_2026.xlsx output/Events_USA_2026.xlsx \
+                  output/weekly_summary.json output/progress.json \
+                  output/failures.csv output/failures_USA.csv
+          git diff --staged --quiet || git commit -m "Weekly scrape: $(date -u +'%Y-%m-%d')"
+          git push
+
+      - name: Upload run logs as an artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-run-output
+          path: |
+            output/failures.csv
+            output/failures_USA.csv
+            output/weekly_summary.json
+          retention-days: 30
