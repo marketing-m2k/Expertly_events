@@ -160,9 +160,14 @@ def parse_event_date_range(raw: str, today: datetime | None = None) -> tuple[dat
     "1st to 18th September, 2026" -> (1-Sep-2026, 18-Sep-2026). The end
     date is None for a single-day event, or when no end could be
     confidently parsed (including when it would fall before the start --
-    a sign `raw` wasn't really a date range after all)."""
+    a sign `raw` wasn't really a date range after all).
+
+    `raw` is usually a string, but callers sometimes hand back whatever an
+    Excel cell held (a bare year like "2026" typed into a Date column gets
+    auto-typed as an int by openpyxl) -- coerce defensively rather than
+    crash on `.strip()`."""
     today = today or datetime.now()
-    text = (raw or "").strip()
+    text = str(raw).strip() if raw is not None else ""
     if not text:
         return None, None
 
@@ -206,14 +211,19 @@ _DAY_NUMBER = re.compile(r"\b\d{1,2}(?:st|nd|rd|th)?\b")
 _FULL_NUMERIC = re.compile(r"\d{1,2}[/\-.]\d{1,2}[/\-.]\d{2,4}")
 
 
-def has_day_precision(raw: str) -> bool:
+def has_day_precision(raw) -> bool:
     """True only if the text names an actual day-of-month, not just a bare
     month/year (e.g. "APR", "Q3 2026", "December 2026"). dateutil's fuzzy
     parser will happily fill in a missing day from `today`/`default`, which
     silently manufactures a plausible-looking but fabricated date — this
     catches that case so it can be routed to the Incomplete sheet instead of
-    trusted as a real event date."""
-    text = (raw or "").strip()
+    trusted as a real event date.
+
+    `raw` is usually a string, but callers sometimes hand back whatever an
+    Excel cell held (a bare year like "2026" typed into a Date column gets
+    auto-typed as an int by openpyxl) -- coerce defensively rather than
+    crash on `.strip()`."""
+    text = str(raw).strip() if raw is not None else ""
     if not text:
         return False
     if _FULL_NUMERIC.search(text):
