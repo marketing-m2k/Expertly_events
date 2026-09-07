@@ -1,0 +1,262 @@
+"""Turn a raw scraped Events workbook (one flat sheet) into the reviewed,
+5-sheet format (Summary / Upcoming - Verified / Upcoming - Incomplete / Past
+events / Flagged for Review): normalized dates, a clean single-category
+filter, junk-title filtering, dedup of the same event scraped under
+different organizer labels, and a per-organizer summary table.
+
+Usage:
+    python -m scraper.clean_events --input output/Events_USA.xlsx \
+        --sheet USA --output output/Events_USA_2026.xlsx --label USA \
+        --total-orgs 215
+"""
+
+import argparse
+from collections import defaultdict
+from datetime import datetime
+
+import openpyxl
+
+from scraper.date_utils import has_day_precision, parse_event_date
+from scraper.excel_writer import COLUMNS, format_sheet
+
+# An event is relevant if its category (or, when category is blank, its
+# name/description) mentions any of these — not an exact-match check, since
+# multi-focus orgs legitimately tag events "Legal / Tax" or "Finance /
+# Accounting" and those are still real tax/finance/legal events, not noise.
+RELEVANCE_KEYWORDS = (
+    "tax", "finance", "financial", "legal", "law", "accounting", "audit",
+    "bank", "securities", "insurance", "compliance", "insolvency", "actuari",
+    "corporate governance", "cpa", "estate planning", "wealth management",
+)
+
+# Exact-match (case-insensitive, trimmed) titles seen across sites that are
+# nav chrome / CTAs / placeholders picked up by the heuristic extractor, not
+# real event names.
+JUNK_TITLES = {
+    "today", "more info", "upcoming events", "register", "register now",
+    "events", "learn more", "learn more.", "google calendar", "conferences",
+    "read more", "read more »", "login with facebook", "yourmembership",
+    "view event", "home", "calendar", "view calendar", "view all events",
+    "see all events", "details", "click here", "subscribe", "download",
+    "sign in", "log in", "view program description",
+    "learn more and secure your room at special rates.",
+    "past events", "events calendar", "contact us", "quick links",
+    "announcements", "empty heading", "no title", "untitled",
+}
+JUNK_SUBSTRINGS = ("check eligibility", "login with", "secure your room at special rates")
+
+
+def _is_junk_title(name: str) -> bool:
+    n = (name or "").strip().lower()
+    if not n:
+        return True
+    if n in JUNK_TITLES:
+        return True
+    if n.isdigit():
+        return True
+    return any(s in n for s in JUNK_SUBSTRINGS)
+
+
+def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs: int | None,
+          llm_classify: bool = True):
+    wb_in = openpyxl.load_workbook(input_path, data_only=True)
+    ws_in = wb_in[sheet] if sheet in wb_in.sheetnames else wb_in[wb_in.sheetnames[0]]
+    header = next(ws_in.iter_rows(min_row=1, max_row=1, values_only=True))
+    idx = {name: i for i, name in enumerate(header)}
+
+    today = datetime.now()
+    events, past_events, flagged, incomplete = [], [], [], []
+    orgs_seen = set()
+
+    # The same event is often pulled from two different sub-pages of the same
+    # institution (e.g. ICAI's CPE Directorate page and its Research
+    # committee page both mention the same webinar), each tagging it with a
+    # different organizer label. Collapse those into one row per (name,
+    # resolved date) instead of listing the event 2-3 times, preferring
+    # whichever duplicate has more fields filled in (description/link).
+    dedup_rows: dict[tuple[str, str], tuple] = {}
+
+    def _fullness(row) -> int:
+        return sum(1 for v in row if v)
+
+    for row in ws_in.iter_rows(min_row=2, values_only=True):
+        if not row or not (row[idx["Event Name"]] or "").strip():
+            continue
+        date_raw = row[idx["Date"]] or ""
+        name = row[idx["Event Name"]] or ""
+        organizer = row[idx["Organizer"]] or ""
+        category = (row[idx["Category"]] or "").strip()
+        fmt = row[idx.get("Format", -1)] if "Format" in idx else None
+        location = row[idx.get("Location", -1)] if "Location" in idx else None
+        description = row[idx.get("Description", -1)] if "Description" in idx else None
+        link = row[idx.get("Register Link", -1)] if "Register Link" in idx else None
+        source_url = row[idx.get("Source URL", -1)] if "Source URL" in idx else None
+
+        orgs_seen.add(organizer)
+
+        date_source = date_raw
+        dt = parse_event_date(date_raw, today)
+        if dt is None:
+            # some sites never put the date in a structured field at all --
+            # it's only visible embedded in the title itself, e.g. "56th
+            # Annual Spring Symposium, 2026"
+            dt = parse_event_date(name, today)
+            date_source = name
+        # dateutil's fuzzy parser will happily invent a day for a bare
+        # "APR" or "December 2026" by borrowing it from `today` -- that's a
+        # fabricated date, not a real one, so don't format/trust it unless
+        # the source text actually named a day.
+        has_real_date = dt is not None and has_day_precision(date_source)
+        date_display = dt.strftime("%d-%b-%Y") if has_real_date else date_raw
+
+        out_row = [date_display, None, name, organizer, category, fmt, location,
+                   description, link, source_url]
+
+        dedup_key = (name.strip().lower(), date_display.strip().lower())
+        prior = dedup_rows.get(dedup_key)
+        if prior is None or _fullness(out_row) > _fullness(prior):
+            dedup_rows[dedup_key] = out_row
+
+    for out_row in dedup_rows.values():
+        name = out_row[2] or ""
+        category = out_row[4] or ""
+        description = out_row[7]
+        date_display = out_row[0] or ""
+        dt = parse_event_date(date_display, today)
+        is_dated = dt is not None and has_day_precision(date_display)
+        is_past = is_dated and dt.date() < today.date()
+
+        if category:
+            is_relevant = any(kw in category.lower() for kw in RELEVANCE_KEYWORDS)
+        else:
+            # no category tag at all -- fall back to judging the event itself
+            haystack = f"{name} {description or ''}".lower()
+            is_relevant = any(kw in haystack for kw in RELEVANCE_KEYWORDS)
+
+        if not is_relevant or _is_junk_title(name):
+            out_row[1] = "Undated" if not is_dated else ("Past" if is_past else "Upcoming")
+            flagged.append(out_row)
+            continue
+
+        if not is_dated:
+            # a real, on-topic event whose date is missing or too vague to
+            # trust (e.g. "APR" with no day) -- it's verified as relevant,
+            # just not complete enough to publish as a firm upcoming event.
+            out_row[1] = "Incomplete"
+            incomplete.append(out_row)
+            continue
+
+        if is_past:
+            out_row[1] = "Past"
+            past_events.append(out_row)
+        else:
+            out_row[1] = "Upcoming"
+            events.append(out_row)
+
+    if llm_classify and (events or past_events or incomplete):
+        from scraper.classify_relevance import classify_all
+
+        candidates = events + past_events + incomplete
+        print(f"Classifying {len(candidates)} events with Gemini for actual topical relevance "
+              f"(an org's category tag doesn't mean every event it hosts is on-topic)...")
+        payload = [{"name": r[2], "organizer": r[3], "category": r[4], "location": r[6]} for r in candidates]
+        verdicts = classify_all(payload)
+        events, past_events, incomplete = [], [], []
+        for row, is_relevant in zip(candidates, verdicts):
+            if not is_relevant:
+                flagged.append(row)
+            elif row[1] == "Upcoming":
+                events.append(row)
+            elif row[1] == "Past":
+                past_events.append(row)
+            else:
+                incomplete.append(row)
+
+    def sort_key(row):
+        d = parse_event_date(row[0], today)
+        return d if d is not None else datetime.max
+
+    events.sort(key=sort_key)
+    past_events.sort(key=sort_key)
+    incomplete.sort(key=sort_key)
+    flagged.sort(key=sort_key)
+
+    wb = openpyxl.Workbook()
+    wb.remove(wb.active)
+
+    ws_summary = wb.create_sheet("Summary")
+    orgs_with_upcoming = {r[3] for r in events}
+    orgs_with_past = {r[3] for r in past_events}
+    total_checked = total_orgs if total_orgs is not None else len(orgs_seen)
+    relevant_total = len(events) + len(past_events) + len(incomplete)
+
+    org_totals = defaultdict(lambda: [0, 0])
+    for r in events:
+        org_totals[r[3]][0] += 1
+    for r in past_events:
+        org_totals[r[3]][1] += 1
+
+    summary_rows = [
+        [f"{label} Tax / Finance / Legal Events — Summary"],
+        [],
+        ["Metric", "Count"],
+        ["Total organizations/sources checked", total_checked],
+        ["Organizations with at least one event found", len(orgs_seen)],
+        ["Organizations with zero events found (dead link / no listing)",
+         max(total_checked - len(orgs_seen), 0)],
+        [],
+        ["Total events on sheet", relevant_total, "Relevant", None, "Irrelevant", len(flagged)],
+        ["  – Upcoming events (verified, complete)", len(events)],
+        ["  – Upcoming events (verified, incomplete date)", len(incomplete)],
+        ["  – Past events (since Jan 2026)", len(past_events)],
+        [],
+        ["Organizations with Upcoming events", len(orgs_with_upcoming)],
+        ["Organizations with Past events", len(orgs_with_past)],
+        ["Organizations with BOTH Past and Upcoming", len(orgs_with_upcoming & orgs_with_past)],
+        [],
+        [],
+        ["Organizer", "Upcoming", "Past", "Total"],
+    ]
+    for organizer, (up, past) in sorted(org_totals.items(), key=lambda kv: -(kv[1][0] + kv[1][1])):
+        summary_rows.append([organizer, up, past, up + past])
+
+    for row in summary_rows:
+        ws_summary.append(row)
+
+    for name, rows in (
+        ("Upcoming - Verified", events),
+        ("Upcoming - Incomplete", incomplete),
+        ("Past events", past_events),
+        ("Flagged for Review", flagged),
+    ):
+        ws = wb.create_sheet(name)
+        ws.append(COLUMNS)
+        for r in rows:
+            ws.append(r)
+        format_sheet(ws)
+
+    wb.save(output_path)
+    print(f"Wrote {output_path}: {len(events)} upcoming verified, {len(incomplete)} upcoming incomplete, "
+          f"{len(past_events)} past, {len(flagged)} flagged. {len(orgs_seen)}/{total_checked} orgs had >=1 event.")
+
+    return {
+        "verified": len(events),
+        "incomplete": len(incomplete),
+        "past": len(past_events),
+        "flagged": len(flagged),
+        "orgs_seen": len(orgs_seen),
+        "total_orgs": total_checked,
+    }
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--sheet", required=True)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--label", default="Events")
+    parser.add_argument("--total-orgs", type=int, default=None)
+    parser.add_argument("--skip-llm", action="store_true",
+                         help="skip the Gemini per-event relevance pass (rule-based filtering only)")
+    args = parser.parse_args()
+    clean(args.input, args.sheet, args.output, args.label, args.total_orgs, llm_classify=not args.skip_llm)

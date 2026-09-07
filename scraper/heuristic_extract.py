@@ -122,43 +122,137 @@ def _find_format(text: str) -> str:
     return ""
 
 
-def extract_events(html: str, source_url: str) -> list[dict]:
-    soup = BeautifulSoup(html, "html.parser")
-    for tag in soup(["script", "style", "nav", "footer"]):
-        tag.decompose()
+NON_EVENT_CLASS = re.compile(
+    r"\b(nav|menu|footer|header|breadcrumb|sidebar|cookie|social|share|pagination|"
+    r"pager|widget|search|filter|tag|categor)", re.I,
+)
 
-    seen_cards = set()
-    events = []
 
-    for node in soup.find_all(string=True):
-        text = str(node)
-        date = _find_date(text)
-        if not date:
+def _card_to_event(card: Tag, source_url: str) -> dict | None:
+    card_text = card.get_text(" ", strip=True)
+    title, link = _find_title_and_link(card, source_url)
+    if not title:
+        return None
+    return {
+        "event_name": title,
+        "date": _find_date(card_text),
+        "format": _find_format(card_text),
+        "location_city": _find_location(card_text),
+        "description": "",
+        "link": link,
+    }
+
+
+def _find_repeated_card_groups(soup: BeautifulSoup) -> list[list[Tag]]:
+    """Find groups of sibling elements that repeat under the same parent with
+    the same tag+class — the structural signature of a list of event cards.
+    This catches events whose date lives in a different sentence/node than
+    the one a naive per-text-node walk would start from, or that have no
+    date at all on the listing page.
+    """
+    groups: dict[tuple, list[Tag]] = {}
+    for el in soup.find_all(["article", "li", "div", "tr"]):
+        classes = tuple(sorted(el.get("class") or []))
+        key = (id(el.parent), el.name, classes)
+        groups.setdefault(key, []).append(el)
+
+    candidates = []
+    for (_, _tag, classes), els in groups.items():
+        if not (2 <= len(els) <= 300):
+            continue
+        class_str = " ".join(classes)
+        if NON_EVENT_CLASS.search(class_str):
             continue
 
+        good = []
+        for el in els:
+            if not el.find("a", href=True):
+                continue
+            text_len = len(el.get_text(strip=True))
+            if not (15 <= text_len <= 5000):
+                continue
+            good.append(el)
+        if len(good) < 2:
+            continue
+        candidates.append(good)
+    return candidates
+
+
+def _score_group(els: list[Tag]) -> float:
+    with_date = sum(1 for el in els if _find_date(el.get_text(" ", strip=True)))
+    with_heading = sum(1 for el in els if el.find(re.compile(r"^h[1-4]$")))
+    return (with_date + with_heading) / len(els)
+
+
+def _dedupe_nested(groups: list[list[Tag]]) -> list[list[Tag]]:
+    """Drop a group if its elements are ancestors of elements in a
+    higher-scoring group — otherwise the same events get captured twice,
+    once as an outer wrapper and once as the inner card."""
+    scored = sorted(groups, key=_score_group, reverse=True)
+    kept: list[list[Tag]] = []
+    kept_descendant_ids: set[int] = set()
+    for group in scored:
+        if any(id(el) in kept_descendant_ids for el in group):
+            continue
+        kept.append(group)
+        for ke in group:
+            kept_descendant_ids.update(id(d) for d in ke.descendants if isinstance(d, Tag))
+    return kept
+
+
+CHROME_ID_CLASS = re.compile(
+    r"cookiebot|cybot|onetrust|cookie-consent|cookie-banner|gdpr|userway|accessibility-widget",
+    re.I,
+)
+
+
+def _strip_page_chrome(soup: BeautifulSoup) -> None:
+    for tag in soup(["script", "style", "nav", "footer", "iframe", "noscript"]):
+        tag.decompose()
+    for tag in soup.find_all(id=CHROME_ID_CLASS):
+        tag.decompose()
+    for tag in soup.find_all(class_=CHROME_ID_CLASS):
+        tag.decompose()
+
+
+def extract_events(html: str, source_url: str) -> list[dict]:
+    soup = BeautifulSoup(html, "html.parser")
+    _strip_page_chrome(soup)
+
+    events = []
+
+    groups = _find_repeated_card_groups(soup)
+    groups = [g for g in groups if _score_group(g) >= 0.3]
+    groups = _dedupe_nested(groups)
+
+    covered_cards: set[int] = set()
+    for group in groups:
+        for card in group:
+            covered_cards.add(id(card))
+            event = _card_to_event(card, source_url)
+            if event:
+                events.append(event)
+
+    # fallback for pages that don't have a clean repeated-card structure:
+    # the original date-driven per-text-node walk, skipping anything
+    # already covered by the structural pass above.
+    seen_cards = set(covered_cards)
+    for node in soup.find_all(string=True):
+        date = _find_date(str(node))
+        if not date:
+            continue
         card = _find_card(node.parent if node.parent else soup)
         card_id = id(card)
         if card_id in seen_cards:
             continue
         seen_cards.add(card_id)
+        event = _card_to_event(card, source_url)
+        if event:
+            events.append(event)
 
-        card_text = card.get_text(" ", strip=True)
-        title, link = _find_title_and_link(card, source_url)
-        if not title:
-            continue
-
-        events.append({
-            "event_name": title,
-            "date": date,
-            "format": _find_format(card_text),
-            "location_city": _find_location(card_text),
-            "description": "",
-            "link": link,
-        })
-
-    # dedupe by (title, date)
+    # dedupe by (title, date, link)
     deduped = {}
     for e in events:
-        key = (e["event_name"].lower(), e["date"].lower())
+        key = (e["event_name"].lower(), e["date"].lower(), e["link"].lower())
         deduped.setdefault(key, e)
     return list(deduped.values())

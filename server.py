@@ -75,11 +75,16 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         global current_proc
 
-        if self.path == "/api/start":
+        if self.path.startswith("/api/start"):
             if is_running():
                 return self._json(200, {"status": "already_running"})
+            query = self.path.split("?", 1)[1] if "?" in self.path else ""
+            params = dict(p.split("=", 1) for p in query.split("&") if "=" in p)
+            engine = params.get("engine", "free")
+            if engine not in ("free", "gemini"):
+                engine = "free"
             current_proc = subprocess.Popen(
-                [sys.executable, "main.py", "--resume"],
+                [sys.executable, "main.py", "--resume", "--engine", engine],
                 cwd=BASE_DIR,
             )
             return self._json(200, {"status": "started"})

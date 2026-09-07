@@ -1,21 +1,53 @@
-"""Read the target organizations/events-pages from the master workbook."""
+"""Read the target organizations/events-pages from the master workbook.
+
+Column layout varies between master files (some have a Country column, some
+don't; header names differ: "Organization" vs "Organisation", "Category" vs
+"Focus"), so columns are matched by header name instead of hardcoded index.
+"""
 
 import openpyxl
 
+HEADER_ALIASES = {
+    "organizer": {"organization", "organisation", "org", "name"},
+    "category": {"category", "focus"},
+    "country": {"country"},
+    "url": {"events page", "event page", "url", "link", "official event / calendar"},
+}
 
-def load_organizations(path: str, sheet_name: str = "Organizations") -> list[dict]:
+
+def _map_headers(header_row: tuple) -> dict[str, int]:
+    mapping = {}
+    for idx, cell in enumerate(header_row):
+        key = str(cell or "").strip().lower()
+        for field, aliases in HEADER_ALIASES.items():
+            if key in aliases:
+                mapping[field] = idx
+    return mapping
+
+
+def load_organizations(path: str, sheet_name: str | None = None) -> list[dict]:
     wb = openpyxl.load_workbook(path, data_only=True)
-    ws = wb[sheet_name]
+    ws = wb[sheet_name] if sheet_name and sheet_name in wb.sheetnames else wb[wb.sheetnames[0]]
+
+    rows = ws.iter_rows(min_row=1, values_only=True)
+    header = next(rows, None)
+    if header is None:
+        return []
+    cols = _map_headers(header)
+    if "organizer" not in cols or "url" not in cols:
+        raise ValueError(f"Could not find organizer/url columns in {path}!{ws.title} header: {header}")
 
     orgs = []
-    for row in ws.iter_rows(min_row=2, values_only=True):
-        if not row or not row[4]:
+    for row in rows:
+        if not row:
             continue
-        _, name, category, country, events_page = row[:5]
+        url = row[cols["url"]] if cols["url"] < len(row) else None
+        if not url:
+            continue
         orgs.append({
-            "organizer": name,
-            "category": category,
-            "country": country,
-            "url": events_page,
+            "organizer": row[cols["organizer"]] if cols["organizer"] < len(row) else "",
+            "category": row[cols["category"]] if "category" in cols and cols["category"] < len(row) else "",
+            "country": row[cols["country"]] if "country" in cols and cols["country"] < len(row) else "",
+            "url": url,
         })
     return orgs

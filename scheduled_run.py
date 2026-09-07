@@ -1,6 +1,12 @@
-"""Entry point for the Coolify Scheduled Task: run a full scrape, then email
-a short digest. Meant to be invoked as `python3 scheduled_run.py` on a cron
-schedule (e.g. every 3 days) — the schedule itself lives in Coolify, not here.
+"""Entry point for the Coolify Scheduled Task: run a full weekly re-scrape
+of both India and USA, then email a short digest. Meant to be invoked as
+`python3 scheduled_run.py` on a weekly cron schedule — the schedule itself
+lives in Coolify, not here (see DEPLOYMENT.md).
+
+This always does a FULL re-scrape of every organization (not an incremental
+resume), so that events published since last week are picked up and any
+previously incomplete/missing dates get filled in as sites update them —
+see weekly_full_run.py for the reconciliation logic.
 
 Email digest is optional: it only fires if SMTP_HOST/SMTP_USER/SMTP_PASS/
 DIGEST_TO are all set as environment variables. Without them, this just runs
@@ -14,13 +20,13 @@ import subprocess
 import sys
 from email.mime.text import MIMEText
 
-PROGRESS_PATH = "output/progress.json"
-FAILURES_LOG = "output/failures.csv"
+SUMMARY_PATH = "output/weekly_summary.json"
+FAILURES_LOGS = {"India": "output/failures.csv", "USA": "output/failures_USA.csv"}
 
 
 def run_scrape():
     result = subprocess.run(
-        [sys.executable, "main.py", "--engine", "free"],
+        [sys.executable, "weekly_full_run.py", "--engine", "free"],
         cwd=os.path.dirname(os.path.abspath(__file__)) or ".",
     )
     return result.returncode
@@ -28,41 +34,39 @@ def run_scrape():
 
 def build_digest() -> str:
     try:
-        with open(PROGRESS_PATH, encoding="utf-8") as f:
-            state = json.load(f)
+        with open(SUMMARY_PATH, encoding="utf-8") as f:
+            summary = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return "Scrape ran but output/progress.json was not found/readable."
+        return "Scrape ran but output/weekly_summary.json was not found/readable."
 
     lines = [
-        f"Expertly Event Scraper — run summary ({state.get('updated_at', 'unknown time')})",
-        "",
-        f"Sites processed: {state.get('processed')}/{state.get('total_sites')}",
-        f"Events found:    {state.get('events_found')}",
-        f"Events added:    {state.get('events_added')}",
-        f"Links fixed:     {state.get('links_fixed')}",
-        f"Failures:        {state.get('failures')}",
-        f"Status:          {state.get('status')}",
+        f"Expertly Event Scraper — weekly run summary",
+        f"Started:  {summary.get('started_at', 'unknown')}",
+        f"Finished: {summary.get('finished_at', 'unknown')}",
+        f"Status:   {summary.get('status', 'unknown')}",
     ]
 
-    zero_event_orgs = [
-        entry.split("]")[1].split(":")[0].strip()
-        for entry in state.get("recent_log", [])
-        if ": found 0, added 0" in entry
-    ]
-    if zero_event_orgs:
+    for label, counts in summary.get("countries", {}).items():
         lines.append("")
-        lines.append(f"Sites returning 0 events this run (most recent {len(zero_event_orgs)}):")
-        for name in zero_event_orgs[:15]:
-            lines.append(f"  - {name}")
+        lines.append(f"--- {label} ---")
+        if counts.get("scrape_status") != "done":
+            lines.append("  Scrape FAILED this run — see container logs.")
+            continue
+        lines.append(f"  Orgs checked:            {counts.get('total_orgs')}")
+        lines.append(f"  Orgs with >=1 event:     {counts.get('orgs_seen')}")
+        lines.append(f"  Upcoming (verified):     {counts.get('verified')}")
+        lines.append(f"  Upcoming (incomplete):   {counts.get('incomplete')}")
+        lines.append(f"  Past events:             {counts.get('past')}")
+        lines.append(f"  Flagged (irrelevant):    {counts.get('flagged')}")
 
-    if os.path.exists(FAILURES_LOG):
-        with open(FAILURES_LOG, encoding="utf-8") as f:
-            fail_lines = f.readlines()
-        if len(fail_lines) > 1:
-            lines.append("")
-            lines.append(f"Sites that failed to load ({len(fail_lines) - 1}):")
-            for row in fail_lines[1:11]:
-                lines.append(f"  - {row.split(',')[0]}")
+        fail_log = FAILURES_LOGS.get(label)
+        if fail_log and os.path.exists(fail_log):
+            with open(fail_log, encoding="utf-8") as f:
+                fail_lines = f.readlines()
+            if len(fail_lines) > 1:
+                lines.append(f"  Sites that failed to load ({len(fail_lines) - 1}):")
+                for row in fail_lines[1:11]:
+                    lines.append(f"    - {row.split(',')[0]}")
 
     return "\n".join(lines)
 
