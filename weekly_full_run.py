@@ -42,6 +42,7 @@ import openpyxl
 
 import main as scraper_main
 from scraper.clean_events import clean
+from scraper.date_utils import date_conflicts_with_text
 from scraper.excel_writer import FINAL_COLUMNS, format_sheet
 from scraper.load_sites import load_organizations
 
@@ -73,13 +74,25 @@ COUNTRIES = [
 
 
 def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
-    """Rebuild Master.xlsx's one "Verified Events" sheet from the union of
-    every country's own Upcoming - Verified sheet. Dedupes on (country,
-    event name, date) so re-running this never doubles up a row -- each
-    country file is itself the single source of truth per event; Master is
-    just a read-only merge of them, not an accumulating log."""
+    """Rebuild Master.xlsx from the union of every country's own
+    Upcoming - Verified sheet. Dedupes on (country, event name, date) so
+    re-running this never doubles up a row -- each country file is itself
+    the single source of truth per event; Master is just a read-only merge
+    of them, not an accumulating log.
+
+    Being in "Upcoming - Verified" is not enough on its own to reach
+    Master: every row also goes through a cross-check gate here first --
+    does the event's own name/description state an explicit date that
+    DISAGREES with the resolved Date/End Date? (e.g. a historical
+    "Bulletin" title stating 1908 while the resolved date drifted to some
+    other year, or a description saying an event "was held ... 2023" while
+    the Date column still shows something else). A row that fails this
+    check is held back into a separate "Needs Review" sheet instead of
+    silently reaching Master with a possibly-wrong date."""
     seen = set()
-    all_rows = []
+    passed_rows = []
+    needs_review_rows = []
+
     for label, path in labels_and_paths:
         try:
             wb = openpyxl.load_workbook(path, data_only=True)
@@ -93,20 +106,48 @@ def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
             if key in seen:
                 continue
             seen.add(key)
-            all_rows.append([label] + list(row))
+            full_row = [label] + list(row)
 
-    all_rows.sort(key=lambda r: (r[0], r[1] or ""))  # Country, then Date
+            date_disp, end_disp, name, description = full_row[1], full_row[2], full_row[4], full_row[9]
+            try:
+                resolved_start = datetime.strptime(date_disp, "%d-%b-%Y") if date_disp else None
+            except ValueError:
+                resolved_start = None
+            resolved_end = None
+            if end_disp:
+                try:
+                    resolved_end = datetime.strptime(end_disp, "%d-%b-%Y")
+                except ValueError:
+                    pass
+
+            if resolved_start and date_conflicts_with_text(resolved_start, resolved_end,
+                                                             f"{name or ''} {description or ''}"):
+                needs_review_rows.append(full_row)
+            else:
+                passed_rows.append(full_row)
+
+    passed_rows.sort(key=lambda r: (r[0], r[1] or ""))  # Country, then Date
+    needs_review_rows.sort(key=lambda r: (r[0], r[1] or ""))
 
     wb_out = openpyxl.Workbook()
     wb_out.remove(wb_out.active)
-    ws_out = wb_out.create_sheet("Verified Events")
-    ws_out.append(MASTER_COLUMNS)
-    for r in all_rows:
-        ws_out.append(r)
-    format_sheet(ws_out, MASTER_COLUMNS)
+
+    ws_v = wb_out.create_sheet("Verified Events")
+    ws_v.append(MASTER_COLUMNS)
+    for r in passed_rows:
+        ws_v.append(r)
+    format_sheet(ws_v, MASTER_COLUMNS)
+
+    ws_r = wb_out.create_sheet("Needs Review")
+    ws_r.append(MASTER_COLUMNS)
+    for r in needs_review_rows:
+        ws_r.append(r)
+    format_sheet(ws_r, MASTER_COLUMNS)
+
     wb_out.save(MASTER_PATH)
-    print(f"Wrote {MASTER_PATH}: {len(all_rows)} verified events across {len(labels_and_paths)} countries.")
-    return len(all_rows)
+    print(f"Wrote {MASTER_PATH}: {len(passed_rows)} verified events across {len(labels_and_paths)} countries "
+          f"({len(needs_review_rows)} held back to Needs Review -- date conflicts with the event's own text).")
+    return len(passed_rows)
 
 
 def run_all(engine: str = "free", llm_classify: bool = True) -> int:

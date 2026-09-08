@@ -144,7 +144,21 @@ def _reattach_year(candidate: str, year_match: re.Match | None) -> str:
     return candidate
 
 
-def _parse_candidate(candidate: str, today: datetime, cutoff: datetime) -> datetime | None:
+# Returned by _parse_candidate instead of None when the candidate DID
+# contain an explicit, unambiguous year and it's just implausible (e.g. a
+# 1908 historical bulletin) -- as opposed to genuinely failing to parse.
+# The distinction matters to parse_event_date_range's fallback loop below:
+# an implausible-but-explicit year means "this text names a real date and
+# it's simply out of scope," so trying a weaker/fuzzier fallback parse of
+# the same text next would only risk fabricating some OTHER date out of
+# unrelated digits in the surrounding text (this is exactly how a 1908
+# bulletin title was previously turning into a fabricated "2030" event).
+# An unparseable candidate, by contrast, has no year to trust either way,
+# so falling back to a different candidate is still worth trying.
+REJECTED_IMPLAUSIBLE_YEAR = object()
+
+
+def _parse_candidate(candidate: str, today: datetime, cutoff: datetime):
     try:
         dt = date_parser.parse(candidate, fuzzy=True, default=today)
     except (ValueError, OverflowError, TypeError):
@@ -157,7 +171,9 @@ def _parse_candidate(candidate: str, today: datetime, cutoff: datetime) -> datet
         # tz-naive `cutoff` below.
         dt = dt.replace(tzinfo=None)
 
-    if dt < cutoff and not has_explicit_year(candidate, today):
+    candidate_had_explicit_year = has_explicit_year(candidate, today)
+
+    if dt < cutoff and not candidate_had_explicit_year:
         try:
             dt = dt.replace(year=dt.year + 1)
         except ValueError:
@@ -172,7 +188,7 @@ def _parse_candidate(candidate: str, today: datetime, cutoff: datetime) -> datet
     # to that real year), and this same bound would otherwise reject that
     # correction right back into looking like a misparse.
     if not (today.year - 10 <= dt.year <= today.year + 6):
-        return None
+        return REJECTED_IMPLAUSIBLE_YEAR if candidate_had_explicit_year else None
 
     return dt
 
@@ -215,15 +231,24 @@ def parse_event_date_range(raw: str, today: datetime | None = None) -> tuple[dat
 
     start_dt = None
     for candidate in start_candidates:
-        start_dt = _parse_candidate(candidate, today, cutoff)
-        if start_dt is not None:
+        result = _parse_candidate(candidate, today, cutoff)
+        if result is REJECTED_IMPLAUSIBLE_YEAR:
+            # this candidate named a real, unambiguous year and it's just
+            # out of scope (e.g. a 1908 historical bulletin) -- don't keep
+            # trying weaker/fuzzier fallback candidates on the same text,
+            # since that risks fabricating an unrelated date out of other
+            # digits nearby instead of correctly giving up.
+            return None, None
+        if result is not None:
+            start_dt = result
             break
     if start_dt is None:
         return None, None
 
     end_dt = None
     if end_half:
-        end_dt = _parse_candidate(_reattach_year(end_half, year_match), today, cutoff)
+        end_result = _parse_candidate(_reattach_year(end_half, year_match), today, cutoff)
+        end_dt = end_result if isinstance(end_result, datetime) else None
         if end_dt is not None and end_dt < start_dt:
             end_dt = None
 
@@ -276,3 +301,80 @@ def is_before_cutoff(raw: str, cutoff: datetime, today: datetime | None = None) 
     if dt is None:
         return False
     return dt.date() < cutoff.date()
+
+
+_MONTH_NAMES = (
+    "January|February|March|April|May|June|July|August|September|October|"
+    "November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec"
+)
+_STATED_FULL_DATE = re.compile(
+    rf"(?:(\d{{1,2}})(?:st|nd|rd|th)?\s+({_MONTH_NAMES})\.?,?\s+(\d{{4}}))"
+    rf"|(?:({_MONTH_NAMES})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?,?\s+(\d{{4}}))",
+    re.I,
+)
+# Range forms: "October 6-8, 1908", "December 1 to 9, 2023" -- extract the
+# START day of the range as the comparison point.
+_STATED_RANGE_DATE = re.compile(
+    rf"(?:({_MONTH_NAMES})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\s*(?:[-–—]|to|through)\s*\d{{1,2}}(?:st|nd|rd|th)?,?\s+(\d{{4}}))"
+    rf"|(?:(\d{{1,2}})(?:st|nd|rd|th)?\s*(?:[-–—]|to|through)\s*\d{{1,2}}(?:st|nd|rd|th)?\s+({_MONTH_NAMES})\.?,?\s+(\d{{4}}))",
+    re.I,
+)
+_MONTH_NUM = {name.lower(): i for i, names in enumerate([
+    ("january", "jan"), ("february", "feb"), ("march", "mar"), ("april", "apr"),
+    ("may",), ("june", "jun"), ("july", "jul"), ("august", "aug"),
+    ("september", "sept", "sep"), ("october", "oct"), ("november", "nov"), ("december", "dec"),
+], start=1) for name in names}
+
+
+def extract_stated_dates(text: str) -> list[datetime]:
+    """Find every explicit, fully-specified date (day + month-name + year)
+    mentioned anywhere in `text`, in either "1 January 2026" or "January 1,
+    2026" order. Used to cross-check a resolved Date against what the
+    event's own name/description actually says -- unlike the parsing
+    functions above, this doesn't guess or roll years forward; it only
+    returns dates that were spelled out completely and unambiguously."""
+    found = []
+    for m in _STATED_FULL_DATE.finditer(text or ""):
+        if m.group(1):
+            day, month_name, year = m.group(1), m.group(2), m.group(3)
+        else:
+            month_name, day, year = m.group(4), m.group(5), m.group(6)
+        month = _MONTH_NUM.get(month_name.lower().rstrip("."))
+        if not month:
+            continue
+        try:
+            found.append(datetime(int(year), month, int(day)))
+        except ValueError:
+            continue
+    for m in _STATED_RANGE_DATE.finditer(text or ""):
+        if m.group(1):
+            month_name, day, year = m.group(1), m.group(2), m.group(3)
+        else:
+            day, month_name, year = m.group(4), m.group(5), m.group(6)
+        month = _MONTH_NUM.get(month_name.lower().rstrip("."))
+        if not month:
+            continue
+        try:
+            found.append(datetime(int(year), month, int(day)))
+        except ValueError:
+            continue
+    return found
+
+
+def date_conflicts_with_text(resolved_start: datetime, resolved_end: datetime | None,
+                              text: str) -> bool:
+    """The verification gate before Master.xlsx: True only when `text`
+    (an event's own name + description) explicitly states a date that
+    DISAGREES with the resolved start/end. If the text states no date at
+    all, or states one that matches (or falls inside a multi-day range),
+    this returns False -- an unconfirmed date is not the same as a wrong
+    one, so it doesn't get flagged just for lack of corroboration."""
+    stated = extract_stated_dates(text)
+    if not stated:
+        return False
+    for s in stated:
+        if s.date() == resolved_start.date():
+            return False
+        if resolved_end and resolved_start.date() <= s.date() <= resolved_end.date():
+            return False
+    return True
