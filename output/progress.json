@@ -1,17 +1,173 @@
 {
   "status": "done",
   "engine": "free",
-  "total_sites": 216,
-  "processed": 216,
-  "current_organizer": "American Bar Association (ABA)",
+  "total_sites": 220,
+  "processed": 105,
+  "current_organizer": "Chamber of Tax Consultants (CTC), Confederation of Indian Industry (CII), ASSOCHAM, Federation of Indian Chambers of Commerce & Industry (FICCI), PHD Chamber of Commerce and Industry (PHDCCI)",
   "current_url": "",
-  "events_found": 0,
-  "events_added": 0,
-  "links_fixed": 0,
+  "events_found": 394,
+  "events_added": 285,
+  "events_updated": 0,
+  "links_fixed": 86,
   "failures": 0,
-  "recent_events": [],
-  "recent_log": [
-    "[216/216] American Bar Association (ABA): found 0, added 0"
+  "recent_events": [
+    {
+      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
+      "event_name": "\u201cIndia Pavilion at UzMedExpo 2026 Tashkent, Uzbekistan",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
+      "event_name": "Women\u2019s Financial Independence Conclave",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
+      "event_name": "EV TECH ASIA 2026",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
+      "event_name": "Seminar on GST",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
+      "event_name": "Stakeholder Consultation on Strengthening Agri Export Logistics through Integrated Warehousing and Value-Added Services",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
+      "event_name": "FICCI India Next Growth Frontier Hyderabad 2035: Indias Global Capability Capital",
+      "date": "Sep 10, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
+      "event_name": "BRICS Energy Co-operation Forum 2026",
+      "date": "Sep 09, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
+      "event_name": "India-South Africa Business Conclave",
+      "date": "Sep 09, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
+      "event_name": "India-Kazakhstan business, trade, and investment forum",
+      "date": "Sep 08\n                                         - Sep 08, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
+      "event_name": "FICCI Symposium: Protein for India: Nutrition, Business, Sustainability and Policy  Perspective",
+      "date": "Sep 08, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "ASSOCHAM",
+      "event_name": "ASSOCHAM National Tourism Conclave",
+      "date": "30 Sep, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "ASSOCHAM",
+      "event_name": "4th Health & Wellness Summit 2026",
+      "date": "17 Sep, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "ASSOCHAM",
+      "event_name": "Cold Chain & Warehousing Summit",
+      "date": "10 Sep, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "ASSOCHAM",
+      "event_name": "MahaChem 2026 3i: Catalysing Investments, Innovation and Infrastructure",
+      "date": "09 Sep, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "ASSOCHAM",
+      "event_name": "REAL ESTATE National Conference on Enabling Growth, Investment & Ease of Doing Business",
+      "date": "08 Sep, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Confederation of Indian Industry (CII)",
+      "event_name": "9th CII Hospital Tech 2026 Western Region",
+      "date": "9 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Confederation of Indian Industry (CII)",
+      "event_name": "'I Have a Dream' Fireside Chat with Ms Kiran Mazumdar-Shaw, Executive Chairperson, Biocon Limited",
+      "date": "8 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Confederation of Indian Industry (CII)",
+      "event_name": "Masterclass on Industrial Automation Using IoT & PLC",
+      "date": "8 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Confederation of Indian Industry (CII)",
+      "event_name": "CII Business Delegation to Japan",
+      "date": "11 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Confederation of Indian Industry (CII)",
+      "event_name": "9th Edition of Bengaluru Space Expo (BSX) 2026 - An International Conference and Exhibition",
+      "date": "9 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Chamber of Tax Consultants (CTC)",
+      "event_name": "Enroll Now",
+      "date": "24 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Chamber of Tax Consultants (CTC)",
+      "event_name": "CTC Masterclass 2026: The 4D Framework for Transfer Pricing Excellence - Sept. & Oct. 2026",
+      "date": "18 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Chamber of Tax Consultants (CTC)",
+      "event_name": "International Taxation Study Circle Meeting on  FAST-DS 2026: A Path to FA Disclosure and Immunity \u2014 Emerging Rules, Risks & Opportunities",
+      "date": "11 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Chamber of Tax Consultants (CTC)",
+      "event_name": "Study Circle Meeting \u2013 Charitable Trust - ITR 7 /10B/10BB and other compliance",
+      "date": "10 Sep 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Chamber of Tax Consultants (CTC)",
+      "event_name": "Indirect Taxes Study Circle Meeting on Section 74A under GST \u2013 Decoding the Unified Demand & Adjudication Framework",
+      "date": "09 Sep 2026",
+      "location": ""
+    }
   ],
-  "updated_at": "2026-08-31T11:59:18.115950+00:00"
+  "recent_log": [
+    "[105/220] PHD Chamber of Commerce and Industry (PHDCCI): found 129, added 129, date-fixed 0, fixed 44 link(s)",
+    "[104/220] Federation of Indian Chambers of Commerce & Industry (FICCI): found 42, added 25, date-fixed 0, fixed 42 link(s)",
+    "[103/220] ASSOCHAM: found 36, added 17, date-fixed 0",
+    "[102/220] Confederation of Indian Industry (CII): found 180, added 107, date-fixed 0",
+    "[101/220] Chamber of Tax Consultants (CTC): found 7, added 7, date-fixed 0"
+  ],
+  "updated_at": "2026-09-07T12:06:03.725235+00:00"
 }

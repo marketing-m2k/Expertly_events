@@ -77,12 +77,18 @@ def send_email(body: str):
     user = os.environ.get("SMTP_USER")
     password = os.environ.get("SMTP_PASS")
     to_addr = os.environ.get("DIGEST_TO")
-    port = int(os.environ.get("SMTP_PORT", "587"))
 
     if not all([host, user, password, to_addr]):
         print("SMTP_HOST/SMTP_USER/SMTP_PASS/DIGEST_TO not fully set — skipping email, printing digest instead:\n")
         print(body)
         return
+
+    # An unset GitHub Actions secret still comes through as an empty string,
+    # not a missing env var -- os.environ.get's default only kicks in when
+    # the key is absent entirely, so int("") would otherwise crash here even
+    # though the `all([...])` check above already treats an empty SMTP_PORT
+    # as "not configured" for the other fields.
+    port = int(os.environ.get("SMTP_PORT") or "587")
 
     msg = MIMEText(body)
     msg["Subject"] = "Expertly Event Scraper — run digest"
