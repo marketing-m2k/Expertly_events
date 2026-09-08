@@ -8,13 +8,44 @@ from datetime import datetime
 from dateutil import parser as date_parser
 
 
-def _has_explicit_year(candidate: str, today: datetime) -> bool:
+def has_explicit_year(candidate: str, today: datetime) -> bool:
     try:
         d1 = date_parser.parse(candidate, fuzzy=True, default=today.replace(year=1901))
         d2 = date_parser.parse(candidate, fuzzy=True, default=today.replace(year=2099))
     except (ValueError, OverflowError, TypeError):
         return True  # unknown -> don't guess, treat as explicit so we don't shift it
     return d1.year == d2.year
+
+
+# An archive-style listing (e.g. a "past events" page) sometimes gives a
+# date with no year at all in its own field ("December 1") while the
+# event's own title/description states, in the past tense, which year it
+# actually happened ("...programme was held from December 1 to 9 2023").
+# Without this, a yearless date gets the "assume next upcoming occurrence"
+# treatment below and a 2023 event silently becomes "upcoming in 2026".
+# Deliberately narrow to past-tense phrasing describing THIS event
+# happening -- not organizational history ("founded in 1998") -- to avoid
+# misreading an unrelated year mention as the event's own date.
+_STATED_PAST_YEAR = re.compile(
+    r"(?:was held|held (?:on|from|in)|took place|was conducted|conducted (?:on|in)|"
+    r"concluded on|was organi[sz]ed|was convened)"
+    # up to 60 chars of anything can sit between the phrase and the year
+    # (e.g. "held from December 1 to 9 2023") -- must be `.`, not `\D`,
+    # since day numbers in that gap are themselves digits.
+    r".{0,60}?(\d{4})\b",
+    re.I,
+)
+
+
+def stated_past_year(text: str, today: datetime) -> int | None:
+    """If `text` explicitly says (in the past tense) which year an event
+    happened, and that year is actually in the past, return it -- else
+    None."""
+    match = _STATED_PAST_YEAR.search(text or "")
+    if not match:
+        return None
+    year = int(match.group(1))
+    return year if year < today.year else None
 
 
 _FULL_NUMERIC_DATE = re.compile(r"\d{1,2}[/\-.]\d{1,2}[/\-.]\d{2,4}")
@@ -126,7 +157,7 @@ def _parse_candidate(candidate: str, today: datetime, cutoff: datetime) -> datet
         # tz-naive `cutoff` below.
         dt = dt.replace(tzinfo=None)
 
-    if dt < cutoff and not _has_explicit_year(candidate, today):
+    if dt < cutoff and not has_explicit_year(candidate, today):
         try:
             dt = dt.replace(year=dt.year + 1)
         except ValueError:
@@ -134,10 +165,13 @@ def _parse_candidate(candidate: str, today: datetime, cutoff: datetime) -> datet
 
     # dateutil's fuzzy mode will occasionally misread an unrelated number
     # in the text as a year (e.g. "Accounting 101 for..." -> year 101,
-    # or "Part 2" contributing digits) -- a real event for this tracker
-    # is never more than a few years out, so anything wildly outside
-    # that range is a misparse, not a real date.
-    if not (today.year - 2 <= dt.year <= today.year + 6):
+    # or "Part 2" contributing digits) -- reject those obvious misparses.
+    # The floor is deliberately generous (not just today.year - 2): an
+    # archive-style "past events" listing can genuinely reference events
+    # several years old (stated_past_year() above corrects a yearless date
+    # to that real year), and this same bound would otherwise reject that
+    # correction right back into looking like a misparse.
+    if not (today.year - 10 <= dt.year <= today.year + 6):
         return None
 
     return dt

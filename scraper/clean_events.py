@@ -16,7 +16,13 @@ from datetime import datetime
 
 import openpyxl
 
-from scraper.date_utils import has_day_precision, parse_event_date, parse_event_date_range
+from scraper.date_utils import (
+    has_day_precision,
+    has_explicit_year,
+    parse_event_date,
+    parse_event_date_range,
+    stated_past_year,
+)
 from scraper.excel_writer import FINAL_COLUMNS, format_sheet
 
 # An event is relevant if its category (or, when category is blank, its
@@ -112,6 +118,20 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
             # Annual Spring Symposium, 2026"
             dt, end_dt = parse_event_date_range(name, today)
             date_source = name
+
+        if dt is not None and not has_explicit_year(date_source, today):
+            # a yearless date ("December 1") defaults to "next upcoming
+            # occurrence" -- but an archive-style listing's own title/
+            # description sometimes states, in the past tense, which year
+            # it actually happened ("...programme was held from December 1
+            # to 9 2023"). Trust that over the rollover guess so a 2023
+            # event doesn't silently become "upcoming in 2026".
+            real_year = stated_past_year(f"{name} {_s(description)}", today)
+            if real_year:
+                dt = dt.replace(year=real_year)
+                if end_dt is not None:
+                    end_dt = end_dt.replace(year=real_year)
+
         # dateutil's fuzzy parser will happily invent a day for a bare
         # "APR" or "December 2026" by borrowing it from `today` -- that's a
         # fabricated date, not a real one, so don't format/trust it unless
