@@ -1,173 +1,368 @@
 {
   "status": "done",
   "engine": "free",
-  "total_sites": 220,
-  "processed": 105,
-  "current_organizer": "Chamber of Tax Consultants (CTC), Confederation of Indian Industry (CII), ASSOCHAM, Federation of Indian Chambers of Commerce & Industry (FICCI), PHD Chamber of Commerce and Industry (PHDCCI)",
+  "total_sites": 216,
+  "processed": 216,
+  "current_organizer": "American Bar Association (ABA)",
   "current_url": "",
-  "events_found": 394,
-  "events_added": 285,
-  "events_updated": 0,
-  "links_fixed": 86,
-  "failures": 0,
+  "events_found": 4345,
+  "events_added": 1174,
+  "events_updated": 2,
+  "links_fixed": 676,
+  "failures": 9,
   "recent_events": [
     {
-      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
-      "event_name": "\u201cIndia Pavilion at UzMedExpo 2026 Tashkent, Uzbekistan",
-      "date": "",
+      "organizer": "American Bar Association (ABA)",
+      "event_name": "Featured Member Benefit CLE",
+      "date": "September 22- 1",
       "location": ""
     },
     {
-      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
-      "event_name": "Women\u2019s Financial Independence Conclave",
-      "date": "",
+      "organizer": "American Bar Association (ABA)",
+      "event_name": "Sep08Events| WebinarPathways to Leadership: Continuing the Conversation60 minsThis panel explores what the ABA Antitrust section looks like, and delves into the variety of ways that members of all levels can become more involved in section leadership.",
+      "date": "Sep 08",
       "location": ""
     },
     {
-      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
-      "event_name": "EV TECH ASIA 2026",
-      "date": "",
+      "organizer": "American Bar Association (ABA)",
+      "event_name": "Featured Event",
+      "date": "Sep 24 2026",
       "location": ""
     },
     {
-      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
-      "event_name": "Seminar on GST",
-      "date": "",
+      "organizer": "Fund Finance Association",
+      "event_name": "More Info",
+      "date": "Oct 01, 2026",
       "location": ""
     },
     {
-      "organizer": "PHD Chamber of Commerce and Industry (PHDCCI)",
-      "event_name": "Stakeholder Consultation on Strengthening Agri Export Logistics through Integrated Warehousing and Value-Added Services",
-      "date": "",
+      "organizer": "Fund Finance Association",
+      "event_name": "More Info",
+      "date": "Sep 25, 2026",
       "location": ""
     },
     {
-      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
-      "event_name": "FICCI India Next Growth Frontier Hyderabad 2035: Indias Global Capability Capital",
+      "organizer": "Fund Finance Association",
+      "event_name": "More Info",
+      "date": "Sep 14 - 16, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Fund Finance Association",
+      "event_name": "More Info",
       "date": "Sep 10, 2026",
       "location": ""
     },
     {
-      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
-      "event_name": "BRICS Energy Co-operation Forum 2026",
+      "organizer": "Fund Finance Association",
+      "event_name": "More Info",
       "date": "Sep 09, 2026",
       "location": ""
     },
     {
-      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
-      "event_name": "India-South Africa Business Conclave",
+      "organizer": "Managed Funds Association",
+      "event_name": "Global Alts Asia 2024",
+      "date": "November 11 - November 13 2024",
+      "location": ""
+    },
+    {
+      "organizer": "Managed Funds Association",
+      "event_name": "Global Alts Asia 2025",
+      "date": "November 10 - November 12 2025",
+      "location": ""
+    },
+    {
+      "organizer": "Managed Funds Association",
+      "event_name": "Past Events",
+      "date": "October 8, 2026",
+      "location": "New York, NY"
+    },
+    {
+      "organizer": "Managed Funds Association",
+      "event_name": "Events",
+      "date": "October 8, 2026",
+      "location": "New York, NY"
+    },
+    {
+      "organizer": "Investment Company Institute",
+      "event_name": "Jul 15",
+      "date": "Jul 15",
+      "location": ""
+    },
+    {
+      "organizer": "Investment Company Institute",
+      "event_name": "Jul 22",
+      "date": "Jul 22",
+      "location": "Alternative Assets New York, NY"
+    },
+    {
+      "organizer": "Investment Company Institute",
+      "event_name": "Fund Directors Conference (IDC)",
+      "date": "October 26\u201328, 2026",
+      "location": "Scottsdale, AZ"
+    },
+    {
+      "organizer": "Investment Company Institute",
+      "event_name": "Tax and Accounting Conference",
+      "date": "September 27\u201330, 2026",
+      "location": "Marco Island, FL"
+    },
+    {
+      "organizer": "Investment Company Institute",
+      "event_name": "Compliance, Risk, and Legal Conference",
+      "date": "September 15\u201317, 2026",
+      "location": "Nashville, TN"
+    },
+    {
+      "organizer": "Association for Corporate Growth",
+      "event_name": "YACG Coffee Connections: September 2026",
+      "date": "September 8, 2026",
+      "location": "East Las Olas Boulevard\nFort Lauderdale, FL"
+    },
+    {
+      "organizer": "Association for Corporate Growth",
+      "event_name": "2026 PECS LA - October",
+      "date": "Oct 13, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Association for Corporate Growth",
+      "event_name": "Webinar: 2026 M&A Mid-Year Recap & Outlook",
+      "date": "Sep 22, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Association for Corporate Growth",
+      "event_name": "2026 PECS NYC - September",
+      "date": "Sep 17, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Association for Corporate Growth",
+      "event_name": "ACG Demo Days:  Due Diligence Products and Services - Sept. 2026",
+      "date": "Sep 17, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "American Bankruptcy Institute",
+      "event_name": "Virtual | Bankruptcy 2026: Views from the Bench",
+      "date": "Sep 25, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "American Bankruptcy Institute",
+      "event_name": "Bankruptcy 2026: Views from the Bench",
+      "date": "Sep 25, 2026",
+      "location": "Washington, DC"
+    },
+    {
+      "organizer": "American Bankruptcy Institute",
+      "event_name": "Chapter 15 Bankruptcies:  Pre-Filing Considerations and Related Transactions",
+      "date": "Sep 24, 2026",
+      "location": ""
+    },
+    {
+      "organizer": "American Bankruptcy Institute",
+      "event_name": "2026 Midwest Regional Bankruptcy Seminar",
+      "date": "Sep 14, 2026",
+      "location": "Cincinnati, OH"
+    },
+    {
+      "organizer": "American Bankruptcy Institute",
+      "event_name": "2026 Southwest Bankruptcy Conference",
       "date": "Sep 09, 2026",
+      "location": "Las Vegas Blvd Las Vegas, NV"
+    },
+    {
+      "organizer": "National Association of Credit Management",
+      "event_name": "FCIB Members Only: Global Expert Briefings",
+      "date": "09/16/26",
       "location": ""
     },
     {
-      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
-      "event_name": "India-Kazakhstan business, trade, and investment forum",
-      "date": "Sep 08\n                                         - Sep 08, 2026",
+      "organizer": "National Association of Credit Management",
+      "event_name": "International Credit & Risk Management Online Fall 2026 Course",
+      "date": "09/14/26",
       "location": ""
     },
     {
-      "organizer": "Federation of Indian Chambers of Commerce & Industry (FICCI)",
-      "event_name": "FICCI Symposium: Protein for India: Nutrition, Business, Sustainability and Policy  Perspective",
-      "date": "Sep 08, 2026",
+      "organizer": "National Association of Credit Management",
+      "event_name": "Application Deadline for Certification Exam Date: November 2",
+      "date": "November 2",
       "location": ""
     },
     {
-      "organizer": "ASSOCHAM",
-      "event_name": "ASSOCHAM National Tourism Conclave",
-      "date": "30 Sep, 2026",
+      "organizer": "National Association of Credit Management",
+      "event_name": "Technology Thought Leaders",
+      "date": "09/09/26",
       "location": ""
     },
     {
-      "organizer": "ASSOCHAM",
-      "event_name": "4th Health & Wellness Summit 2026",
-      "date": "17 Sep, 2026",
+      "organizer": "National Association of Credit Management",
+      "event_name": "Accounting Online Course -  Fall 2026",
+      "date": "08/31/26",
       "location": ""
     },
     {
-      "organizer": "ASSOCHAM",
-      "event_name": "Cold Chain & Warehousing Summit",
-      "date": "10 Sep, 2026",
+      "organizer": "National Association of Government Guaranteed Lenders",
+      "event_name": "Learn more",
+      "date": "September 17, 2026",
       "location": ""
     },
     {
-      "organizer": "ASSOCHAM",
-      "event_name": "MahaChem 2026 3i: Catalysing Investments, Innovation and Infrastructure",
-      "date": "09 Sep, 2026",
+      "organizer": "National Association of Government Guaranteed Lenders",
+      "event_name": "Learn more",
+      "date": "September 15, 2026",
       "location": ""
     },
     {
-      "organizer": "ASSOCHAM",
-      "event_name": "REAL ESTATE National Conference on Enabling Growth, Investment & Ease of Doing Business",
-      "date": "08 Sep, 2026",
+      "organizer": "National Association of Government Guaranteed Lenders",
+      "event_name": "Learn more",
+      "date": "September 9, 2026",
       "location": ""
     },
     {
-      "organizer": "Confederation of Indian Industry (CII)",
-      "event_name": "9th CII Hospital Tech 2026 Western Region",
-      "date": "9 Sep 2026",
+      "organizer": "National Association of Government Guaranteed Lenders",
+      "event_name": "Learn more",
+      "date": "September 8, 2026",
       "location": ""
     },
     {
-      "organizer": "Confederation of Indian Industry (CII)",
-      "event_name": "'I Have a Dream' Fireside Chat with Ms Kiran Mazumdar-Shaw, Executive Chairperson, Biocon Limited",
-      "date": "8 Sep 2026",
+      "organizer": "National Association of Government Guaranteed Lenders",
+      "event_name": "Learn more",
+      "date": "January 1, 2026",
       "location": ""
     },
     {
-      "organizer": "Confederation of Indian Industry (CII)",
-      "event_name": "Masterclass on Industrial Automation Using IoT & PLC",
-      "date": "8 Sep 2026",
+      "organizer": "Association of Local Government Auditors",
+      "event_name": "A. Hopkins, Oregon Department of Forestry",
+      "date": "",
       "location": ""
     },
     {
-      "organizer": "Confederation of Indian Industry (CII)",
-      "event_name": "CII Business Delegation to Japan",
-      "date": "11 Sep 2026",
+      "organizer": "Association of Local Government Auditors",
+      "event_name": "Matthew Ragaglia",
+      "date": "",
       "location": ""
     },
     {
-      "organizer": "Confederation of Indian Industry (CII)",
-      "event_name": "9th Edition of Bengaluru Space Expo (BSX) 2026 - An International Conference and Exhibition",
-      "date": "9 Sep 2026",
+      "organizer": "Association of Local Government Auditors",
+      "event_name": "ALGA Webinar: Fool Me Twice: How to Use Prior Fraud Schemes to Detect Your Next Fraudster",
+      "date": "9/8/2026",
       "location": ""
     },
     {
-      "organizer": "Chamber of Tax Consultants (CTC)",
-      "event_name": "Enroll Now",
-      "date": "24 Sep 2026",
+      "organizer": "Association of Local Government Auditors",
+      "event_name": "Save the Date for This Year's Virtual CPE Symposium",
+      "date": "8/21/2026",
       "location": ""
     },
     {
-      "organizer": "Chamber of Tax Consultants (CTC)",
-      "event_name": "CTC Masterclass 2026: The 4D Framework for Transfer Pricing Excellence - Sept. & Oct. 2026",
-      "date": "18 Sep 2026",
+      "organizer": "Association of Local Government Auditors",
+      "event_name": "Login with Facebook",
+      "date": "",
       "location": ""
     },
     {
-      "organizer": "Chamber of Tax Consultants (CTC)",
-      "event_name": "International Taxation Study Circle Meeting on  FAST-DS 2026: A Path to FA Disclosure and Immunity \u2014 Emerging Rules, Risks & Opportunities",
-      "date": "11 Sep 2026",
+      "organizer": "Association of Public Treasurers of the United States and Canada",
+      "event_name": "CPFIM/ACPFIM Re-Certification Training - September 2026",
+      "date": "Sep 22, 2026",
       "location": ""
     },
     {
-      "organizer": "Chamber of Tax Consultants (CTC)",
-      "event_name": "Study Circle Meeting \u2013 Charitable Trust - ITR 7 /10B/10BB and other compliance",
-      "date": "10 Sep 2026",
+      "organizer": "Association of Public Treasurers of the United States and Canada",
+      "event_name": "Front Line Cash Handling - September 2026",
+      "date": "Sep 9, 2026",
       "location": ""
     },
     {
-      "organizer": "Chamber of Tax Consultants (CTC)",
-      "event_name": "Indirect Taxes Study Circle Meeting on Section 74A under GST \u2013 Decoding the Unified Demand & Adjudication Framework",
-      "date": "09 Sep 2026",
+      "organizer": "Association of Public Treasurers of the United States and Canada",
+      "event_name": "2026: Amway Grand/DeVos Place, Grand Rapids, Michigan, August 16-19",
+      "date": "August 16-19 2027",
+      "location": ""
+    },
+    {
+      "organizer": "Association of Public Treasurers of the United States and Canada",
+      "event_name": "Facebook",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "Association of Public Treasurers of the United States and Canada",
+      "event_name": "Annual Conference",
+      "date": "August 16-19 2027",
+      "location": ""
+    },
+    {
+      "organizer": "National Association of County Treasurers and Finance Officers",
+      "event_name": "Join now",
+      "date": "",
+      "location": ""
+    },
+    {
+      "organizer": "National Association of County Treasurers and Finance Officers",
+      "event_name": "2026 NACCTFO Annual ConferenceJuly 12 - 15, 2026| New Orleans, LA",
+      "date": "July 12 - 15, 2026",
+      "location": "New Orleans, LA"
+    },
+    {
+      "organizer": "National Association of State Procurement Officials",
+      "event_name": "More About Event",
+      "date": "September 28-Oct 1, 2025",
       "location": ""
     }
   ],
   "recent_log": [
-    "[105/220] PHD Chamber of Commerce and Industry (PHDCCI): found 129, added 129, date-fixed 0, fixed 44 link(s)",
-    "[104/220] Federation of Indian Chambers of Commerce & Industry (FICCI): found 42, added 25, date-fixed 0, fixed 42 link(s)",
-    "[103/220] ASSOCHAM: found 36, added 17, date-fixed 0",
-    "[102/220] Confederation of Indian Industry (CII): found 180, added 107, date-fixed 0",
-    "[101/220] Chamber of Tax Consultants (CTC): found 7, added 7, date-fixed 0"
+    "[216/216] American Bar Association (ABA): found 3, added 3, date-fixed 0, fixed 3 link(s)",
+    "[215/216] National Association of Credit Union Service Organizations: found 0, added 0, date-fixed 0",
+    "[214/216] Fund Finance Association: found 24, added 2, date-fixed 0",
+    "[213/216] Managed Funds Association: found 4, added 0, date-fixed 0",
+    "[212/216] Investment Adviser Association: found 0, added 0, date-fixed 0",
+    "[211/216] Investment Company Institute: found 116, added 0, date-fixed 0",
+    "[210/216] Association for Corporate Growth: found 155, added 32, date-fixed 0",
+    "[209/216] American Bankruptcy Institute: found 37, added 0, date-fixed 0",
+    "[208/216] Turnaround Management Association: found 0, added 0, date-fixed 0",
+    "[207/216] National Association of Credit Management: found 55, added 1, date-fixed 0",
+    "[206/216] Credit Research Foundation: found 0, added 0, date-fixed 0",
+    "[205/216] National Association of Government Guaranteed Lenders: found 8, added 2, date-fixed 0, fixed 1 link(s)",
+    "[204/216] Association of Local Government Auditors: found 5, added 1, date-fixed 0, fixed 4 link(s)",
+    "[203/216] Association of Public Treasurers of the United States and Canada: found 8, added 0, date-fixed 0",
+    "[202/216] National Association of County Treasurers and Finance Officers: found 2, added 0, date-fixed 0",
+    "[201/216] National Association of State Procurement Officials: found 1, added 0, date-fixed 0",
+    "[200/216] National Association of State Treasurers: found 3, added 0, date-fixed 0",
+    "[199/216] Association for Financial Professionals: found 11, added 0, date-fixed 0",
+    "[198/216] Institute of Management Accountants: found 2, added 0, date-fixed 0",
+    "[197/216] Association of Certified Fraud Examiners: found 2, added 0, date-fixed 0",
+    "[196/216] Institute of Internal Auditors: found 7, added 0, date-fixed 0",
+    "[195/216] Association of Government Accountants: found 12, added 0, date-fixed 0, fixed 12 link(s)",
+    "[194/216] National Association of State Auditors, Comptrollers and Treasurers: found 5, added 0, date-fixed 0",
+    "[193/216] National Association of Tax Professionals Foundation: found 2, added 0, date-fixed 0, fixed 2 link(s)",
+    "[192/216] American Society of Tax Problem Solvers: found 0, added 0, date-fixed 0",
+    "[191/216] Financial Management Association International: found 6, added 0, date-fixed 0",
+    "[190/216] Government Finance Officers Association: found 11, added 11, date-fixed 0, fixed 11 link(s)",
+    "[189/216] California Tax Policy Institute: FAILED - Page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL\nCall log:\n  - navigating to \"NA\", waiting until \"commit\"\n",
+    "[188/216] Michigan Tax Conference: found 1, added 1, date-fixed 0",
+    "[187/216] Chicago Tax Club: found 1, added 0, date-fixed 0",
+    "[186/216] California Tax Bar: FAILED - Page.evaluate: Execution context was destroyed, most likely because of a navigation",
+    "[185/216] California Tax Education Council: found 4, added 1, date-fixed 0",
+    "[184/216] Texas Taxpayers and Research Association: found 0, added 0, date-fixed 0",
+    "[183/216] Tax Assessor-Collectors Association of Texas: found 2, added 0, date-fixed 0",
+    "[182/216] International Association of Assessing Officers: found 6, added 6, date-fixed 0",
+    "[181/216] Taxpayer Advocate Service: found 0, added 0, date-fixed 0",
+    "[180/216] Internal Revenue Service: found 0, added 0, date-fixed 0",
+    "[179/216] National Association of Enrolled Agents: found 5, added 0, date-fixed 0",
+    "[178/216] National Society of Tax Professionals: found 11, added 0, date-fixed 0, fixed 1 link(s)",
+    "[177/216] National Association of Tax Professionals: found 0, added 0, date-fixed 0",
+    "[176/216] Louisiana Association of Tax Administrators: found 68, added 45, date-fixed 0",
+    "[175/216] Texas Association of Property Tax Professionals: found 0, added 0, date-fixed 0",
+    "[174/216] Michigan Assessors Association: found 1, added 1, date-fixed 0",
+    "[173/216] North Central Regional Association of Assessing Officers: found 2, added 0, date-fixed 0",
+    "[172/216] Southeastern Association of Tax Administrators: found 2, added 2, date-fixed 0, fixed 1 link(s)",
+    "[171/216] Texas Society of Enrolled Agents: found 0, added 0, date-fixed 0",
+    "[170/216] Colorado Society of Enrolled Agents: found 0, added 0, date-fixed 0",
+    "[169/216] New York State Society of Enrolled Agents: found 0, added 0, date-fixed 0",
+    "[168/216] California Society of Enrolled Agents: found 10, added 0, date-fixed 0",
+    "[167/216] Federation of Tax Administrators: found 6, added 0, date-fixed 0"
   ],
-  "updated_at": "2026-09-07T12:06:03.725235+00:00"
+  "updated_at": "2026-09-08T05:57:23.958930+00:00"
 }

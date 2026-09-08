@@ -1,0 +1,26 @@
+{
+  "started_at": "2026-09-08T04:41:49.733395+00:00",
+  "countries": {
+    "India": {
+      "scrape_status": "done",
+      "verified": 482,
+      "incomplete": 964,
+      "past": 1077,
+      "flagged": 2148,
+      "orgs_seen": 146,
+      "total_orgs": 220
+    },
+    "USA": {
+      "scrape_status": "done",
+      "verified": 1517,
+      "incomplete": 496,
+      "past": 186,
+      "flagged": 1248,
+      "orgs_seen": 168,
+      "total_orgs": 216
+    }
+  },
+  "master_verified_total": 1999,
+  "finished_at": "2026-09-08T05:58:23.666603+00:00",
+  "status": "done"
+}
