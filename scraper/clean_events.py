@@ -159,7 +159,19 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
         location = out_row[7]
         description = out_row[8]
         date_display = out_row[0] or ""
-        dt = parse_event_date(date_display, today)
+        # date_display is already a validated "%d-%b-%Y" string whenever
+        # the first pass found a real date (including a genuinely old
+        # historical year corrected via stated_past_year) -- parse it
+        # directly rather than routing it back through parse_event_date's
+        # heuristics, which include a sanity-bound rejection of implausibly
+        # old years meant for messy RAW text, not an already-normalized
+        # date. Re-running that here would reject a correctly-resolved
+        # 1914 event right back into looking unparseable. Only fall back
+        # to the heuristic parser for a still-raw, unformatted date string.
+        try:
+            dt = datetime.strptime(date_display, "%d-%b-%Y")
+        except ValueError:
+            dt = parse_event_date(date_display, today)
         is_dated = dt is not None and has_day_precision(date_display)
         is_past = is_dated and dt.date() < today.date()
         # a virtual/hybrid event has nowhere to announce -- Location is
@@ -216,7 +228,16 @@ def clean(input_path: str, sheet: str, output_path: str, label: str, total_orgs:
                 incomplete.append(row)
 
     def sort_key(row):
-        d = parse_event_date(row[0], today)
+        # same reasoning as the is_dated re-parse above: row[0] is already
+        # a validated "%d-%b-%Y" string for every dated row, so parse it
+        # directly rather than through parse_event_date's sanity-bound
+        # rejection of implausibly old years (which would otherwise sort
+        # a correctly-resolved 1914 event to the very end instead of into
+        # its real chronological place).
+        try:
+            d = datetime.strptime(row[0] or "", "%d-%b-%Y")
+        except ValueError:
+            d = parse_event_date(row[0], today)
         return d if d is not None else datetime.max
 
     events.sort(key=sort_key)

@@ -8,13 +8,30 @@ from datetime import datetime
 from dateutil import parser as date_parser
 
 
+_EXPLICIT_4_DIGIT_YEAR = re.compile(r"\b(19|20)\d{2}\b")
+
+
 def has_explicit_year(candidate: str, today: datetime) -> bool:
-    try:
-        d1 = date_parser.parse(candidate, fuzzy=True, default=today.replace(year=1901))
-        d2 = date_parser.parse(candidate, fuzzy=True, default=today.replace(year=2099))
-    except (ValueError, OverflowError, TypeError):
-        return True  # unknown -> don't guess, treat as explicit so we don't shift it
-    return d1.year == d2.year
+    """True if `candidate` names an actual year, checked directly against
+    the text rather than by asking dateutil to guess.
+
+    The previous implementation compared dateutil's fuzzy parse of
+    `candidate` under two different default years and treated agreement as
+    "explicit" -- but dateutil's fuzzy mode will sometimes read a trailing
+    number as an implicit 2-digit year regardless of the default supplied
+    (e.g. "September 9-10" fuzzy-parses to September 9, **2010** under
+    BOTH a 1901 default and a 2099 default, since "10" gets read as the
+    year either way), which made a genuinely yearless range look
+    "explicit" and silently blocked the past-year correction below from
+    ever running for it.
+    """
+    if _EXPLICIT_4_DIGIT_YEAR.search(candidate or ""):
+        return True
+    # a full numeric date can legitimately use a 2-digit year (e.g.
+    # "07/24/26") -- distinct from dateutil's fuzzy-mode misreading of an
+    # unrelated bare number, since here the whole token is shaped like a
+    # date to begin with.
+    return bool(_FULL_NUMERIC_DATE.search(candidate or ""))
 
 
 # An archive-style listing (e.g. a "past events" page) sometimes gives a
@@ -36,16 +53,37 @@ _STATED_PAST_YEAR = re.compile(
     re.I,
 )
 
+_ANY_YEAR = re.compile(r"\b(1[89]\d{2}|20\d{2})\b")
+
 
 def stated_past_year(text: str, today: datetime) -> int | None:
-    """If `text` explicitly says (in the past tense) which year an event
-    happened, and that year is actually in the past, return it -- else
-    None."""
+    """If `text` states which year an event happened and that year is
+    actually in the past, return it -- else None.
+
+    Two tiers: first a high-confidence check for explicit past-tense
+    phrasing ("was held ... 2023"). Many real event titles state the year
+    with NO such phrasing at all though -- e.g. a title that's simply
+    "Eighth National Conference On Taxation September 8 To 11, 1914" with
+    a separate Date field of just "September 8" (no year). When nothing
+    phrase-based matches, fall back to: is there exactly one plausible old
+    year mentioned anywhere in the text at all? A title naming a single
+    year is virtually always naming its own event's year, not something
+    unrelated -- and the caller only reaches this function when the
+    structured Date field itself had no year, so there's nothing to lose
+    by trusting it over a fabricated "next occurrence" guess.
+    """
     match = _STATED_PAST_YEAR.search(text or "")
-    if not match:
-        return None
-    year = int(match.group(1))
-    return year if year < today.year else None
+    if match:
+        year = int(match.group(1))
+        return year if year < today.year else None
+
+    years = {int(y) for y in _ANY_YEAR.findall(text or "")}
+    past_years = {y for y in years if y < today.year}
+    if len(past_years) == 1 and len(years) == len(past_years):
+        # exactly one year mentioned, total, and it's in the past -- no
+        # ambiguity between candidate years to worry about
+        return past_years.pop()
+    return None
 
 
 _FULL_NUMERIC_DATE = re.compile(r"\d{1,2}[/\-.]\d{1,2}[/\-.]\d{2,4}")
