@@ -70,6 +70,38 @@ COUNTRIES = [
         "final_output": "output/Events_USA_2026.xlsx",
         "failures_log": "output/failures_USA.csv",
     },
+    {
+        "label": "UK",
+        "source_sheet": "UK",
+        "raw_sheet": "UK",
+        "raw_output": "output/raw/Events_UK.xlsx",
+        "final_output": "output/Events_UK_2026.xlsx",
+        "failures_log": "output/failures_UK.csv",
+    },
+    {
+        "label": "SG",
+        "source_sheet": "SG",
+        "raw_sheet": "SG",
+        "raw_output": "output/raw/Events_SG.xlsx",
+        "final_output": "output/Events_SG_2026.xlsx",
+        "failures_log": "output/failures_SG.csv",
+    },
+    {
+        "label": "UAE",
+        "source_sheet": "UAE",
+        "raw_sheet": "UAE",
+        "raw_output": "output/raw/Events_UAE.xlsx",
+        "final_output": "output/Events_UAE_2026.xlsx",
+        "failures_log": "output/failures_UAE.csv",
+    },
+    {
+        "label": "AUS",
+        "source_sheet": "AUS",
+        "raw_sheet": "AUS",
+        "raw_output": "output/raw/Events_AUS.xlsx",
+        "final_output": "output/Events_AUS_2026.xlsx",
+        "failures_log": "output/failures_AUS.csv",
+    },
 ]
 
 

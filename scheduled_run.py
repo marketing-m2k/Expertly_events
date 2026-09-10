@@ -1,5 +1,6 @@
 """Entry point for the Coolify Scheduled Task: run a full weekly re-scrape
-of both India and USA, then email a short digest. Meant to be invoked as
+of every country in weekly_full_run.py's COUNTRIES list, then email a
+short digest. Meant to be invoked as
 `python3 scheduled_run.py` on a weekly cron schedule — the schedule itself
 lives in Coolify, not here (see DEPLOYMENT.md).
 
@@ -20,8 +21,12 @@ import subprocess
 import sys
 from email.mime.text import MIMEText
 
+from weekly_full_run import COUNTRIES
+
 SUMMARY_PATH = "output/weekly_summary.json"
-FAILURES_LOGS = {"India": "output/failures.csv", "USA": "output/failures_USA.csv"}
+# Derived from COUNTRIES instead of hardcoded -- adding a country to
+# weekly_full_run.py's list is picked up here automatically.
+FAILURES_LOGS = {c["label"]: c["failures_log"] for c in COUNTRIES}
 
 
 def run_scrape():

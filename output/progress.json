@@ -1,338 +1,338 @@
 {
   "status": "done",
   "engine": "free",
-  "total_sites": 199,
+  "total_sites": 128,
   "processed": 20,
-  "current_organizer": "Securities Investors Association (Singapore) (SIAS), Singapore Venture & Private Capital Association (SVCA), Singapore FinTech Association (SFA), Association of Banks in Singapore (ABS), Singapore Actuarial Society (SAS)",
+  "current_organizer": "Netherlands Business Council UAE, Finnish Business Council UAE, Austrian Business Council UAE, U.S.-U.A.E. Business Council, Emirates Institute of Finance",
   "current_url": "",
-  "events_found": 323,
-  "events_added": 211,
+  "events_found": 313,
+  "events_added": 162,
   "events_updated": 0,
-  "links_fixed": 105,
-  "failures": 0,
+  "links_fixed": 89,
+  "failures": 1,
   "recent_events": [
     {
-      "organizer": "Singapore Actuarial Society (SAS)",
-      "event_name": "Asian Actuarial Conference 2026",
-      "date": "21 August 2026",
+      "organizer": "U.S.-U.A.E. Business Council",
+      "event_name": "H.E. Dr. Ali Rashid Al Nuaimi Hosts U.S.-U.A.E. Business Council U.S. Board of Directors for Private Dialogue on Regional Developments",
+      "date": "July 14, 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Actuarial Society (SAS)",
-      "event_name": "22nd Practising Certificate Seminar (PCS) 2026 , 24 Nov \u2192",
-      "date": "24 Nov",
+      "organizer": "U.S.-U.A.E. Business Council",
+      "event_name": "U.A.E. Officials Consult Business Council Members on Implementation of New U.A.E. Child Digital Safety Law",
+      "date": "July 14, 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Actuarial Society (SAS)",
-      "event_name": "22nd Practising Certificate Seminar (PCS) 2026",
-      "date": "24 November 2026",
+      "organizer": "U.S.-U.A.E. Business Council",
+      "event_name": "New Deputy Assistant Secretary of Commerce Highlights Continued Momentum in the U.S.-U.A.E. Commercial Partnership",
+      "date": "July 14, 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Actuarial Society (SAS)",
-      "event_name": "ICA 2026 \u2013 33rd International Congress of Actuaries",
-      "date": "13 November 2026",
+      "organizer": "U.S.-U.A.E. Business Council",
+      "event_name": "U.A.E. Commercial Attach\u00e9 Discusses A:5 Designation, Pax Silica, and Expanding U.S.-U.A.E. Investment",
+      "date": "July 29, 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Actuarial Society (SAS)",
-      "event_name": "InsurInnovator Connect Asia 2026 (IIC Asia 2026)",
-      "date": "24 September 2026",
+      "organizer": "U.S.-U.A.E. Business Council",
+      "event_name": "Pennsylvania-U.A.E. Global Investor Day Advances Economic Partnerships",
+      "date": "September 2, 2026",
       "location": ""
     },
     {
-      "organizer": "Association of Banks in Singapore (ABS)",
-      "event_name": "Singapore banks come together to help seniors plan well age well and ease the burden on their loved ones",
-      "date": "25 Jun 2026",
+      "organizer": "Finnish Business Council UAE",
+      "event_name": "Multiply Your Productivity with AI - Workshop",
+      "date": "Oct 16",
       "location": ""
     },
     {
-      "organizer": "Association of Banks in Singapore (ABS)",
-      "event_name": "MAS and ABS Chart Instant Payments Enhancements with PayNow Generation 2 Study",
-      "date": "25 Jun 2026",
+      "organizer": "Finnish Business Council UAE",
+      "event_name": "Mentorship Program launch - Private event",
+      "date": "Sep 22",
       "location": ""
     },
     {
-      "organizer": "Association of Banks in Singapore (ABS)",
-      "event_name": "ABS 53rd Annual Dinner - Speech by ABS Chairman Mr Tan Teck Long Group Chief Executive Officer OCBC",
-      "date": "25 Jun 2026",
+      "organizer": "Finnish Business Council UAE",
+      "event_name": "Meet the Members",
+      "date": "Sep 17",
       "location": ""
     },
     {
-      "organizer": "Association of Banks in Singapore (ABS)",
-      "event_name": "ABS 53rd Annual Dinner - Keynote Address by Mr Gan Kim Yong, Deputy Prime Minister and Minister for Trade and Industry, and Chairman of the Monetary Authority of Singapore",
-      "date": "25 Jun 2026",
+      "organizer": "Finnish Business Council UAE",
+      "event_name": "Compliance Summit 2026 together with MBG",
+      "date": "Sep 16",
       "location": ""
     },
     {
-      "organizer": "Association of Banks in Singapore (ABS)",
-      "event_name": "MAS and ABS Establish Taskforce to Strengthen Cyber and Technology Resilience against AI-driven Threats",
-      "date": "28 Jul 2026",
+      "organizer": "Finnish Business Council UAE",
+      "event_name": "InterCouncil Networking Night",
+      "date": "Sep 10",
       "location": ""
     },
     {
-      "organizer": "Singapore Venture & Private Capital Association (SVCA)",
-      "event_name": "thumbnails Value Creation: Simplified (opens in a new window)",
-      "date": "14 Oct 2026",
+      "organizer": "Netherlands Business Council UAE",
+      "event_name": "thumbnails Your Story, On Camera | NBC Studio Day (opens in a new window)",
+      "date": "06 Oct 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Venture & Private Capital Association (SVCA)",
-      "event_name": "thumbnails SVCA Annual Gala & Awards Dinner 2026 (opens in a new window)",
-      "date": "30 Sep 2026",
+      "organizer": "Netherlands Business Council UAE",
+      "event_name": "thumbnails UAE E-Invoicing Readiness Workshop (opens in a new window)",
+      "date": "01 Oct 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Venture & Private Capital Association (SVCA)",
-      "event_name": "thumbnails Japan - Singapore Investment Roadshow (opens in a new window)",
-      "date": "11 Sep 2026",
+      "organizer": "Netherlands Business Council UAE",
+      "event_name": "thumbnails Behind the Scenes: Site Visit TenCate Grass (opens in a new window)",
+      "date": "23 Sep 2026",
       "location": ""
     },
     {
-      "organizer": "Securities Investors Association (Singapore) (SIAS)",
-      "event_name": "BeginnerFree",
-      "date": "24 Sep 2026",
+      "organizer": "Netherlands Business Council UAE",
+      "event_name": "thumbnails Wellness Without the Budget: Practical Strategies for SMEs in the UAE (opens in a new window)",
+      "date": "15 Sep 2026",
       "location": ""
     },
     {
-      "organizer": "Securities Investors Association (Singapore) (SIAS)",
-      "event_name": "BeginnerFree",
-      "date": "17 Sep 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Securities Investors Association (Singapore) (SIAS)",
-      "event_name": "Members Only",
-      "date": "16 Sep 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Securities Investors Association (Singapore) (SIAS)",
-      "event_name": "Free",
-      "date": "14 Sep 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Securities Investors Association (Singapore) (SIAS)",
-      "event_name": "BeginnerFree",
+      "organizer": "Netherlands Business Council UAE",
+      "event_name": "thumbnails Big Inter-Council Networking Night (opens in a new window)",
       "date": "10 Sep 2026",
       "location": ""
     },
     {
-      "organizer": "Investment Management Association of Singapore (IMAS)",
-      "event_name": "IMAS x Optimai QDC Reporting Demo Session19 Nov 2025",
-      "date": "19 Nov 2025",
+      "organizer": "ICC UAE",
+      "event_name": "5th Annual MENA Supply Chain Finance",
+      "date": "4 November 2026",
       "location": ""
     },
     {
-      "organizer": "Investment Management Association of Singapore (IMAS)",
-      "event_name": "IMAS x ICI Lunchtime Talk10 Feb 2026",
-      "date": "10 Feb 2026",
+      "organizer": "ICC UAE",
+      "event_name": "Workshop on International Contracts and Payments Challenging",
+      "date": "15 October 2026",
       "location": ""
     },
     {
-      "organizer": "Investment Management Association of Singapore (IMAS)",
-      "event_name": "IMAS Investment Conference & Masterclass7 Apr 2026",
-      "date": "7 Apr 2026",
+      "organizer": "ICC UAE",
+      "event_name": "Global Trade Finance Expo 2026",
+      "date": "",
       "location": ""
     },
     {
-      "organizer": "Investment Management Association of Singapore (IMAS)",
-      "event_name": "Building Trust in Investment Performance Measurement: Perspectives from Asset Owners and Managers20 Aug 2026",
-      "date": "20 Aug 2026",
+      "organizer": "ICC UAE",
+      "event_name": "ICC UAE Campus Connect",
+      "date": "",
       "location": ""
     },
     {
-      "organizer": "Investment Management Association of Singapore (IMAS)",
-      "event_name": "The Future of Credit Trading in APAC27 Oct 2026",
+      "organizer": "Dubai Chambers",
+      "event_name": "Workshop: Franchise And Licensing Agreements",
+      "date": "29 Oct 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Dubai Chambers",
+      "event_name": "Workshop: International Contracts and Payments Challenges: Questions On Incoterms, LCS and Guarantees",
+      "date": "15 Oct 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Dubai Chambers",
+      "event_name": "Workshop: Corporate Restructuring and M&A: Legal and Tax Strategies for Transformation in Changing Business Landscape",
+      "date": "20 Oct 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Dubai Chambers",
+      "event_name": "Workshop: Shipping & Logistics",
+      "date": "13 Oct 2026",
+      "location": ""
+    },
+    {
+      "organizer": "Dubai Chambers",
+      "event_name": "Workshop: Commercial Companies Law, Directors and Shareholders Liablity",
       "date": "27 Oct 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Directors (SID)",
-      "event_name": "View Event Details",
-      "date": "24 Sep 2026",
+      "organizer": "Dubai Business Women Council",
+      "event_name": "Become a Member",
+      "date": "23 Jun 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Directors (SID)",
-      "event_name": "View Event Details",
-      "date": "22 Sep 2026",
+      "organizer": "Dubai Business Women Council",
+      "event_name": "Become a Member",
+      "date": "26 Jun 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Directors (SID)",
-      "event_name": "View Event Details",
-      "date": "17 Sep 2026",
+      "organizer": "Dubai Business Women Council",
+      "event_name": "Become a Member",
+      "date": "30 Jun 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Directors (SID)",
-      "event_name": "View Event Details",
-      "date": "16 Sep 2026",
+      "organizer": "Dubai Business Women Council",
+      "event_name": "A Dubai Chambers Event |  Dubai - Assolombarda Business Seminar - October 1, 2026",
+      "date": "October 1, 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Directors (SID)",
-      "event_name": "View Event Details",
-      "date": "15 Sep 2026",
+      "organizer": "Dubai Business Women Council",
+      "event_name": "Become a Member",
+      "date": "11 Sep 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Corporate Counsel Association (SCCA)",
-      "event_name": "thumbnails Getting Started with AI for APAC In-House Legal: From Routine Work to Business Impact (opens in a new window)",
-      "date": "24 Sep 2026",
+      "organizer": "ISACA UAE Chapter",
+      "event_name": "September 2026",
+      "date": "Sep 16, 2026",
       "location": ""
     },
     {
-      "organizer": "Singapore Corporate Counsel Association (SCCA)",
-      "event_name": "thumbnails ESG Contracting in Practice: Managing ESG Risks in Commercial Agreements (opens in a new window)",
-      "date": "17 Sep 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Singapore Corporate Counsel Association (SCCA)",
-      "event_name": "thumbnails AI\u3068\u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u3092\u6d3b\u7528\u3057\u305f\u30af\u30ed\u30b9\u30dc\u30fc\u30c0\u30fc\u7d1b\u4e89\u30fb\u5185\u90e8\u8abf\u67fb\u3078\u306e\u5099\u3048 (opens in a new window)",
-      "date": "15 Sep 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Singapore Corporate Counsel Association (SCCA)",
-      "event_name": "thumbnails SCCA & Leah: Agentic AI for In-House Departments (opens in a new window)",
-      "date": "29 Sep, 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Singapore Corporate Counsel Association (SCCA)",
-      "event_name": "thumbnails SCCA In-House Practice Management Series (opens in a new window)",
-      "date": "05 Aug",
-      "location": ""
-    },
-    {
-      "organizer": "Singapore International Commercial Court (SICC)",
-      "event_name": "Registration of Foreign Lawyers",
+      "organizer": "ISACA UAE Chapter",
+      "event_name": "Privacy & Terms",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore International Commercial Court (SICC)",
-      "event_name": "SICC Proceedings",
+      "organizer": "ISACA UAE Chapter",
+      "event_name": "Membership",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore International Commercial Court (SICC)",
-      "event_name": "Hearings and Judgments",
+      "organizer": "ISACA UAE Chapter",
+      "event_name": "Contact Us",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore International Commercial Court (SICC)",
-      "event_name": "Forms and Services",
+      "organizer": "CFA Society Emirates",
+      "event_name": "Job Board",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore International Commercial Court (SICC)",
-      "event_name": "Legislation, Rules and Practice Directions",
+      "organizer": "CFA Society Emirates",
+      "event_name": "MENA INVESTMENT CONGRESS 2026",
+      "date": "Nov 24",
+      "location": ""
+    },
+    {
+      "organizer": "CFA Society Emirates",
+      "event_name": "State of the Market: GCC Equity Dynamics and Capital Flows",
+      "date": "Oct 7",
+      "location": ""
+    },
+    {
+      "organizer": "CFA Society Emirates",
+      "event_name": "Abu Dhabi Event: UAE Real Estate Outlook 2026",
+      "date": "Sep 24",
+      "location": ""
+    },
+    {
+      "organizer": "CFA Society Emirates",
+      "event_name": "Dubai Event: UAE Real Estate Outlook 2026",
+      "date": "Sep 23",
+      "location": ""
+    },
+    {
+      "organizer": "UAE Internal Auditors Association",
+      "event_name": "Mirror, Mirror on the Wall \u2014 The One Audit That's Never on the Plan.",
+      "date": "Sep 22",
+      "location": ""
+    },
+    {
+      "organizer": "UAE Internal Auditors Association",
+      "event_name": "The Storyteller's Ledger: The Power of Storytelling in Internal Audit",
+      "date": "Sep 17",
+      "location": ""
+    },
+    {
+      "organizer": "PICPA Dubai",
+      "event_name": "IFRS 10 & 3 : Consolidation, Business Combinations & Group Reporting",
+      "date": "October 24",
+      "location": ""
+    },
+    {
+      "organizer": "PICPA Dubai",
+      "event_name": "Tax Accounting under IAS 12 & Deferred Tax Complexities",
+      "date": "October 24",
+      "location": ""
+    },
+    {
+      "organizer": "PICPA Dubai",
+      "event_name": "VAT Compliance, Audits & Risk Management in the UAE",
+      "date": "October 24",
+      "location": ""
+    },
+    {
+      "organizer": "PICPA Dubai",
+      "event_name": "Governance, Risk & Reporting: Key ERM, COSO & IFRS 18/19 Updates",
+      "date": "September 26",
+      "location": ""
+    },
+    {
+      "organizer": "PICPA Dubai",
+      "event_name": "A CSR Initiative: Pickleball for a Cause",
+      "date": "September 12",
+      "location": ""
+    },
+    {
+      "organizer": "Taxation Society UAE",
+      "event_name": "UAE E-INVOICING OPEN DAY",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Legal Education (SILE)",
-      "event_name": "Maintain a Register of Qualified Persons Seeking Admission to the Singapore Bar",
+      "organizer": "Taxation Society UAE",
+      "event_name": "UAE CORPORATE TAX \u2013 3rd Anniversary",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Legal Education (SILE)",
-      "event_name": "Pro Bono Programme",
+      "organizer": "Taxation Society UAE",
+      "event_name": "3 MONTH MASTERCLASS ON IFRS-FINAL SESSION ON 20 JUNE",
+      "date": "20 JUNE",
+      "location": ""
+    },
+    {
+      "organizer": "Taxation Society UAE",
+      "event_name": "BLOOD DONATION CAMP",
       "date": "",
       "location": ""
     },
     {
-      "organizer": "Singapore Institute of Legal Education (SILE)",
-      "event_name": "Continuing Professional Development (\u2018CPD\u2019)",
+      "organizer": "Taxation Society UAE",
+      "event_name": "FUTURE-READY UAE TAX & COMPLIANCE INTEGRATING UAE CT, TP, VAT & E-INVOICING, INTERNAL AUDIT & AML",
       "date": "",
-      "location": ""
-    },
-    {
-      "organizer": "Singapore Institute of Legal Education (SILE)",
-      "event_name": "Conduct the Foreign Practitioner Examinations",
-      "date": "",
-      "location": ""
-    },
-    {
-      "organizer": "Singapore Institute of Legal Education (SILE)",
-      "event_name": "NOTICES",
-      "date": "",
-      "location": ""
-    },
-    {
-      "organizer": "ICAI Singapore Chapter",
-      "event_name": "Transformation in Motion - ICAI SG Professional Training Series",
-      "date": "18 Jul 2026",
-      "location": ""
-    },
-    {
-      "organizer": "ICAI Singapore Chapter",
-      "event_name": "Transformation in Motion",
-      "date": "28 Jul 2026",
-      "location": ""
-    },
-    {
-      "organizer": "ICAI Singapore Chapter",
-      "event_name": "Working Smarter with AI : Practical Applications for Finance Professional",
-      "date": "26 Aug 2026",
-      "location": ""
-    },
-    {
-      "organizer": "ICAI Singapore Chapter",
-      "event_name": "Beyond the Numbers: Holistic Leadership for Finance Leaders - Leading with Purpose, Emotional Intelligence & Psychological Safet",
-      "date": "Sep 23, 2026",
-      "location": ""
-    },
-    {
-      "organizer": "ICAI Singapore Chapter",
-      "event_name": "Log In",
-      "date": "Sep 10 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Tax Academy of Singapore",
-      "event_name": "Seminars and conferences",
-      "date": "17 August 2026",
-      "location": ""
-    },
-    {
-      "organizer": "Institute of Singapore Chartered Accountants (ISCA)",
-      "event_name": "Professional Programme",
-      "date": "",
-      "location": ""
+      "location": "COMPLIANCE INTEGRATING UAE CT, TP"
     }
   ],
   "recent_log": [
-    "[20/199] Singapore Actuarial Society (SAS): found 13, added 13, date-fixed 0, fixed 3 link(s)",
-    "[19/199] Association of Banks in Singapore (ABS): found 9, added 9, date-fixed 0",
-    "[18/199] Singapore FinTech Association (SFA): found 0, added 0, date-fixed 0",
-    "[17/199] Singapore Venture & Private Capital Association (SVCA): found 3, added 3, date-fixed 0",
-    "[16/199] Securities Investors Association (Singapore) (SIAS): found 7, added 7, date-fixed 0, fixed 7 link(s)",
-    "[15/199] Investment Management Association of Singapore (IMAS): found 99, added 15, date-fixed 0, fixed 91 link(s)",
-    "[14/199] CFA Society Singapore: found 0, added 0, date-fixed 0",
-    "[13/199] Singapore Association of the Institute of Chartered Secretaries and Administrators (SAICSA): found 0, added 0, date-fixed 0",
-    "[12/199] Singapore Institute of Directors (SID): found 28, added 28, date-fixed 0",
-    "[11/199] Singapore Corporate Counsel Association (SCCA): found 9, added 9, date-fixed 0, fixed 1 link(s)",
-    "[10/199] Singapore International Commercial Court (SICC): found 10, added 10, date-fixed 0",
-    "[9/199] Singapore International Arbitration Centre (SIAC): found 0, added 0, date-fixed 0",
-    "[8/199] Singapore Institute of Legal Education (SILE): found 11, added 11, date-fixed 0",
-    "[7/199] Singapore Academy of Law (SAL): found 0, added 0, date-fixed 0",
-    "[6/199] Law Society of Singapore: found 0, added 0, date-fixed 0",
-    "[5/199] ACCA Singapore: found 0, added 0, date-fixed 0",
-    "[4/199] ICAI Singapore Chapter: found 45, added 17, date-fixed 0",
-    "[3/199] Tax Academy of Singapore: found 1, added 1, date-fixed 0",
-    "[2/199] Institute of Singapore Chartered Accountants (ISCA): found 28, added 28, date-fixed 0, fixed 3 link(s)",
-    "[1/199] Singapore Chartered Tax Professionals (SCTP): found 60, added 60, date-fixed 0"
+    "[20/128] Emirates Institute of Finance: found 0, added 0, date-fixed 0",
+    "[19/128] U.S.-U.A.E. Business Council: found 20, added 0, date-fixed 0, fixed 1 link(s)",
+    "[18/128] Austrian Business Council UAE: found 0, added 0, date-fixed 0",
+    "[17/128] Finnish Business Council UAE: found 86, added 0, date-fixed 0, fixed 1 link(s)",
+    "[16/128] Netherlands Business Council UAE: found 11, added 0, date-fixed 0",
+    "[15/128] UAE Singapore Business Council: found 0, added 0, date-fixed 0",
+    "[14/128] ICC UAE: found 4, added 4, date-fixed 0",
+    "[13/128] Sharjah Chamber of Commerce & Industry: found 0, added 0, date-fixed 0",
+    "[12/128] Abu Dhabi Chamber: found 0, added 0, date-fixed 0",
+    "[11/128] Dubai Chambers: found 20, added 20, date-fixed 0",
+    "[10/128] Dubai Business Women Council: found 44, added 13, date-fixed 0",
+    "[9/128] ISACA UAE Chapter: found 4, added 4, date-fixed 0",
+    "[8/128] CFA Society Emirates: found 8, added 8, date-fixed 0",
+    "[7/128] UAE Internal Auditors Association: found 2, added 2, date-fixed 0",
+    "[6/128] IMA Middle East: FAILED - Page.goto: net::ERR_NAME_NOT_RESOLVED at https://imamiddleast.org/en/events/\nCall log:\n  - navigating to \"https://imamiddleast.org/en/events/\", waiting until \"commit\"\n",
+    "[5/128] PICPA Dubai: found 22, added 20, date-fixed 0, fixed 11 link(s)",
+    "[4/128] Emirates Association for Accountants & Auditors: found 0, added 0, date-fixed 0",
+    "[3/128] ICAI Dubai UAE Chapter: found 0, added 0, date-fixed 0",
+    "[2/128] Taxation Society UAE: found 76, added 75, date-fixed 0, fixed 76 link(s)",
+    "[1/128] Federal Tax Authority: found 16, added 16, date-fixed 0"
   ],
-  "updated_at": "2026-09-10T11:49:02.747150+00:00"
+  "updated_at": "2026-09-10T11:59:45.434852+00:00"
 }
