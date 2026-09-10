@@ -20,7 +20,13 @@ def _map_headers(header_row: tuple) -> dict[str, int]:
     for idx, cell in enumerate(header_row):
         key = str(cell or "").strip().lower()
         for field, aliases in HEADER_ALIASES.items():
-            if key in aliases:
+            if field in mapping:
+                continue  # first (leftmost) matching column wins for a field
+            # substring match, not exact -- a source tab's header is
+            # sometimes phrased as "Organisation / Website" or similar
+            # rather than a bare "Organisation", and an exact-match lookup
+            # would silently fail to find the organizer/url columns at all.
+            if any(alias in key for alias in aliases):
                 mapping[field] = idx
     return mapping
 
