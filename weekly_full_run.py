@@ -182,42 +182,74 @@ def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
     return len(passed_rows)
 
 
-def run_all(engine: str = "free", llm_classify: bool = True) -> int:
+def _country_summary_path(label: str) -> str:
+    return f"output/summary_{label}.json"
+
+
+def run_one_country(country: dict, engine: str = "free", llm_classify: bool = True) -> tuple[int, dict]:
+    """Scrape + clean exactly one country. Returns (exit_code, result_dict).
+    Also writes output/summary_<label>.json -- this is what lets the
+    parallel GitHub Actions matrix run every country as an independent job
+    (each on its own runner, no shared state) and have a later merge step
+    reassemble one combined summary afterward, without needing every job to
+    somehow write to the same file at once."""
+    label = country["label"]
+    orgs = load_organizations(SOURCE, country["source_sheet"])
+    print(f"\n=== {label}: full re-scrape of {len(orgs)} organizations ===")
+
+    rc = scraper_main.run(
+        source=SOURCE,
+        output=country["raw_output"],
+        sheet=country["raw_sheet"],
+        limit=0,
+        start=0,
+        failures_log=country["failures_log"],
+        engine=engine,
+        resume=False,  # always scrape everything, not just where we left off
+        source_sheet=country["source_sheet"],
+    )
+    if rc:
+        print(f"{label} scrape failed (exit {rc}) — skipping its cleaning step this run")
+        result = {"scrape_status": "failed"}
+        with open(_country_summary_path(label), "w", encoding="utf-8") as f:
+            json.dump(result, f, indent=2)
+        return rc, result
+
+    print(f"=== {label}: cleaning/classifying into {country['final_output']} ===")
+    counts = clean(
+        input_path=country["raw_output"],
+        sheet=country["raw_sheet"],
+        output_path=country["final_output"],
+        label=label,
+        total_orgs=len(orgs),
+        llm_classify=llm_classify,
+    )
+    result = {"scrape_status": "done", **counts}
+    with open(_country_summary_path(label), "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2)
+    return 0, result
+
+
+def merge_and_finalize(started_at: str | None = None) -> int:
+    """The second half of a parallel run: read every country's
+    output/summary_<label>.json (written independently by run_one_country,
+    possibly on a different runner entirely), rebuild Master.xlsx from
+    whichever final workbooks are actually present, and write the combined
+    output/weekly_summary.json. Safe to call even if a country's own
+    summary file is missing (its scrape/clean job failed or never ran) --
+    that country is just recorded as failed rather than crashing the merge."""
+    summary = {"started_at": started_at or datetime.now(timezone.utc).isoformat(), "countries": {}}
     exit_code = 0
-    summary = {"started_at": datetime.now(timezone.utc).isoformat(), "countries": {}}
 
     for country in COUNTRIES:
         label = country["label"]
-        orgs = load_organizations(SOURCE, country["source_sheet"])
-        print(f"\n=== {label}: full re-scrape of {len(orgs)} organizations ===")
-
-        rc = scraper_main.run(
-            source=SOURCE,
-            output=country["raw_output"],
-            sheet=country["raw_sheet"],
-            limit=0,
-            start=0,
-            failures_log=country["failures_log"],
-            engine=engine,
-            resume=False,  # always scrape everything, not just where we left off
-            source_sheet=country["source_sheet"],
-        )
-        if rc:
-            exit_code = rc
-            print(f"{label} scrape failed (exit {rc}) — skipping its cleaning step this run")
+        try:
+            with open(_country_summary_path(label), encoding="utf-8") as f:
+                summary["countries"][label] = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
             summary["countries"][label] = {"scrape_status": "failed"}
-            continue
-
-        print(f"=== {label}: cleaning/classifying into {country['final_output']} ===")
-        counts = clean(
-            input_path=country["raw_output"],
-            sheet=country["raw_sheet"],
-            output_path=country["final_output"],
-            label=label,
-            total_orgs=len(orgs),
-            llm_classify=llm_classify,
-        )
-        summary["countries"][label] = {"scrape_status": "done", **counts}
+        if summary["countries"][label].get("scrape_status") != "done":
+            exit_code = 1
 
     master_count = build_master([(c["label"], c["final_output"]) for c in COUNTRIES])
     summary["master_verified_total"] = master_count
@@ -230,11 +262,46 @@ def run_all(engine: str = "free", llm_classify: bool = True) -> int:
     return exit_code
 
 
+def run_all(engine: str = "free", llm_classify: bool = True) -> int:
+    """Sequential fallback: every country, one after another, in a single
+    process. Used for local/manual runs and Coolify -- the parallel GitHub
+    Actions matrix uses run_one_country() + merge_and_finalize() instead,
+    each country as its own job."""
+    exit_code = 0
+    started_at = datetime.now(timezone.utc).isoformat()
+
+    for country in COUNTRIES:
+        rc, _ = run_one_country(country, engine=engine, llm_classify=llm_classify)
+        if rc:
+            exit_code = rc
+
+    merge_rc = merge_and_finalize(started_at=started_at)
+    return exit_code or merge_rc
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--engine", choices=["free", "gemini"], default="free",
                          help="extraction engine for main.py's scrape step (default: free, no API cost)")
     parser.add_argument("--skip-llm", action="store_true",
                          help="skip the Gemini per-event relevance classification pass during cleaning")
+    parser.add_argument("--country", default=None,
+                         help="run only this one country's label (e.g. India) instead of all of them -- "
+                              "used by the parallel GitHub Actions matrix, one job per country")
+    parser.add_argument("--merge-only", action="store_true",
+                         help="skip scraping entirely and just rebuild Master.xlsx + weekly_summary.json "
+                              "from each country's output/summary_<label>.json -- used by the matrix's "
+                              "final merge job, after every per-country job has already run")
     args = parser.parse_args()
-    sys.exit(run_all(engine=args.engine, llm_classify=not args.skip_llm))
+
+    if args.merge_only:
+        sys.exit(merge_and_finalize())
+    elif args.country:
+        matches = [c for c in COUNTRIES if c["label"] == args.country]
+        if not matches:
+            print(f"Unknown country label {args.country!r}. Known labels: {[c['label'] for c in COUNTRIES]}")
+            sys.exit(1)
+        rc, _ = run_one_country(matches[0], engine=args.engine, llm_classify=not args.skip_llm)
+        sys.exit(rc)
+    else:
+        sys.exit(run_all(engine=args.engine, llm_classify=not args.skip_llm))
