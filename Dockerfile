@@ -3,7 +3,9 @@ FROM mcr.microsoft.com/playwright/python:v1.47.0-jammy
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Pin playwright to the base image's version -- a newer pip package would
+# look for a Chromium build this image doesn't ship.
+RUN pip install --no-cache-dir -r requirements.txt "playwright==1.47.0"
 
 COPY . .
 
