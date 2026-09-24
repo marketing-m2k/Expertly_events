@@ -108,6 +108,13 @@ def format_sheet(ws, columns=None):
     for name in list(ws.tables.keys()):
         del ws.tables[name]
 
+    if ws.max_row < 2:
+        # header-only sheet (e.g. every Needs-Review row got resolved this
+        # run) -- an Excel Table with zero data rows is invalid and makes
+        # Excel flag the whole workbook as corrupted on open. Leave the
+        # header formatting above in place but skip wrapping it in a Table.
+        return
+
     last_col_letter = get_column_letter(len(columns))
     table_ref = f"A1:{last_col_letter}{ws.max_row}"
     safe_name = "Tbl_" + re.sub(r"\W+", "_", ws.title).strip("_")

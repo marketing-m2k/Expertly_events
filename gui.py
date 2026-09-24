@@ -23,7 +23,7 @@ SOURCE = "Sources/Event_scrapper_-_Website_completed.xlsx"
 SOURCE_SHEET = "India"
 OUTPUT = "output/raw/Events.xlsx"
 SHEET = "Events"
-FAILURES_LOG = "output/failures.csv"
+FAILURES_LOG = "output/failures/failures.csv"
 ENGINE = "free"
 
 BG = "#0f1117"

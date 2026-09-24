@@ -48,6 +48,15 @@ JUNK_TITLES = {
     "learn more and secure your room at special rates.",
     "past events", "events calendar", "contact us", "quick links",
     "announcements", "empty heading", "no title", "untitled",
+    # section/category labels some sites use as every card's heading
+    # instead of the event's own name (see heuristic_extract.py's
+    # GENERIC_HEADINGS) -- kept here too as a safety net for whatever slips
+    # through from a different extraction path (e.g. the Gemini engine).
+    "masterclasses", "masterclass", "lunchtime series", "listing", "theme",
+    "webinar", "webinars", "conference", "seminar", "seminars",
+    "news letter", "newsletter", "training", "workshop", "workshops",
+    "programme", "program", "session", "sessions", "meeting", "meetings",
+    "series", "resilience", "economic education",
 }
 JUNK_SUBSTRINGS = ("check eligibility", "login with", "secure your room at special rates")
 

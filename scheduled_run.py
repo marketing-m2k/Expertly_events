@@ -23,7 +23,7 @@ from email.mime.text import MIMEText
 
 from weekly_full_run import COUNTRIES
 
-SUMMARY_PATH = "output/weekly_summary.json"
+SUMMARY_PATH = "output/summaries/weekly_summary.json"
 # Derived from COUNTRIES instead of hardcoded -- adding a country to
 # weekly_full_run.py's list is picked up here automatically.
 FAILURES_LOGS = {c["label"]: c["failures_log"] for c in COUNTRIES}

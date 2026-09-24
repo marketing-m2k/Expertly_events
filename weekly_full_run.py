@@ -34,20 +34,90 @@ Scheduled Task). Manual usage:
 """
 
 import argparse
+import csv
 import json
+import os
+import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 
 import openpyxl
+from openpyxl.styles import Font, PatternFill
 
 import main as scraper_main
-from scraper.clean_events import clean
+from scraper.api_budget import BudgetExceededError, get_total_cost
+from scraper.clean_events import JUNK_TITLES, clean
 from scraper.date_utils import date_conflicts_with_text
 from scraper.excel_writer import FINAL_COLUMNS, format_sheet
 from scraper.load_sites import load_organizations
 
+# A handful of organizations run one global calendar but got entered into
+# several different country tabs of the Sources workbook (e.g. the
+# Association of Corporate Treasurers under both UK and UAE, ISDA under
+# both UK and USA) -- each tab re-scrapes the SAME page, so the same event
+# shows up once per tab it's listed under, tagged with whichever country
+# that tab happens to be, regardless of where the event is actually
+# happening. Separately, a genuinely single-tab org whose own calendar
+# covers events worldwide (e.g. LCIA under India, listing a Beijing summit)
+# gets every one of its events mislabeled with that one tab's country too.
+# These hints let build_master() correct the Country field from the
+# event's own Location text when it clearly disagrees, and only these --
+# no full country-name-as-substring matching, which false-positives on
+# things like "Indianapolis, IN" (contains "india") or "Dublin, OH".
+_US_STATES = {
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID",
+    "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
+    "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK",
+    "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
+    "WI", "WY", "DC",
+}
+_COUNTRY_LOCATION_HINTS = {
+    "USA": [r"\busa\b", r"\bunited states\b"] + [rf",\s*{s.lower()}\b" for s in _US_STATES],
+    "UK": [r"\bunited kingdom\b", r"\buk\b", r"\blondon\b"],
+    "India": [r"\bindia\b", r"\bmumbai\b", r"\bdelhi\b", r"\bbengaluru\b",
+              r"\bbangalore\b", r"\bkolkata\b", r"\bchennai\b", r"\bhyderabad\b",
+              r"\bpune\b"],
+    "UAE": [r"\bdubai\b", r"\babu dhabi\b", r"\buae\b", r"\bunited arab emirates\b"],
+    "AUS": [r"\baustralia\b", r"\bsydney\b", r"\bmelbourne\b", r"\bbrisbane\b", r"\bperth\b"],
+    "SG": [r"\bsingapore\b"],
+}
+# A confident location signal that names a country we don't even track --
+# not corrected to one of the 6 tracked labels (there's nothing to correct
+# it TO), but not left silently mislabeled either: routed to Needs Review
+# so a human decides whether it belongs on that country's list at all.
+_UNTRACKED_COUNTRY_HINTS = [
+    r"\bchina\b", r"\bbeijing\b", r"\bshanghai\b", r"\bhong kong\b",
+    r"\bjapan\b", r"\btokyo\b", r"\bosaka\b", r"\bcanada\b", r"\btoronto\b",
+    r"\bcalgary\b", r"\bgermany\b", r"\bfrance\b", r"\bparis\b",
+    r"\bswitzerland\b", r"\bgeneva\b", r"\bzurich\b", r"\bireland\b",
+    r"\bdublin,\s*ireland\b", r"\bnew zealand\b", r"\bsouth africa\b",
+]
+
+
+def _infer_country_from_location(location: str) -> str | None:
+    """A tracked country label if `location` unambiguously names it, else
+    None (including when it's blank, or names more than one -- ambiguous
+    beats wrong)."""
+    loc = (location or "").lower()
+    if not loc:
+        return None
+    matches = {country for country, patterns in _COUNTRY_LOCATION_HINTS.items()
+               if any(re.search(p, loc) for p in patterns)}
+    return matches.pop() if len(matches) == 1 else None
+
+
+def _location_names_untracked_country(location: str) -> bool:
+    loc = (location or "").lower()
+    return bool(loc) and any(re.search(p, loc) for p in _UNTRACKED_COUNTRY_HINTS)
+
+
+def _row_fullness(row: list) -> int:
+    return sum(1 for v in row if v)
+
+
 SOURCE = "Sources/Event_scrapper_-_Website_completed.xlsx"
-SUMMARY_PATH = "output/weekly_summary.json"
+SUMMARY_PATH = "output/summaries/weekly_summary.json"
 MASTER_PATH = "output/Master.xlsx"
 MASTER_COLUMNS = ["Country"] + FINAL_COLUMNS
 
@@ -59,70 +129,189 @@ COUNTRIES = [
         "source_sheet": "India",
         "raw_sheet": "Events",
         "raw_output": "output/raw/Events.xlsx",
-        "final_output": "output/Events_2026.xlsx",
-        "failures_log": "output/failures.csv",
+        "final_output": "output/final/Events_2026.xlsx",
+        "failures_log": "output/failures/failures.csv",
     },
     {
         "label": "USA",
         "source_sheet": "USA",
         "raw_sheet": "USA",
         "raw_output": "output/raw/Events_USA.xlsx",
-        "final_output": "output/Events_USA_2026.xlsx",
-        "failures_log": "output/failures_USA.csv",
+        "final_output": "output/final/Events_USA_2026.xlsx",
+        "failures_log": "output/failures/failures_USA.csv",
     },
     {
         "label": "UK",
         "source_sheet": "UK",
         "raw_sheet": "UK",
         "raw_output": "output/raw/Events_UK.xlsx",
-        "final_output": "output/Events_UK_2026.xlsx",
-        "failures_log": "output/failures_UK.csv",
+        "final_output": "output/final/Events_UK_2026.xlsx",
+        "failures_log": "output/failures/failures_UK.csv",
     },
     {
         "label": "SG",
         "source_sheet": "SG",
         "raw_sheet": "SG",
         "raw_output": "output/raw/Events_SG.xlsx",
-        "final_output": "output/Events_SG_2026.xlsx",
-        "failures_log": "output/failures_SG.csv",
+        "final_output": "output/final/Events_SG_2026.xlsx",
+        "failures_log": "output/failures/failures_SG.csv",
     },
     {
         "label": "UAE",
         "source_sheet": "UAE",
         "raw_sheet": "UAE",
         "raw_output": "output/raw/Events_UAE.xlsx",
-        "final_output": "output/Events_UAE_2026.xlsx",
-        "failures_log": "output/failures_UAE.csv",
+        "final_output": "output/final/Events_UAE_2026.xlsx",
+        "failures_log": "output/failures/failures_UAE.csv",
     },
     {
         "label": "AUS",
         "source_sheet": "AUS",
         "raw_sheet": "AUS",
         "raw_output": "output/raw/Events_AUS.xlsx",
-        "final_output": "output/Events_AUS_2026.xlsx",
-        "failures_log": "output/failures_AUS.csv",
+        "final_output": "output/final/Events_AUS_2026.xlsx",
+        "failures_log": "output/failures/failures_AUS.csv",
     },
 ]
 
 
+def _build_stats_sheet(wb_out: openpyxl.Workbook, passed_rows: list, needs_review_rows: list) -> None:
+    """Adds a "Stats" sheet to Master.xlsx summarizing every stage of the
+    pipeline per country: orgs checked/found/failed, raw events extracted
+    vs. filtered by Gemini, relevant events split by status, and this
+    run's actual final Verified/Needs-Review counts. Rebuilt fresh every
+    run (not carried over) so it always reflects exactly what's in the two
+    other sheets right now."""
+    per_country = []
+    for country in COUNTRIES:
+        label = country["label"]
+        try:
+            with open(_country_summary_path(label), encoding="utf-8") as f:
+                counts = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+        if counts.get("scrape_status") != "done":
+            continue
+        verified = counts.get("verified", 0)
+        incomplete = counts.get("incomplete", 0)
+        past = counts.get("past", 0)
+        flagged = counts.get("flagged", 0)
+        orgs_seen = counts.get("orgs_seen", 0)
+        total_orgs = counts.get("total_orgs", 0)
+
+        failures_path = country["failures_log"]
+        if os.path.exists(failures_path):
+            with open(failures_path, encoding="utf-8") as f:
+                failed = sum(1 for _ in csv.DictReader(f))
+        else:
+            failed = 0
+
+        per_country.append({
+            "label": label, "checked": total_orgs, "with_events": orgs_seen,
+            "zero_events": total_orgs - orgs_seen, "failed": failed,
+            "raw_extracted": verified + incomplete + past + flagged,
+            "irrelevant": flagged, "relevant": verified + incomplete + past,
+            "verified": verified, "incomplete": incomplete, "past": past,
+        })
+
+    master_verified = Counter(r[0] for r in passed_rows)
+    master_needs_review = Counter(r[0] for r in needs_review_rows)
+
+    ws = wb_out.create_sheet("Stats")
+    header_fill = PatternFill("solid", fgColor="2F5496")
+    header_font = Font(color="FFFFFF", bold=True)
+    bold = Font(bold=True)
+
+    row = [1]  # mutable so the nested helper can advance it
+
+    def write_table(title: str, headers: list[str], data: list[list], totals: list) -> None:
+        r = row[0]
+        ws.cell(row=r, column=1, value=title).font = Font(bold=True, size=13)
+        r += 1
+        for c, h in enumerate(headers, 1):
+            cell = ws.cell(row=r, column=c, value=h)
+            cell.font = header_font
+            cell.fill = header_fill
+        r += 1
+        for data_row in data:
+            for c, v in enumerate(data_row, 1):
+                ws.cell(row=r, column=c, value=v)
+            r += 1
+        for c, v in enumerate(totals, 1):
+            ws.cell(row=r, column=c, value=v).font = bold
+        row[0] = r + 2  # blank row after each table
+
+    write_table(
+        "Organizations",
+        ["Country", "Checked", "Had >=1 event", "Had 0 events", "Failed to load"],
+        [[c["label"], c["checked"], c["with_events"], c["zero_events"], c["failed"]] for c in per_country],
+        ["TOTAL", sum(c["checked"] for c in per_country), sum(c["with_events"] for c in per_country),
+         sum(c["zero_events"] for c in per_country), sum(c["failed"] for c in per_country)],
+    )
+    write_table(
+        "Raw events extracted -> filtered by Gemini",
+        ["Country", "Raw events extracted", "Irrelevant (filtered out)", "Relevant (kept)"],
+        [[c["label"], c["raw_extracted"], c["irrelevant"], c["relevant"]] for c in per_country],
+        ["TOTAL", sum(c["raw_extracted"] for c in per_country), sum(c["irrelevant"] for c in per_country),
+         sum(c["relevant"] for c in per_country)],
+    )
+    write_table(
+        "Relevant events -> split by status",
+        ["Country", "Verified (complete)", "Incomplete (missing date/venue)", "Past"],
+        [[c["label"], c["verified"], c["incomplete"], c["past"]] for c in per_country],
+        ["TOTAL", sum(c["verified"] for c in per_country), sum(c["incomplete"] for c in per_country),
+         sum(c["past"] for c in per_country)],
+    )
+    labels = [c["label"] for c in per_country]
+    write_table(
+        "Final Master.xlsx (this workbook)",
+        ["Country", "Verified Events (final)", "Needs Review (held back)"],
+        [[label, master_verified.get(label, 0), master_needs_review.get(label, 0)] for label in labels],
+        ["TOTAL", sum(master_verified.values()), sum(master_needs_review.values())],
+    )
+
+    ws.column_dimensions["A"].width = 22
+    for col in "BCDE":
+        ws.column_dimensions[col].width = 20
+
+
 def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
     """Rebuild Master.xlsx from the union of every country's own
-    Upcoming - Verified sheet. Dedupes on (country, event name, date) so
-    re-running this never doubles up a row -- each country file is itself
-    the single source of truth per event; Master is just a read-only merge
-    of them, not an accumulating log.
+    Upcoming - Verified sheet.
+
+    Two corrections happen here, on top of the per-country files
+    themselves, because they can only be caught once every country's data
+    is sitting side by side:
+
+    1. Country correction from the event's own Location -- some
+       organizations are global (their one Sources-tab listing covers
+       events worldwide) and some are simply entered into several country
+       tabs at once (each re-scraping the same global calendar page under
+       a different label). Both produce a Country tag that's wrong for at
+       least some of that org's events. _infer_country_from_location()
+       trusts a confident Location signal over the source tab it happened
+       to be scraped from.
+    2. Cross-country dedup -- an org entered into multiple tabs produces
+       the exact same event (same name, same date) once per tab, each
+       under a different -- usually wrong per (1) -- country. Deduping key
+       is (event name, date) alone, not (country, name, date), so the same
+       globally-listed webinar can't survive as 3-5 near-identical rows.
+       When duplicates collide, the most complete row wins.
 
     Being in "Upcoming - Verified" is not enough on its own to reach
     Master: every row also goes through a cross-check gate here first --
     does the event's own name/description state an explicit date that
     DISAGREES with the resolved Date/End Date? (e.g. a historical
     "Bulletin" title stating 1908 while the resolved date drifted to some
-    other year, or a description saying an event "was held ... 2023" while
-    the Date column still shows something else). A row that fails this
-    check is held back into a separate "Needs Review" sheet instead of
-    silently reaching Master with a possibly-wrong date."""
-    seen = set()
-    passed_rows = []
+    other year, a description saying an event "was held ... 2023" while
+    the Date column still shows something else, or a title with an
+    embedded "[10/11/2026]" that disagrees with the resolved Date -- some
+    sites put a different date, e.g. a registration cutoff, in their own
+    structured date field). A row that fails this check, or whose Location
+    names a country we don't even track, is held back into a separate
+    "Needs Review" sheet instead of silently reaching Master with a
+    possibly-wrong date or country."""
+    by_key: dict[tuple[str, str], list] = {}
     needs_review_rows = []
 
     for label, path in labels_and_paths:
@@ -134,13 +323,22 @@ def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
         for row in ws.iter_rows(min_row=2, values_only=True):
             if not row or not (row[3] or "").strip():  # Event Name blank
                 continue
-            key = (label, (row[3] or "").strip().lower(), (row[0] or "").strip().lower())
-            if key in seen:
+            if (row[3] or "").strip().lower() in JUNK_TITLES:
+                # a generic section-label name (e.g. "Masterclasses",
+                # "THEME") that reached this per-country file before the
+                # extractor/JUNK_TITLES fix existed -- filtered out here too
+                # so already-scraped data benefits immediately, not just
+                # whatever gets scraped on the next run.
                 continue
-            seen.add(key)
             full_row = [label] + list(row)
 
-            date_disp, end_disp, name, description = full_row[1], full_row[2], full_row[4], full_row[9]
+            date_disp, end_disp, name, location, description = (
+                full_row[1], full_row[2], full_row[4], full_row[8], full_row[9])
+
+            inferred_country = _infer_country_from_location(location)
+            if inferred_country and inferred_country != label:
+                full_row[0] = inferred_country
+
             try:
                 resolved_start = datetime.strptime(date_disp, "%d-%b-%Y") if date_disp else None
             except ValueError:
@@ -152,12 +350,20 @@ def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
                 except ValueError:
                     pass
 
-            if resolved_start and date_conflicts_with_text(resolved_start, resolved_end,
-                                                             f"{name or ''} {description or ''}"):
-                needs_review_rows.append(full_row)
-            else:
-                passed_rows.append(full_row)
+            date_conflict = resolved_start and date_conflicts_with_text(
+                resolved_start, resolved_end, f"{name or ''} {description or ''}")
+            location_conflict = not inferred_country and _location_names_untracked_country(location)
 
+            if date_conflict or location_conflict:
+                needs_review_rows.append(full_row)
+                continue
+
+            key = (name.strip().lower(), (date_disp or "").strip().lower())
+            existing = by_key.get(key)
+            if existing is None or _row_fullness(full_row) > _row_fullness(existing):
+                by_key[key] = full_row
+
+    passed_rows = list(by_key.values())
     passed_rows.sort(key=lambda r: (r[0], r[1] or ""))  # Country, then Date
     needs_review_rows.sort(key=lambda r: (r[0], r[1] or ""))
 
@@ -176,6 +382,9 @@ def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
         ws_r.append(r)
     format_sheet(ws_r, MASTER_COLUMNS)
 
+    _build_stats_sheet(wb_out, passed_rows, needs_review_rows)
+    wb_out.move_sheet("Stats", offset=-(len(wb_out.sheetnames) - 1))  # put it first
+
     wb_out.save(MASTER_PATH)
     print(f"Wrote {MASTER_PATH}: {len(passed_rows)} verified events across {len(labels_and_paths)} countries "
           f"({len(needs_review_rows)} held back to Needs Review -- date conflicts with the event's own text).")
@@ -183,7 +392,7 @@ def build_master(labels_and_paths: list[tuple[str, str]]) -> int:
 
 
 def _country_summary_path(label: str) -> str:
-    return f"output/summary_{label}.json"
+    return f"output/summaries/summary_{label}.json"
 
 
 def run_one_country(country: dict, engine: str = "free", llm_classify: bool = True) -> tuple[int, dict]:
@@ -271,10 +480,18 @@ def run_all(engine: str = "free", llm_classify: bool = True) -> int:
     started_at = datetime.now(timezone.utc).isoformat()
 
     for country in COUNTRIES:
-        rc, _ = run_one_country(country, engine=engine, llm_classify=llm_classify)
+        try:
+            rc, _ = run_one_country(country, engine=engine, llm_classify=llm_classify)
+        except BudgetExceededError as exc:
+            print(f"\n*** STOPPING: {exc} ***")
+            print(f"*** {country['label']} was mid-run when the cap hit -- its output may be partial. "
+                  f"Countries not yet started this run were skipped. ***")
+            exit_code = 1
+            break
         if rc:
             exit_code = rc
 
+    print(f"\nGemini API spend this run: ${get_total_cost():.4f}")
     merge_rc = merge_and_finalize(started_at=started_at)
     return exit_code or merge_rc
 

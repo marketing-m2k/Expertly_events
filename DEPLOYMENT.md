@@ -59,14 +59,21 @@ docker build -t expertly-event-scraper .
 
 ## Output
 
-Four files land in `output/` inside the container each run:
-- `Events.xlsx` / `Events_USA.xlsx` — raw scraped rows (intermediate; every
-  organization's events before cleaning/classification).
-- `Events_2026.xlsx` / `Events_USA_2026.xlsx` — the final reviewed
-  workbooks, each with 5 sheets: Summary, Upcoming - Verified,
+`output/` is organized into subfolders, one country's worth of files each run:
+- `output/raw/Events.xlsx` / `Events_<Country>.xlsx` — raw scraped rows
+  (intermediate; every organization's events before cleaning/classification).
+- `output/final/Events_2026.xlsx` / `Events_<Country>_2026.xlsx` — the final
+  reviewed workbooks, each with 5 sheets: Summary, Upcoming - Verified,
   Upcoming - Incomplete, Past events, Flagged for Review.
-- `weekly_summary.json` — machine-readable run summary used to build the
-  email digest.
+- `output/failures/failures.csv` / `failures_<Country>.csv` — per-country
+  sites that failed to load this run.
+- `output/summaries/summary_<Country>.json` / `weekly_summary.json` —
+  machine-readable run summaries used to build the email digest.
+- `output/Master.xlsx` — the final cross-country deliverable (kept at the
+  `output/` root, not a subfolder, since it's the one file meant for actual
+  downstream use).
+- `output/progress.json`, `output/dashboard.html` — live operational files
+  read by `main.py`/`server.py` by a fixed path; kept at the `output/` root.
 
 On Coolify this all lives inside the container's filesystem — mount a
 volume at `/app/output` (Coolify → Storage → add a persistent volume) so

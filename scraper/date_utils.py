@@ -57,20 +57,30 @@ _ANY_YEAR = re.compile(r"\b(1[89]\d{2}|20\d{2})\b")
 
 
 def stated_past_year(text: str, today: datetime) -> int | None:
-    """If `text` states which year an event happened and that year is
-    actually in the past, return it -- else None.
+    """If `text` states which year an event happened/is happening, and
+    trusting that year is safer than the caller's "assume next upcoming
+    occurrence" rollover guess, return it -- else None.
 
     Two tiers: first a high-confidence check for explicit past-tense
     phrasing ("was held ... 2023"). Many real event titles state the year
     with NO such phrasing at all though -- e.g. a title that's simply
     "Eighth National Conference On Taxation September 8 To 11, 1914" with
-    a separate Date field of just "September 8" (no year). When nothing
-    phrase-based matches, fall back to: is there exactly one plausible old
-    year mentioned anywhere in the text at all? A title naming a single
-    year is virtually always naming its own event's year, not something
-    unrelated -- and the caller only reaches this function when the
-    structured Date field itself had no year, so there's nothing to lose
-    by trusting it over a fabricated "next occurrence" guess.
+    a separate Date field of just "September 8" (no year), or "Money20/20
+    Europe 2026" with a Date field of just "2 Jun" scraped after 2 Jun 2026
+    has already passed -- the rollover guess bumps that second case to "2
+    Jun 2027", silently fabricating a whole year ahead even though the
+    title already says which year it is. When nothing phrase-based
+    matches, fall back to: is there exactly one plausible year (this year
+    or older) mentioned anywhere in the text at all? A title naming a
+    single year is virtually always naming its own event's year, not
+    something unrelated -- and the caller only reaches this function when
+    the structured Date field itself had no year, so there's nothing to
+    lose by trusting it over a fabricated "next occurrence" guess. A year
+    strictly AFTER today.year is deliberately excluded here even when it's
+    the only one mentioned -- has_explicit_year() would already have caught
+    that case directly from the date field, so reaching this fallback with
+    a future year usually means the number belongs to something else
+    (e.g. a decade name) and rolling forward remains the better guess.
     """
     match = _STATED_PAST_YEAR.search(text or "")
     if match:
@@ -78,11 +88,11 @@ def stated_past_year(text: str, today: datetime) -> int | None:
         return year if year < today.year else None
 
     years = {int(y) for y in _ANY_YEAR.findall(text or "")}
-    past_years = {y for y in years if y < today.year}
-    if len(past_years) == 1 and len(years) == len(past_years):
-        # exactly one year mentioned, total, and it's in the past -- no
-        # ambiguity between candidate years to worry about
-        return past_years.pop()
+    plausible_years = {y for y in years if y <= today.year}
+    if len(plausible_years) == 1 and len(years) == len(plausible_years):
+        # exactly one year mentioned, total, and it's this year or older --
+        # no ambiguity between candidate years to worry about
+        return plausible_years.pop()
     return None
 
 
@@ -364,13 +374,26 @@ _MONTH_NUM = {name.lower(): i for i, names in enumerate([
 ], start=1) for name in names}
 
 
+# "[10/11/2026]" embedded in an event name -- seen on sites (e.g. AICM)
+# whose listing page puts some OTHER date (a registration cutoff, a "page
+# last updated" stamp) in the structured date field while the event's own
+# real date sits spelled out, day-first, inside the title itself. Day-first
+# because every site we've actually seen this on (AU/UK/India/SG/UAE) uses
+# that convention; ambiguous when both halves are <=12, but numeric dates
+# routed through here are only ever used to flag a *conflict* for a human
+# to check, never to silently resolve one, so an occasional false-positive
+# flag just means an extra row in Needs Review, not a corrupted date.
+_STATED_NUMERIC_DATE = re.compile(r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b")
+
+
 def extract_stated_dates(text: str) -> list[datetime]:
-    """Find every explicit, fully-specified date (day + month-name + year)
-    mentioned anywhere in `text`, in either "1 January 2026" or "January 1,
-    2026" order. Used to cross-check a resolved Date against what the
-    event's own name/description actually says -- unlike the parsing
-    functions above, this doesn't guess or roll years forward; it only
-    returns dates that were spelled out completely and unambiguously."""
+    """Find every explicit, fully-specified date (day + month-name + year,
+    or numeric day/month/year) mentioned anywhere in `text`, in either
+    "1 January 2026", "January 1, 2026", or "10/11/2026" order. Used to
+    cross-check a resolved Date against what the event's own name/
+    description actually says -- unlike the parsing functions above, this
+    doesn't guess or roll years forward; it only returns dates that were
+    spelled out completely and unambiguously."""
     found = []
     for m in _STATED_FULL_DATE.finditer(text or ""):
         if m.group(1):
@@ -394,6 +417,18 @@ def extract_stated_dates(text: str) -> list[datetime]:
             continue
         try:
             found.append(datetime(int(year), month, int(day)))
+        except ValueError:
+            continue
+    for m in _STATED_NUMERIC_DATE.finditer(text or ""):
+        day, month, year = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if day > 12 and month <= 12:
+            pass  # unambiguous day-first as-is
+        elif month > 12 and day <= 12:
+            day, month = month, day  # was actually month-first -- swap
+        elif day > 12 and month > 12:
+            continue  # neither half is a valid month -- not a real date
+        try:
+            found.append(datetime(year, month, day))
         except ValueError:
             continue
     return found

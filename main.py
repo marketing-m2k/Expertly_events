@@ -332,7 +332,7 @@ if __name__ == "__main__":
                          help="tab name to write raw scraped events into, in --output")
     parser.add_argument("--limit", type=int, default=0, help="0 = no limit, process all organizations")
     parser.add_argument("--start", type=int, default=0, help="index to start from")
-    parser.add_argument("--failures-log", default="output/failures.csv")
+    parser.add_argument("--failures-log", default="output/failures/failures.csv")
     parser.add_argument("--engine", choices=["free", "gemini"], default="free",
                          help="'free' = pattern-matching only, no API/cost. 'gemini' = LLM-based, needs GEMINI_API_KEY")
     parser.add_argument("--resume", action="store_true",

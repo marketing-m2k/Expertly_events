@@ -1,9 +1,9 @@
-__pycache__/
+﻿__pycache__/
 *.pyc
 server.log
 .env
 
-# output/ holds the persisted scrape results -- these ARE committed by the
+# output/ holds the persisted scrape results -- these ARE committed after
 # weekly GitHub Actions workflow so each run can reconcile against last
 # week's data (e.g. fill in a date that was previously missing). Patterns
 # (not per-country filenames) so adding a new country to weekly_full_run.py's
@@ -16,8 +16,13 @@ server.log
 output/*
 !output/raw/
 !output/raw/*.xlsx
-!output/*_2026.xlsx
+!output/final/
+!output/final/*.xlsx
 !output/Master.xlsx
-!output/weekly_summary.json
+!output/summaries/
+!output/summaries/*.json
 !output/progress.json
 !output/dashboard.html
+
+# Local run logs
+logs/

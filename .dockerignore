@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 output/archive/
 server.log
+# Secrets come from Coolify environment variables, never baked into the image
+.env
+.git/
+.github/
+logs/

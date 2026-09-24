@@ -59,19 +59,46 @@ def _valid_href(href: str) -> bool:
     return bool(href) and not href.startswith(("#", "javascript:", "mailto:", "tel:"))
 
 
+# A handful of sites use a section/category label -- not the event's own
+# name -- as every single one of their event cards' heading: TVED tags
+# every masterclass card "Masterclasses", the Australian Competition
+# Tribunal's template literally headings each listing "LISTING", Institute
+# of Directors India uses "THEME", the NY Fed's own program names
+# ("RESILIENCE") get picked up instead of that session's actual topic.
+# Trusting the heading blindly there produces a sheet full of events all
+# named "Masterclasses" -- worse than no heading at all, since the card
+# usually has the real, event-specific title sitting in a different link.
+GENERIC_HEADINGS = {
+    "masterclasses", "masterclass", "lunchtime series", "listing", "theme",
+    "webinar", "webinars", "conference", "conferences", "seminar", "seminars",
+    "news letter", "newsletter", "event", "events", "details", "register",
+    "training", "workshop", "workshops", "programme", "program", "session",
+    "sessions", "meeting", "meetings", "series", "resilience",
+    "economic education", "update", "updates",
+}
+
+
 def _find_title_and_link(card: Tag, base_url: str) -> tuple[str, str]:
     """Find the event title and, preferentially, the link that actually
     points at *that* event's own page — not just the first link in the card.
 
-    Priority: (1) the link the heading text itself is wrapped in or contains,
-    (2) a link whose own text is register/details/etc., (3) a link whose
-    text looks like a title, (4) the first valid link as a last resort.
+    Priority: (1) the link the heading text itself is wrapped in or contains
+    -- unless that heading text is a generic section label rather than the
+    event's own name, in which case it's set aside in favor of (2) a link
+    whose own text is register/details/etc., (3) a link whose text looks
+    like a title, (4) the first valid link as a last resort -- falling back
+    to the generic heading text only if nothing more specific turns up
+    anywhere in the card, since a vague name still beats silently dropping
+    the event.
     """
     heading = card.find(re.compile(r"^h[1-4]$"))
-    title = heading.get_text(strip=True) if heading else ""
+    heading_text = heading.get_text(strip=True) if heading else ""
+    usable_heading = "" if heading_text.strip().lower() in GENERIC_HEADINGS else heading_text
+    title = usable_heading
 
-    # (1) the heading's own anchor — most reliable per-event link
-    if heading:
+    # (1) the heading's own anchor — most reliable per-event link, but only
+    # trusted for the title text when the heading itself wasn't generic
+    if heading and usable_heading:
         anchor = heading if heading.name == "a" else heading.find("a", href=True)
         if not anchor:
             parent_a = heading.find_parent("a", href=True)
@@ -84,7 +111,7 @@ def _find_title_and_link(card: Tag, base_url: str) -> tuple[str, str]:
 
     candidates = [a for a in card.find_all("a", href=True) if _valid_href(a["href"])]
     if not candidates:
-        return title, ""
+        return title or heading_text, ""
 
     # (2) explicit "register/details/..." link text
     for a in candidates:
@@ -94,18 +121,21 @@ def _find_title_and_link(card: Tag, base_url: str) -> tuple[str, str]:
                 title = a.get_text(strip=True)
             return title, link
 
-    # (3) a link whose text reads like a title
+    # (3) a link whose text reads like a title -- skip another generic label
+    # here too (e.g. a second nav-ish link in the same card), so a genuinely
+    # generic heading doesn't just get replaced by an equally generic link
     for a in candidates:
         text = a.get_text(strip=True)
-        if 8 <= len(text) <= 140:
+        if 8 <= len(text) <= 140 and text.strip().lower() not in GENERIC_HEADINGS:
             if not title:
                 title = text
             return title, urljoin(base_url, a["href"].strip())
 
-    # (4) fall back to the first link in the card
+    # (4) fall back to the first link in the card, or the generic heading
+    # text if even that has nothing -- still better than losing the event
     link = urljoin(base_url, candidates[0]["href"].strip())
     if not title:
-        title = candidates[0].get_text(strip=True)
+        title = candidates[0].get_text(strip=True) or heading_text
     return title, link
 
 

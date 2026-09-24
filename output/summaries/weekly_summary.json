@@ -1,0 +1,62 @@
+{
+  "started_at": "2026-09-16T12:51:45.938585+00:00",
+  "countries": {
+    "India": {
+      "scrape_status": "done",
+      "verified": 496,
+      "incomplete": 564,
+      "past": 1809,
+      "flagged": 2444,
+      "orgs_seen": 145,
+      "total_orgs": 208
+    },
+    "USA": {
+      "scrape_status": "done",
+      "verified": 1506,
+      "incomplete": 386,
+      "past": 599,
+      "flagged": 1495,
+      "orgs_seen": 166,
+      "total_orgs": 216
+    },
+    "UK": {
+      "scrape_status": "done",
+      "verified": 440,
+      "incomplete": 194,
+      "past": 248,
+      "flagged": 617,
+      "orgs_seen": 80,
+      "total_orgs": 129
+    },
+    "SG": {
+      "scrape_status": "done",
+      "verified": 309,
+      "incomplete": 93,
+      "past": 160,
+      "flagged": 1286,
+      "orgs_seen": 82,
+      "total_orgs": 199
+    },
+    "UAE": {
+      "scrape_status": "done",
+      "verified": 190,
+      "incomplete": 141,
+      "past": 67,
+      "flagged": 659,
+      "orgs_seen": 55,
+      "total_orgs": 128
+    },
+    "AUS": {
+      "scrape_status": "done",
+      "verified": 203,
+      "incomplete": 25,
+      "past": 55,
+      "flagged": 566,
+      "orgs_seen": 49,
+      "total_orgs": 107
+    }
+  },
+  "master_verified_total": 3115,
+  "finished_at": "2026-09-16T12:52:03.682417+00:00",
+  "status": "done"
+}
