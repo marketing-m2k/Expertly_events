@@ -19,10 +19,13 @@ def _normalize_url(url: str) -> str:
     return f"{host}{parts.path.rstrip('/')}" + (f"?{parts.query}" if parts.query else "")
 
 
-def make_event_id(organizer: str, name: str, link: str = "", source_url: str = "") -> str:
+def make_event_id(organizer: str, name: str, link: str = "", source_url: str = "", when: str = "") -> str:
+    """`when` (the event's date) only matters for an event with no page of its
+    own: the same name can then legitimately recur on several dates."""
     own_page = link and _normalize_url(link) != _normalize_url(source_url)
     if own_page:
         basis = "url|" + _normalize_url(link)
     else:
-        basis = "name|" + normalize_ws(organizer).lower() + "|" + re.sub(r"\W+", " ", normalize_ws(name).lower()).strip()
+        basis = ("name|" + normalize_ws(organizer).lower() + "|" + re.sub(r"\W+", " ", normalize_ws(name).lower()).strip()
+                 + ("|" + normalize_ws(when) if when else ""))
     return "ev_" + hashlib.sha1(basis.encode("utf-8")).hexdigest()[:12]

@@ -5,6 +5,7 @@ Every value here is stated by the site itself in a named field (startDate,
 location, eventAttendanceMode...), so nothing is inferred. No AI, no cost.
 """
 
+import html as html_lib
 import json
 import re
 from datetime import datetime
@@ -54,7 +55,7 @@ def _text(value) -> str:
         value = value.get("name") or value.get("@value") or ""
     if isinstance(value, list):
         value = value[0] if value else ""
-    return normalize_ws(str(value or ""))
+    return normalize_ws(html_lib.unescape(str(value or "")))
 
 
 def _location(loc) -> tuple[str, bool]:

@@ -17,12 +17,13 @@ A dated backup of the previous file is written before every save.
 
 import os
 import shutil
+from collections import Counter
 from datetime import datetime
 
 import openpyxl
 from openpyxl.styles import Font, PatternFill
 
-from scraper.event_id import make_event_id
+from scraper.event_id import _normalize_url, make_event_id
 from scraper.excel_writer import format_sheet
 
 IDENTITY = ["Event ID", "Country", "Date", "End Date", "Status", "Event Name", "Organizer", "Category",
@@ -92,7 +93,7 @@ class MasterData:
         for name, target in (("Verified Events", self.verified), ("Needs Review", self.review),
                              ("Past Events", self.past), ("Rejected", self.rejected)):
             for row in self._read_sheet(wb, name):
-                target[row["Event ID"]] = row
+                self._add_unique(target, row)
         if "Change Log" in wb.sheetnames:
             self.log = [[_s(c) for c in r] for r in wb["Change Log"].iter_rows(min_row=2, values_only=True) if any(r)]
         return self
@@ -121,6 +122,18 @@ class MasterData:
             out.append(row)
         return out
 
+    @staticmethod
+    def _add_unique(target: dict, row: dict) -> None:
+        """Several events can share one page (a series or course page), so
+        they share an Event ID. Every row is kept: later ones get a ~2, ~3
+        suffix instead of overwriting the first."""
+        base, eid, n = row["Event ID"], row["Event ID"], 2
+        while eid in target:
+            eid = f"{base}~{n}"
+            n += 1
+        row["Event ID"] = eid
+        target[eid] = row
+
     # ---- helpers -----------------------------------------------------------
     def _log(self, row: dict, action: str, field: str = "", old: str = "", new: str = "", source: str = "",
              by: str = "Scraper") -> None:
@@ -147,10 +160,12 @@ class MasterData:
     # ---- applying one scraped record ----------------------------------------
     def apply_record(self, rec: dict) -> None:
         eid, status = rec["event_id"], rec["status"]
-        if status == "unreachable":
-            return
-        new = record_to_row(rec)
         existing = self.verified.get(eid)
+        if status == "past" and existing:
+            existing["Last Seen on Site"] = self.day  # still listed; its own date moves it to Past Events
+        if status not in ("verified", "needs_review", "rejected"):
+            return  # unreachable / shared page / past: nothing to apply, existing rows stay as they are
+        new = record_to_row(rec)
         if existing and self._locked(existing):
             self.stats["locked_skipped"] += 1
             return
@@ -165,8 +180,18 @@ class MasterData:
                 self.verified[eid] = merged
                 self.stats["promoted"] += 1
                 self._log(merged, "promoted to Verified", source=rec.get("link", ""))
-            elif self._find_duplicate(new, eid):
-                self.stats["duplicates_skipped"] += 1
+            elif (dup := self._find_duplicate(new, eid)):
+                row = self.verified[dup]
+                if str(row.get("Verified By", "")).startswith("Legacy") and not self._locked(row):
+                    # an old, never-checked row: the verified event replaces it in place
+                    del self.verified[dup]
+                    row["Event ID"] = eid
+                    self.verified[eid] = row
+                    self._update_existing(row, new, {**rec, "changed": True})
+                    row["Verified By"] = "Rules"
+                    self._log(row, "legacy row upgraded to verified", source=rec.get("link", ""))
+                else:
+                    self.stats["duplicates_skipped"] += 1
             else:
                 self.verified[eid] = self._new_row(new, "Rules")
                 self.stats["added"] += 1
@@ -220,6 +245,8 @@ class MasterData:
 
     # ---- after all records ---------------------------------------------------
     def apply_missing_and_past(self, healthy_sources: set[str], seen_ids: set[str]) -> None:
+        link_counts = Counter(_normalize_url(r.get("Register Link", "")) for r in self.verified.values()
+                              if r.get("Register Link"))
         for eid, row in list(self.verified.items()):
             if self._locked(row):
                 continue
@@ -232,6 +259,9 @@ class MasterData:
                 continue
             if eid in seen_ids or row.get("Source URL") not in healthy_sources:
                 continue  # seen this run, or its website is unwell -- not the event's fault
+            link = _normalize_url(row.get("Register Link", ""))
+            if not link or link == _normalize_url(row.get("Source URL", "")) or link_counts[link] > 1:
+                continue  # its page covers several events, so "not found" can't be judged for this one
             last_seen = _parse(row.get("Last Seen on Site", ""))
             if last_seen and (self.today - last_seen).days > MISSING_GRACE_DAYS:
                 reason = f"Not found on its website since {row['Last Seen on Site']}"

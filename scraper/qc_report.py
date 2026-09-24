@@ -27,7 +27,8 @@ def build_qc_report(run: dict) -> str:
         st = c.get("event_status", {})
         lines.append(f"  Events checked: {sum(st.values())}  (verified {st.get('verified', 0)}, "
                      f"needs review {st.get('needs_review', 0)}, rejected {st.get('rejected', 0)}, "
-                     f"page unreachable {st.get('unreachable', 0)})")
+                     f"already past {st.get('past', 0)}, page unreachable {st.get('unreachable', 0)}, "
+                     f"no page of its own {st.get('shared_page', 0)})")
         lines.append(f"  Fixed by re-scraping: {c.get('fixed_by_rescrape', 0)}")
         reasons = c.get("review_reasons", {})
         for reason, n in sorted(reasons.items(), key=lambda kv: -kv[1])[:8]:

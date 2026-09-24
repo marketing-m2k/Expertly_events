@@ -367,3 +367,120 @@ def test_ai_review_stops_cleanly_when_the_budget_is_reached(tmp_path):
     m = _review_master(tmp_path)
     stats = review_needs_review(m, TODAY, fetch_fn=_fetch, call_fn=over_budget)
     assert stats["stopped_by_budget"] and "ev_1" in m.review
+
+
+# ---- found by the first AUS trial (24 Sep 2026) ----------------------------------
+
+def test_events_sharing_one_page_all_survive_loading_master(tmp_path):
+    # 125 rows of the real Master shared a page with another row and overwrote each other
+    path = tmp_path / "Master.xlsx"
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Verified Events"
+    ws.append(["Country", "Date", "Event Name", "Organizer", "Register Link", "Source URL"])
+    ws.append(["AUS", "16-Sep-2026", "FAAA Series", "FAAA", "https://faaa.au/series/x/", "https://faaa.au/events/"])
+    ws.append(["AUS", "28-Oct-2026", "FAAA Series", "FAAA", "https://faaa.au/series/x/", "https://faaa.au/events/"])
+    wb.save(path)
+    m = MasterData(str(path), TODAY).load()
+    assert len(m.verified) == 2 and sorted(r["Date"] for r in m.verified.values()) == ["16-Sep-2026", "28-Oct-2026"]
+    m.save()
+    assert len(MasterData(str(path), TODAY).load().verified) == 2  # ids are stable after saving
+
+
+def test_html_entities_in_structured_titles_are_decoded():
+    from scraper.structured_data import extract_structured_events
+    page = ('<script type="application/ld+json">{"@type":"Event","name":"Series &#8211; Session 2",'
+            '"startDate":"2026-10-12"}</script>')
+    assert extract_structured_events(page, URL)[0]["name"]["value"] == "Series – Session 2"
+
+
+def test_event_that_already_happened_is_past_not_needs_review():
+    row = {"name": "GST Audit Workshop", "organizer": "ICAI", "link": URL, "source_url": "https://example.org/events"}
+    rec = process_event(row, {"html": PAGE, "status": 200, "error": None}, "India", lambda u, wait_ms: None,
+                        datetime(2026, 12, 1))
+    assert rec["status"] == "past"
+
+
+def test_page_that_fails_to_open_is_retried_but_a_404_is_final():
+    row = {"name": "GST Audit Workshop", "organizer": "ICAI", "link": URL, "source_url": "https://example.org/events"}
+    ok = {"html": PAGE, "status": 200, "error": None}
+    rec = process_event(row, {"html": None, "status": None, "error": "timeout"}, "India", lambda u, wait_ms: ok, TODAY)
+    assert rec["status"] == "verified"
+    calls = []
+    rec = process_event(row, {"html": None, "status": 404, "error": "HTTP 404"}, "India",
+                        lambda u, wait_ms: calls.append(1), TODAY)
+    assert rec["status"] == "unreachable" and not calls
+
+
+def test_list_pages_and_shared_pages_are_not_treated_as_one_events_page():
+    from collections import Counter
+    from scraper.enrich import has_own_page
+    counts = Counter({"example.org/e/1": 1, "faaa.au/series/x": 2})
+    assert has_own_page("https://example.org/e/1", "https://example.org/events", counts)
+    assert not has_own_page("https://faaa.au/series/x", "https://faaa.au/events", counts)   # shared by two events
+    assert not has_own_page("https://example.org/events", "https://example.org/events/", counts)  # the list page
+    assert not has_own_page("http://www.google.com/calendar/event?action=TEMPLATE", "https://a.org/e", counts)
+    assert not has_own_page("", "https://a.org/e", counts)
+
+
+def test_events_on_shared_pages_are_never_marked_missing(tmp_path):
+    m = _master(tmp_path)
+    for eid, date in (("ev_a", "20-Oct-2026"), ("ev_b", "27-Oct-2026")):
+        m.verified[eid] = {"Event ID": eid, "Event Name": "Series", "Date": date, "Register Link": "https://x.org/series/1",
+                           "Source URL": "https://x.org/events", "Last Seen on Site": "01-Jan-2026", "Locked": ""}
+    m.apply_missing_and_past({"https://x.org/events"}, set())
+    assert set(m.verified) == {"ev_a", "ev_b"}
+
+
+def test_listing_style_titles_are_not_event_names():
+    from scraper.label_extract import is_generic_title
+    for bad in ("Events Archive", "Events Calendar", "Event Display", "Conferences and events", "Events & CPD",
+                "Events - Energy & Resources Law Association"):
+        assert is_generic_title(bad), bad
+    assert not is_generic_title("China Asset Management Forum in Australia 2026")
+
+
+def test_og_title_shown_in_the_page_content_is_high_confidence():
+    from scraper.label_extract import extract_labelled
+    html = ('<html><head><meta property="og:title" content="AIMA Australia Annual Forum 2026"></head>'
+            '<body><main><div>AIMA Australia Annual Forum 2026</div></main></body></html>')
+    name = extract_labelled(html, URL)["fields"]["name"]
+    assert name["confidence"] == "high"
+    unseen = ('<html><head><meta property="og:title" content="AIMA Australia Annual Forum 2026"></head>'
+              '<body><main><div>Something else entirely</div></main></body></html>')
+    assert extract_labelled(unseen, URL)["fields"]["name"]["confidence"] == "medium"
+
+
+# ---- AI review fixes from the first AUS trial ------------------------------------
+
+def test_missing_page_text_is_never_a_reason_to_reject(tmp_path):
+    m = _review_master(tmp_path)
+    review_needs_review(m, TODAY, fetch_fn=_fetch, call_fn=lambda p: {
+        "decision": "rejected", "reason": "The page text is only a cookie consent notice with no information about the event"})
+    assert "ev_1" in m.review and "ev_1" not in m.rejected
+    assert "could not be read" in m.review["ev_1"]["AI Review"]
+
+
+def test_ai_marks_an_already_past_event_as_past_not_left_in_review(tmp_path):
+    past_page = PAGE.replace("2026-10-12", "2026-08-12").replace("2026-10-13", "2026-08-13") \
+                    .replace("12 October 2026 - 13 October 2026", "12 August 2026 - 13 August 2026")
+    resp = {**GOOD, "date": {"value": "12 August 2026", "quote": "12 August 2026 - 13 August 2026"}}
+    m = _review_master(tmp_path)
+    review_needs_review(m, TODAY, fetch_fn=lambda urls, workers=5: {u: {"html": past_page, "status": 200, "error": None} for u in urls},
+                        call_fn=lambda p: resp)
+    assert "ev_1" in m.rejected and "already passed" in m.rejected["ev_1"]["Reject Reason"]
+
+
+def test_a_page_that_could_not_be_opened_is_retried_next_run(tmp_path):
+    m = _review_master(tmp_path)
+    down = lambda urls, workers=5: {u: {"html": None, "status": 405, "error": "HTTP 405"} for u in urls}
+    review_needs_review(m, TODAY, fetch_fn=down, call_fn=lambda p: GOOD)
+    assert m.review["ev_1"]["AI Review"].startswith("AI review skipped")
+    stats = review_needs_review(m, TODAY, fetch_fn=_fetch, call_fn=lambda p: GOOD)  # the page works this time
+    assert stats["verified"] == 1 and "ev_1" in m.verified
+
+
+def test_prompt_carries_the_exclusion_rules_from_the_qc_comments():
+    from scraper.ai_review import PROMPT
+    for phrase in ("board-governance", "social or networking", "exam-prep", "NEVER reject"):
+        assert phrase in PROMPT

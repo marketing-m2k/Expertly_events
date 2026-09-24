@@ -9,13 +9,15 @@ record per event. Nothing here writes to Master; master_store.py does that.
 import hashlib
 import html as html_lib
 import os
+from collections import Counter
 from datetime import datetime
+from urllib.parse import urlsplit
 
 import openpyxl
 
 from scraper.classify_rules import classify_event
 from scraper.detail_extract import extract_detail_page
-from scraper.event_id import make_event_id
+from scraper.event_id import _normalize_url, make_event_id
 from scraper.evidence import normalize_ws
 from scraper.fetch import fetch_detail_pages
 from scraper.label_extract import main_text, visible_text
@@ -59,6 +61,29 @@ def _fingerprint(html: str) -> str:
     return hashlib.sha1(main_text(html).encode("utf-8")).hexdigest()[:16]
 
 
+def _is_past(fields: dict, today: datetime) -> bool:
+    """True when the event's own page gives a date and it has already passed."""
+    for column in ("end_date", "date"):
+        if column in fields:
+            try:
+                return datetime.strptime(fields[column]["value"], "%d-%b-%Y") < today.replace(hour=0, minute=0, second=0, microsecond=0)
+            except ValueError:
+                return False
+    return False
+
+
+def has_own_page(link: str, source_url: str, link_counts: Counter) -> bool:
+    """False when the link cannot belong to just this one event: it is the
+    list page itself, one page shared by several events (a series or course
+    page), or an external calendar link. Reading such a page would attach the
+    wrong details to the event, so those events are left as they are."""
+    if not link or _normalize_url(link) == _normalize_url(source_url):
+        return False
+    if urlsplit(link).netloc.lower().endswith("google.com"):
+        return False
+    return link_counts[_normalize_url(link)] == 1
+
+
 def process_event(row: dict, fetched: dict, source_country: str, refetch, today: datetime, max_retries: int = MAX_RETRIES) -> dict:
     """Extract, classify and verify one event; on failure re-open its page up
     to `max_retries` more times (with a longer wait) before giving up."""
@@ -71,9 +96,13 @@ def process_event(row: dict, fetched: dict, source_country: str, refetch, today:
     result = fetched
     while True:
         if not result or result.get("html") is None:
-            return {**base, "status": "unreachable", "fields": {}, "country": source_country, "category": "",
-                    "reasons": [f"event page could not be opened ({(result or {}).get('error') or 'no result'})"],
-                    "attempts": attempts, "fingerprint": ""}
+            if (result or {}).get("status") in (404, 410) or attempts >= max_retries:
+                return {**base, "status": "unreachable", "fields": {}, "country": source_country, "category": "",
+                        "reasons": [f"event page could not be opened ({(result or {}).get('error') or 'no result'})"],
+                        "attempts": attempts, "fingerprint": ""}
+            attempts += 1
+            result = refetch(link, wait_ms=3000 * attempts)
+            continue
 
         html = result["html"]
         extraction = extract_detail_page(html, link, row["organizer"])
@@ -85,7 +114,8 @@ def process_event(row: dict, fetched: dict, source_country: str, refetch, today:
         failures += [r for r in extraction["review_reasons"]
                      if r not in failures and "no event date" not in r and " came from a " not in r]
 
-        if classification["category"] == "Reject" or (not failures and not extraction["conflicts"]) or attempts >= max_retries:
+        if (classification["category"] == "Reject" or _is_past(fields, today)
+                or (not failures and not extraction["conflicts"]) or attempts >= max_retries):
             break
         attempts += 1
         result = refetch(link, wait_ms=3000 * attempts)
@@ -93,6 +123,9 @@ def process_event(row: dict, fetched: dict, source_country: str, refetch, today:
     if classification["category"] == "Reject":
         status = "rejected"
         reasons = [classification["reason"]]
+    elif _is_past(fields, today):
+        status = "past"
+        reasons = []
     elif failures or extraction["conflicts"]:
         status = "needs_review"
         reasons = failures
@@ -116,8 +149,12 @@ def enrich_country(label: str, raw_path: str, raw_sheet: str, state_dir: str, to
     state_path = os.path.join(state_dir, f"pages_{label}.json")
     state = load_json(state_path)
 
-    seen, unique_rows = set(), []
+    link_counts = Counter(_normalize_url(r["link"]) for r in rows if r["link"])
+    shared, seen, unique_rows = [], set(), []
     for r in rows:  # the same event can appear twice in the raw sheet
+        if not has_own_page(r["link"], r["source_url"], link_counts):
+            shared.append(r)
+            continue
         eid = make_event_id(r["organizer"], r["name"], r["link"], r["source_url"])
         if eid not in seen:
             seen.add(eid)
@@ -126,7 +163,11 @@ def enrich_country(label: str, raw_path: str, raw_sheet: str, state_dir: str, to
     fetched = fetch_fn([r["link"] for r in unique_rows if r["link"]], workers=workers)
     refetch = lambda url, wait_ms: fetch_fn([url], wait_ms=wait_ms, workers=1).get(url)
 
-    records = []
+    records = [{"event_id": make_event_id(r["organizer"], r["name"], "", r["source_url"]), "status": "shared_page",
+                "organizer": r["organizer"], "source_url": r["source_url"], "link": r["link"], "fields": {},
+                "country": label, "category": "", "attempts": 0, "fingerprint": "", "changed": True,
+                "reasons": ["the link is the list page or a page shared by several events, so it can't be matched to this one event"]}
+               for r in shared]
     for r in unique_rows:
         if not r["link"]:
             eid = make_event_id(r["organizer"], r["name"], r["link"], r["source_url"])

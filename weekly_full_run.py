@@ -451,14 +451,14 @@ def _reason_group(reason: str) -> str:
     return re.sub(r"'[^']*'|\d{2}-[A-Za-z]{3}-\d{4}", "...", reason)
 
 
-def run_v2(labels: list[str] | None = None, skip_llm: bool = False, skip_list_scrape: bool = False,
-           enrich_limit: int = 0) -> int:
+def run_v2(labels: list[str] | None = None, skip_llm: bool = False, enrich_limit: int = 0,
+           org_limit: int = 0) -> int:
     """The redesigned weekly run: list pages -> each event's own page ->
     extraction with proof -> classify -> verify (re-scrape on failure) ->
     update the ONE Master.xlsx in place -> Gemini review of Needs Review
     only -> QC report. See DEPLOYMENT.md / the process document."""
     from scraper.ai_review import review_needs_review
-    from scraper.enrich import enrich_country
+    from scraper.enrich_lists import enrich_country_from_lists
     from scraper.master_store import MasterData
     from scraper.qc_report import write_qc_report
     from scraper.site_health import assess_sites, healthy_sources, load_json, save_json
@@ -473,29 +473,23 @@ def run_v2(labels: list[str] | None = None, skip_llm: bool = False, skip_list_sc
 
     for country in selected:
         label = country["label"]
-        if not skip_list_scrape:
-            print(f"\n=== {label}: finding events on every organization's list page ===")
-            rc = scraper_main.run(
-                source=SOURCE, output=country["raw_output"], sheet=country["raw_sheet"], limit=0, start=0,
-                failures_log=country["failures_log"], engine="free", resume=False,
-                source_sheet=country["source_sheet"],
-            )
-            if rc:
-                print(f"{label} list-page scrape failed (exit {rc}) -- its existing Master events are left untouched")
-                run["countries"][label] = {"scrape_status": "failed"}
-                exit_code = 1
-                continue
+        orgs = load_organizations(SOURCE, country["source_sheet"])
+        if org_limit:
+            orgs = orgs[:org_limit]
+        print(f"\n=== {label}: reading the list pages of {len(orgs)} organizations and each event's own page ===")
+        try:
+            records, current = enrich_country_from_lists(label, orgs, state_dir, today, max_events=enrich_limit)
+        except Exception as exc:  # noqa: BLE001 - one country failing must not stop the others
+            print(f"{label} failed ({exc}) -- its existing Master events are left untouched")
+            run["countries"][label] = {"scrape_status": "failed"}
+            exit_code = 1
+            continue
 
-        counts_path = os.path.join(os.path.dirname(country["failures_log"]), f"org_counts_{country['raw_sheet']}.json")
         health_path = os.path.join(state_dir, f"health_{label}.json")
-        current = load_json(counts_path)
         health = assess_sites(current, load_json(health_path))
         save_json(health_path, current)
         healthy |= healthy_sources(health)
 
-        print(f"=== {label}: opening each event's own page ===")
-        records = enrich_country(label, country["raw_output"], country["raw_sheet"], state_dir, today,
-                                 limit=enrich_limit)
         records_all.extend(records)
         run["countries"][label] = {
             "scrape_status": "done", "site_health": health,
@@ -541,15 +535,15 @@ if __name__ == "__main__":
     parser.add_argument("--v2", action="store_true",
                          help="use the redesigned pipeline (event pages, proof for every value, in-place Master, "
                               "verification, Gemini review of Needs Review). Not the default until signed off.")
-    parser.add_argument("--skip-list-scrape", action="store_true",
-                         help="--v2 only: reuse the existing raw list-page data instead of re-scraping it")
     parser.add_argument("--enrich-limit", type=int, default=0,
-                         help="--v2 only: open at most this many event pages per country (for small trials)")
+                         help="--v2 only: process at most this many events per country (for small trials)")
+    parser.add_argument("--org-limit", type=int, default=0,
+                         help="--v2 only: read at most this many organizations' list pages per country (small trials)")
     args = parser.parse_args()
 
     if args.v2:
         sys.exit(run_v2([args.country] if args.country else None, skip_llm=args.skip_llm,
-                        skip_list_scrape=args.skip_list_scrape, enrich_limit=args.enrich_limit))
+                        enrich_limit=args.enrich_limit, org_limit=args.org_limit))
 
     if args.merge_only:
         sys.exit(merge_and_finalize())

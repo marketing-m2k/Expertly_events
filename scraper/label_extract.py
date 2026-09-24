@@ -31,6 +31,25 @@ _BOILERPLATE = re.compile(
     r"terms (of|and) (use|conditions)", re.I)
 
 
+# several labels on one line: "Event: X Date: 17-18 September 2026 Venue: Y" --
+# split at each known label so every value stops where the next label starts
+_RUN_LABEL = re.compile(
+    r"(?P<label>(?:event\s+|start\s+)?dates?(?:\s*(?:&|and)\s*times?)?|when|venue|location|where|address|place|"
+    r"mode|format|registration\s+(?:closes|deadline|closing|opens)|deadline|early\s*bird[^:]{0,20}|"
+    r"last\s+date\s+to\s+register)\s*:", re.I)
+
+
+def _split_labelled_run(text: str) -> list[tuple[str, str]]:
+    marks = list(_RUN_LABEL.finditer(text))
+    pairs = []
+    for i, m in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
+        value = text[m.end():end].strip(" ,;|-–—")
+        if value:
+            pairs.append((m.group("label").strip(), value))
+    return pairs
+
+
 def _clean_scope(html: str) -> BeautifulSoup:
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup(["script", "style", "nav", "footer", "aside", "form", "noscript", "iframe"]):
@@ -56,7 +75,12 @@ def _collect_pairs(scope) -> list[tuple[str, str]]:
     for el in scope.find_all(["p", "li", "div", "td", "dd", "span"]):
         if el.find(["p", "li", "div", "table", "ul", "ol"]):
             continue
-        m = _INLINE_PAIR.match(normalize_ws(el.get_text(" ", strip=True)))
+        text = normalize_ws(el.get_text(" ", strip=True))
+        run = _split_labelled_run(text)
+        if run:
+            pairs.extend(run)
+            continue
+        m = _INLINE_PAIR.match(text)
         if m:
             pairs.append((m.group("label").strip(), m.group("value").strip()))
     seen, out = set(), []
@@ -79,9 +103,15 @@ def _mode_from_text(text: str) -> str:
     return ""
 
 
+_LISTING_TITLE = re.compile(
+    r"^(upcoming\s+|all\s+)?(events?|conferences?|seminars?|webinars?)(\s*(&|and)\s*\w+)?"
+    r"(\s+(calendar|archive|list|listing|display|directory))?$|^event\s+display$|^events?\s+-\s+|"
+    r"^(event|full|more|view)\s+details?$|^(learn|read|see|find out)\s+more$|^book\s+now$", re.I)
+
+
 def is_generic_title(title: str, org_name: str = "") -> bool:
     t = normalize_ws(title).lower()
-    if len(t) < 4 or t.isdigit() or t in GENERIC_HEADINGS:
+    if len(t) < 4 or t.isdigit() or t in GENERIC_HEADINGS or _LISTING_TITLE.match(t):
         return True
     return bool(org_name) and t == normalize_ws(org_name).lower()
 
@@ -102,6 +132,9 @@ def _title_from_page(soup: BeautifulSoup, scope, org_name: str) -> dict | None:
         if parts and len(parts[0]) >= 8:
             text = parts[0]
         if text and not is_generic_title(text, org_name):
+            if confidence == "medium" and text.lower() in normalize_ws(scope.get_text(" ", strip=True)).lower():
+                return field(text, text, "Title from the page's og:title, and the same title is shown in the page's own content",
+                             source, "high")
             return field(text, text, "Title from the page's title tag (no main heading found)", source, confidence)
     return None
 

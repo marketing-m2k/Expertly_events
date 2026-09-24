@@ -26,10 +26,13 @@ _CATEGORY_KEYWORDS = {
     "Finance": [r"\bfinance\b", r"\bfinancial\b", r"\baudit", r"\baccounting\b", r"\bifrs\b", r"\bind as\b",
                 r"\bgaap\b", r"\bbanking\b", r"\btreasury\b", r"capital markets?", r"\bvaluation\b",
                 r"\binvestment", r"wealth", r"\binsurance\b", r"\bactuar", r"\bfintech\b", r"\bcredit\b",
-                r"\blending\b", r"\bsebi\b", r"superannuation", r"\bsmsf\b", r"\bcfo\b"],
+                r"\blending\b", r"\bsebi\b", r"superannuation", r"\bsmsf\b", r"\bcfo\b",
+                r"asset management", r"funds management", r"private equity", r"venture capital", r"\bmortgage",
+                r"\bpensions?\b", r"\baccountan", r"\bbookkeep", r"\bpayroll"],
     "Legal": [r"\blaw\b", r"\blegal\b", r"arbitration", r"litigation", r"\bcounsel\b", r"\bcourts?\b",
               r"\bcompliance\b", r"\bregulat", r"insolvency", r"bankruptcy", r"\bcontracts?\b", r"\bdisputes?\b",
-              r"corporate governance", r"\bjudicia", r"mediation", r"estate planning", r"\baml\b", r"\bfiduciary\b"],
+              r"corporate governance", r"\bjudicia", r"mediation", r"estate planning", r"\baml\b", r"\bfiduciary\b",
+              r"\bsolicitor", r"\bbarrister", r"\btribunal", r"\battorney", r"conveyanc", r"\btrustee"],
 }
 
 

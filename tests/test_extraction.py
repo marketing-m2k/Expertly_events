@@ -171,3 +171,19 @@ def test_a_value_the_page_never_stated_is_detected():
     assert appears_on_page("12 October 2026", page_text)
     assert appears_on_page("taj hotel,  mumbai", page_text)
     assert not appears_on_page("14 October 2026", page_text)
+
+
+def test_several_labels_on_one_line_are_split_at_each_label():
+    # seen on an Arlo events page (AUS trial): "Event: X Date: ... Venue: ..." in one block
+    html = _page("<h1>20th Lawtech Summit 2026</h1>"
+                 "<div>Event: 20th Lawtech Summit 2026 Date: 17–18 September 2026 Venue: JW Marriott Gold Coast Resort</div>")
+    fields = extract_labelled(html, URL)["fields"]
+    assert fields["date"]["value"] == "17-Sep-2026" and fields["end_date"]["value"] == "18-Sep-2026"
+    assert fields["location"]["value"] == "JW Marriott Gold Coast Resort"
+
+
+def test_a_deadline_on_the_same_line_does_not_leak_into_the_date():
+    html = _page("<h1>Tax Summit</h1><div>Date: 20 October 2026 Registration closes: 1 October 2026</div>")
+    result = extract_labelled(html, URL)
+    assert result["fields"]["date"]["value"] == "20-Oct-2026"
+    assert any("Registration" in label for label in result["ignored_labels"])

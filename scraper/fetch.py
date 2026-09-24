@@ -2,6 +2,7 @@
 scroll, and pagination so events aren't missed past the first screen."""
 
 import re
+import time
 
 from playwright.sync_api import sync_playwright
 
@@ -255,7 +256,7 @@ def fetch_detail_pages(urls: list[str], wait_ms: int = 1500, workers: int = 5,
 
 
 def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
-                follow_past_events_link: bool = True) -> list[str]:
+                follow_past_events_link: bool = True, deadline_s: float = 90) -> list[str]:
     """Return HTML snapshots: the initial page, then up to `max_pages` - 1
     more page loads reached via 'load more' clicks or pagination links.
     If `follow_past_events_link` and the page links to a separate past
@@ -264,6 +265,7 @@ def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
     Best-effort — failures to expand/paginate are swallowed, not raised."""
     htmls = []
     past_events_url = None
+    deadline = time.monotonic() + deadline_s  # a slow site returns what it has, it never stalls the run
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(ignore_https_errors=True, user_agent=USER_AGENT,
@@ -305,6 +307,8 @@ def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
 
         # expand "load more" repeatedly if present (bounded so we don't spin forever)
         for _ in range(8):
+            if time.monotonic() > deadline:
+                break
             clicked = False
             for text in LOAD_MORE_TEXTS:
                 if _click_first_match(page, text, timeout=1500):
@@ -321,7 +325,7 @@ def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
             past_events_url = _find_past_events_url(page, page.url)
 
         # follow numbered/next pagination for a few more pages
-        while len(htmls) < max_pages:
+        while len(htmls) < max_pages and time.monotonic() < deadline:
             new_html = _advance_page(page, htmls[-1], len(htmls) + 1)
             if new_html is None:
                 break
@@ -333,6 +337,8 @@ def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
                 page.wait_for_timeout(wait_ms)
                 _scroll_to_bottom(page)
                 for _ in range(8):
+                    if time.monotonic() > deadline:
+                        break
                     clicked = False
                     for text in LOAD_MORE_TEXTS:
                         if _click_first_match(page, text, timeout=1500):
@@ -344,7 +350,7 @@ def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
                         break
                 htmls.append(page.content())
 
-                while len(htmls) < max_pages + 3:
+                while len(htmls) < max_pages + 3 and time.monotonic() < deadline:
                     if _archive_page_looks_too_old(htmls[-1]):
                         # past-events archives are almost always newest-first;
                         # once a page has no 2026 dates left, older pages are

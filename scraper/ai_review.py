@@ -11,7 +11,7 @@ once; it is reviewed again only after its page changes.
 """
 
 import json
-import os
+import re
 import time
 from datetime import datetime
 
@@ -24,6 +24,9 @@ from scraper.label_extract import _mode_from_text, main_text
 from scraper.verify_events import ACCEPTED_CATEGORIES, verify_event
 
 PAGE_CHARS = 6000
+_MISSING_INFO = re.compile(
+    r"cookie|privacy|consent|no information|does not (contain|provide|state|include)|not provide|missing|"
+    r"empty|unreadable|generic template|only (the )?(name|title|navigation)", re.I)
 
 _FIELD = {"type": "object", "properties": {"value": {"type": "string"}, "quote": {"type": "string"}}}
 RESPONSE_SCHEMA = {
@@ -43,8 +46,10 @@ Read the event page text below. Rules:
 - For every field you give, "quote" must be the EXACT words copied from the page text that state it.
 - "date" is the date the event takes place -- never a registration deadline, posted-on, updated or early-bird date. It must include the year on the page.
 - "format" is Virtual, In Person or Hybrid, only if the page says so for THIS event.
-- "category" is Tax, Finance or Legal, only if the event's own subject is that. Otherwise None.
-- decision: "verified" only if this is a real, attendable Tax/Finance/Legal professional event and the page states its title and date. "rejected" if it is clearly not (say why). "unclear" if you cannot tell from the page.
+- "category": Tax = taxation; Finance = accounting, audit, banking, financial regulation, investment, superannuation, financial-advice practice; Legal = law, litigation, arbitration, legal practice, regulatory compliance. Use None if the event's own subject is none of these.
+- decision "verified": a real, attendable professional event whose own subject is Tax, Finance or Legal, and the page states its title and date.
+- decision "rejected": ONLY when the page positively shows it is not such an event. That includes: purely social or networking events, careers/student events, receptions; general leadership, board-governance or industry-business events with no specific tax, finance or legal subject; membership administration; corporate notices (AGM, dividends); newsletters or publications; exam-prep courses; job vacancies; articles; pages that are not an event at all. Say why.
+- decision "unclear": whenever the page text is empty, only cookie/consent/navigation text, or lacks the information you need. NEVER reject an event just because the page text is missing or unreadable.
 
 Event as found on the list page: {name}
 Held back because: {reasons}
@@ -137,8 +142,10 @@ def review_needs_review(master, today: datetime | None = None, fetch_fn=fetch_de
                         call_fn=gemini_call, workers: int = 5) -> dict:
     today = today or datetime.now()
     stats = {"reviewed": 0, "verified": 0, "rejected": 0, "unclear": 0, "stopped_by_budget": False}
+    # each event is reviewed once -- except when its page couldn't be opened last time
     todo = {eid: row for eid, row in master.review.items()
-            if not row.get("AI Review") and row.get("Register Link") and not master._locked(row)}
+            if (not row.get("AI Review") or row["AI Review"].startswith("AI review skipped"))
+            and row.get("Register Link") and not master._locked(row)}
     if not todo:
         return stats
 
@@ -159,6 +166,13 @@ def review_needs_review(master, today: datetime | None = None, fetch_fn=fetch_de
 
         decision, fields, problems, category = evaluate_response(resp, page["html"], today)
         reason = normalize_ws(resp.get("reason", ""))
+        if decision == "rejected" and _MISSING_INFO.search(reason):
+            decision = "unclear"  # "no information on the page" is not a reason to reject an event
+            problems.append(f"the page could not be read properly: {reason}")
+        if resp.get("decision") == "verified" and any("already passed" in p for p in problems):
+            master.reject_from_review(eid, "event date has already passed")
+            stats["rejected"] += 1
+            continue
         if decision == "verified":
             updates = {"Event Name": fields.get("name", {}).get("value", ""), "Date": fields["date"]["value"],
                        "End Date": fields.get("end_date", {}).get("value", ""), "Category": category,
