@@ -48,7 +48,7 @@ Read the event page text below. Rules:
 - For every field you give, "quote" must be the EXACT words copied from the page text that state it.
 - "date" is the date the event takes place -- never a registration deadline, posted-on, updated or early-bird date. It must include the year on the page.
 - "format" is Virtual, In Person or Hybrid, only if the page says so for THIS event.
-- "category" is Tax, Finance or Legal. These are BROAD professional fields, not just those three words. Everything professionally inside them counts. Topics that belong to each (these are examples, not a complete list -- any topic in the same spirit counts too):
+- "category" is Tax, Finance or Legal. These are BROAD professional fields, not just those three words. Everything professionally inside them counts. Topics that belong to each (these are only examples, not a complete list -- decide by the FIELD: if the event's subject falls under Tax, Finance or Legal in a professional sense, it counts and passes, even when it is not named below):
 {taxonomy}
   Use None only when the event's own subject is not in any of these fields.
 - decision "verified": a real, attendable professional event whose own subject is within Tax, Finance or Legal (the whole of each field, as above), and the page states its title and date.

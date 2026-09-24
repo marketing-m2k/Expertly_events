@@ -72,6 +72,6 @@ def verify_event(fields: dict, category: str, page_haystack: str, today: datetim
         failures.append(f"location '{location['value']}' is in a country we don't track")
 
     if category not in ACCEPTED_CATEGORIES:
-        failures.append("not clearly a Tax, Finance or Legal event")
+        failures.append("the rules could not place it in Tax, Finance or Legal (goes to the AI review, not rejected)")
 
     return failures
