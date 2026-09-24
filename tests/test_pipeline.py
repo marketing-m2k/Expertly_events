@@ -482,5 +482,5 @@ def test_a_page_that_could_not_be_opened_is_retried_next_run(tmp_path):
 
 def test_prompt_carries_the_exclusion_rules_from_the_qc_comments():
     from scraper.ai_review import PROMPT
-    for phrase in ("board-governance", "social or networking", "exam-prep", "NEVER reject"):
+    for phrase in ("social or networking", "exam-prep", "NEVER reject", "BROAD"):
         assert phrase in PROMPT

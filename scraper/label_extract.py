@@ -109,9 +109,16 @@ _LISTING_TITLE = re.compile(
     r"^(event|full|more|view)\s+details?$|^(learn|read|see|find out)\s+more$|^book\s+now$", re.I)
 
 
+# navigation / call-to-action / listing-link text that list pages put in the same repeated blocks as real events
+_NAV_TITLE = re.compile(
+    r"^(become an?\s+(event\s+)?(sponsor|member|partner)|save by becoming.{0,30}|partner with us|sponsor(ship)?\b.{0,30}|"
+    r"advertise with us|contact us|about us|our (team|partners|sponsors)|membership|join (us|now|today)|"
+    r"(\w[\w'&-]*\s+){0,3}events)$", re.I)
+
+
 def is_generic_title(title: str, org_name: str = "") -> bool:
     t = normalize_ws(title).lower()
-    if len(t) < 4 or t.isdigit() or t in GENERIC_HEADINGS or _LISTING_TITLE.match(t):
+    if len(t) < 4 or t.isdigit() or t in GENERIC_HEADINGS or _LISTING_TITLE.match(t) or _NAV_TITLE.match(t):
         return True
     return bool(org_name) and t == normalize_ws(org_name).lower()
 

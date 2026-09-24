@@ -13,13 +13,15 @@ once; it is reviewed again only after its page changes.
 import json
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 from scraper.api_budget import BudgetExceededError
+from scraper.classify_rules import taxonomy_prompt_text
 from scraper.date_utils import format_display_date, parse_strict_date_range
 from scraper.evidence import appears_on_page, field, normalize_ws
 from scraper.enrich import _haystack
-from scraper.fetch import fetch_detail_pages
+from scraper.fast_fetch import fetch_detail_fast
 from scraper.label_extract import _mode_from_text, main_text
 from scraper.verify_events import ACCEPTED_CATEGORIES, verify_event
 
@@ -40,15 +42,17 @@ RESPONSE_SCHEMA = {
     "required": ["decision", "reason"],
 }
 
-PROMPT = """You are checking ONE event for a Tax / Finance / Legal professional events tracker.
+_PROMPT_TEMPLATE = """You are checking ONE event for a Tax / Finance / Legal professional events tracker.
 Read the event page text below. Rules:
 - Use ONLY what the page text states. Never use general knowledge. If the page does not state something, leave that field out.
 - For every field you give, "quote" must be the EXACT words copied from the page text that state it.
 - "date" is the date the event takes place -- never a registration deadline, posted-on, updated or early-bird date. It must include the year on the page.
 - "format" is Virtual, In Person or Hybrid, only if the page says so for THIS event.
-- "category": Tax = taxation; Finance = accounting, audit, banking, financial regulation, investment, superannuation, financial-advice practice; Legal = law, litigation, arbitration, legal practice, regulatory compliance. Use None if the event's own subject is none of these.
-- decision "verified": a real, attendable professional event whose own subject is Tax, Finance or Legal, and the page states its title and date.
-- decision "rejected": ONLY when the page positively shows it is not such an event. That includes: purely social or networking events, careers/student events, receptions; general leadership, board-governance or industry-business events with no specific tax, finance or legal subject; membership administration; corporate notices (AGM, dividends); newsletters or publications; exam-prep courses; job vacancies; articles; pages that are not an event at all. Say why.
+- "category" is Tax, Finance or Legal. These are BROAD professional fields, not just those three words. Everything professionally inside them counts. Topics that belong to each (these are examples, not a complete list -- any topic in the same spirit counts too):
+{taxonomy}
+  Use None only when the event's own subject is not in any of these fields.
+- decision "verified": a real, attendable professional event whose own subject is within Tax, Finance or Legal (the whole of each field, as above), and the page states its title and date.
+- decision "rejected": ONLY when the page positively shows it is not such an event. That includes: purely social or networking events, careers/student events, receptions; general leadership or industry-business events with no tax, finance or legal subject (corporate governance itself IS a legal topic and counts); membership administration; corporate notices (AGM, dividends); newsletters or publications; exam-prep courses; job vacancies; articles; pages that are not an event at all. Say why.
 - decision "unclear": whenever the page text is empty, only cookie/consent/navigation text, or lacks the information you need. NEVER reject an event just because the page text is missing or unreadable.
 
 Event as found on the list page: {name}
@@ -57,6 +61,8 @@ Held back because: {reasons}
 PAGE TEXT:
 {page}
 """
+# the same taxonomy the rule-based classifier uses (scraper/taxonomy.json) is given to Gemini
+PROMPT = _PROMPT_TEMPLATE.replace("{taxonomy}", taxonomy_prompt_text())
 
 
 def gemini_call(prompt: str) -> dict:
@@ -138,8 +144,8 @@ def evaluate_response(resp: dict, html: str, today: datetime) -> tuple[str, dict
     return decision, fields, problems, category
 
 
-def review_needs_review(master, today: datetime | None = None, fetch_fn=fetch_detail_pages,
-                        call_fn=gemini_call, workers: int = 5) -> dict:
+def review_needs_review(master, today: datetime | None = None, fetch_fn=fetch_detail_fast,
+                        call_fn=gemini_call, workers: int = 6) -> dict:
     today = today or datetime.now()
     stats = {"reviewed": 0, "verified": 0, "rejected": 0, "unclear": 0, "stopped_by_budget": False}
     # each event is reviewed once -- except when its page couldn't be opened last time
@@ -149,7 +155,10 @@ def review_needs_review(master, today: datetime | None = None, fetch_fn=fetch_de
     if not todo:
         return stats
 
-    pages = fetch_fn([row["Register Link"] for row in todo.values()], workers=workers)
+    print(f"  AI review: opening {len(todo)} event pages", flush=True)
+    pages = fetch_fn([row["Register Link"] for row in todo.values()], workers=20)
+
+    jobs = []
     for eid, row in todo.items():
         page = pages.get(row["Register Link"]) or {}
         if not page.get("html"):
@@ -157,14 +166,29 @@ def review_needs_review(master, today: datetime | None = None, fetch_fn=fetch_de
             continue
         prompt = PROMPT.format(name=row["Event Name"], reasons=row.get("Review Reason", ""),
                                page=main_text(page["html"])[:PAGE_CHARS])
-        try:
-            resp = call_fn(prompt)
-        except BudgetExceededError:
-            stats["stopped_by_budget"] = True
-            break
-        stats["reviewed"] += 1
+        jobs.append((eid, page["html"], prompt))
 
-        decision, fields, problems, category = evaluate_response(resp, page["html"], today)
+    def ask(job):
+        try:
+            return job, call_fn(job[2]), None
+        except BudgetExceededError:
+            return job, None, "budget"
+        except Exception as exc:  # noqa: BLE001 - one failed call must not stop the review
+            return job, None, str(exc)[:150]
+
+    print(f"  AI review: asking Gemini about {len(jobs)} events", flush=True)
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as executor:
+        results = list(executor.map(ask, jobs))
+
+    for (eid, html, _), resp, err in results:  # applied one at a time, in order
+        if err == "budget":
+            stats["stopped_by_budget"] = True
+            continue
+        if err:
+            master.note_ai_review(eid, f"AI review skipped: {err}")
+            continue
+        stats["reviewed"] += 1
+        decision, fields, problems, category = evaluate_response(resp, html, today)
         reason = normalize_ws(resp.get("reason", ""))
         if decision == "rejected" and _MISSING_INFO.search(reason):
             decision = "unclear"  # "no information on the page" is not a reason to reject an event

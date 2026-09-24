@@ -1,0 +1,80 @@
+{
+  "_help": "What counts as a Tax, Finance or Legal event. Each topic lists phrases that identify it (a topic's own name is always a phrase too). Matching ignores case; 'and' also matches '&'; a trailing * matches any ending (arbitrat* = arbitration, arbitrator...). 'weak' words are too generic to accept an event alone -- they only help other evidence, and otherwise send the event to the Gemini review. To add a topic or phrase, just edit this file: no code change needed.",
+
+  "Tax": {
+    "topics": {
+      "Tax (general)": ["tax", "taxes", "taxation", "taxpayer*", "tax adviser*", "tax advisor*", "tax practitioner*", "tax professional*", "tax practice", "tax update*", "tax conference", "tax summit", "ato", "australian taxation office", "hmrc", "part iva", "anti-avoidance", "tax avoidance"],
+      "International Tax": ["international tax", "cross-border tax", "tax treaty", "tax treaties", "double taxation", "beps", "pillar two", "pillar 2", "global minimum tax", "foreign tax credit"],
+      "Corporate Tax": ["corporate tax", "corporate income tax", "company tax", "business tax", "tax planning", "tax strategy"],
+      "Indirect Tax": ["indirect tax", "gst", "vat", "value added tax", "goods and services tax", "sales tax", "excise"],
+      "Transfer Pricing": ["transfer pricing", "advance pricing agreement*", "intercompany pricing"],
+      "US Tax": ["us tax", "u.s. tax", "federal tax", "irs", "internal revenue", "state and local tax"],
+      "India Tax": ["india tax", "indian tax", "income tax act", "income-tax", "cbdt", "itat", "tds", "gst council"],
+      "Tax Compliance": ["tax compliance", "tax return*", "tax filing*", "tax reporting", "tax administration", "tax audit*", "tax accounting", "tax provision*"],
+      "Tax Technology": ["tax technology", "tax tech", "tax automation", "digital tax", "e-invoicing", "making tax digital", "tax analytics"],
+      "Tax Controversy": ["tax controversy", "tax dispute*", "tax litigation", "tax appeal*", "tax tribunal", "tax ruling*", "tax authority", "tax authorities"],
+      "Tax Policy and Regulation": ["tax policy", "tax reform", "tax regulation*", "tax legislation", "tax law", "tax administration"],
+      "M&A Tax": ["m&a tax", "tax due diligence", "transaction tax", "tax structuring", "deal tax"],
+      "Expatriate Tax": ["expatriate tax", "expat tax", "global mobility", "inbound tax", "outbound tax", "international assignee*"],
+      "Employment Tax": ["employment tax", "payroll tax", "payroll", "fringe benefits tax", "fbt", "employee benefits tax", "withholding"],
+      "Wealth and Estate Tax": ["wealth tax", "estate tax", "estate planning", "inheritance tax", "trusts and estates", "gift tax", "capital gains", "trusts"],
+      "Real Estate Tax": ["real estate tax", "property tax", "stamp duty", "land tax", "rates and taxes"],
+      "Customs and Trade Tax": ["customs", "trade tax", "tariff*", "import dut*", "customs dut*", "excise dut*", "border tax"]
+    },
+    "weak": ["revenue authority", "levy", "fiscal", "duty"]
+  },
+
+  "Finance": {
+    "topics": {
+      "Finance (general)": ["finance", "financial", "financing", "finance professional*", "financial professional*", "financial institution*", "financial services", "financial markets", "financial system", "financial industry"],
+      "Corporate Finance": ["corporate finance", "capital structure", "debt financing", "equity financing", "capital raising", "ipo", "initial public offering", "capital allocation"],
+      "Investment Banking": ["investment banking", "investment bank*", "underwriting", "equity capital markets", "debt capital markets"],
+      "Accounting and Financial Reporting": ["accounting", "accountant*", "financial reporting", "financial statement*", "ifrs", "gaap", "ind as", "aasb", "bookkeep*", "management accounting", "cost accounting", "forensic accounting", "chartered accountant*", "cpa", "integrated reporting"],
+      "Audit and Assurance": ["audit", "auditor", "auditing", "assurance", "internal audit", "external audit", "auasb", "pcaob", "sarbanes"],
+      "FP&A": ["fp&a", "financial planning and analysis", "budgeting and forecasting", "financial modelling", "financial modeling", "financial analysis"],
+      "CFO and Finance Leadership": ["cfo", "chief financial officer", "finance leadership", "finance leader*", "finance transformation", "finance function", "finance director*", "finance team*"],
+      "Mergers and Acquisitions": ["mergers and acquisitions", "m&a", "takeover*", "deal making", "due diligence", "divestiture*"],
+      "Private Equity": ["private equity", "buyout*", "leveraged buyout*", "private capital", "private markets", "private credit"],
+      "Venture Capital": ["venture capital", "vc funding", "startup funding", "start-up funding", "seed funding", "growth equity", "angel invest*"],
+      "Banking and Financial Services": ["banking", "bank", "banker*", "retail banking", "commercial banking", "open banking", "neobank*", "credit union*", "lending", "lender*", "loan*", "mortgage*", "consumer credit", "credit management", "trade credit", "payment system*"],
+      "FinTech": ["fintech", "regtech", "insurtech", "digital banking", "open finance", "embedded finance", "buy now pay later", "bnpl"],
+      "Risk Management": ["financial risk", "enterprise risk", "credit risk", "market risk", "operational risk", "liquidity risk", "model risk", "third-party risk", "conduct risk", "risk and compliance", "risk management framework"],
+      "Treasury Management": ["treasury", "treasurer*", "cash management", "liquidity management", "working capital", "foreign exchange", "fx risk"],
+      "ESG and Sustainable Finance": ["sustainable finance", "green finance", "climate finance", "esg investing", "esg reporting", "esg disclosure", "climate disclosure*", "climate risk", "green bond*", "impact investing", "responsible investment", "sustainability reporting", "tcfd", "issb"],
+      "Wealth Management": ["wealth management", "wealth manager*", "financial planning", "financial planner*", "financial advice", "financial adviser*", "financial advisor*", "private wealth", "family office*", "retirement planning", "retirement income", "superannuation", "smsf", "pension*"],
+      "Asset Management": ["asset management", "asset manager*", "funds management", "fund manager*", "fund management", "investment management", "portfolio management", "hedge fund*", "alternative investment*", "etf*", "mutual fund*", "investor*", "investment", "institutional investor*", "infrastructure investment", "real assets"],
+      "Capital Markets": ["capital markets", "capital market", "equity markets", "debt markets", "bond market*", "stock exchange*", "securities", "derivatives", "fixed income", "equities", "commodities", "asx", "nse", "sebi"],
+      "Financial Regulation": ["financial regulation", "prudential", "apra", "asic", "basel", "financial conduct", "fca", "rbi", "central bank*", "monetary policy", "regulatory capital", "capital adequacy", "financial stability", "financial crime", "anti-money laundering", "aml", "kyc"],
+      "Insurance and Reinsurance": ["insurance", "insurer*", "reinsurance", "reinsurer*", "actuar*", "captive insurance"],
+      "Cryptocurrency and Digital Assets": ["cryptocurrency", "cryptocurrencies", "crypto", "bitcoin", "blockchain", "digital asset*", "tokeni*", "stablecoin*", "defi", "decentralised finance", "decentralized finance", "web3", "cbdc", "virtual asset*"]
+    },
+    "weak": ["credit", "payments", "risk", "risk management", "esg", "sustainability", "climate", "trading", "markets", "money", "economy", "economics", "budget", "funds", "super"]
+  },
+
+  "Legal": {
+    "topics": {
+      "Law (general)": ["law", "laws", "legal", "lawyer*", "solicitor*", "barrister*", "attorney*", "counsel", "advocate*", "legislation", "legislative", "jurisprudence", "legal practice", "legal profession", "law society", "law council", "bar association"],
+      "Corporate Law": ["corporate law", "company law", "corporations law", "corporations act", "companies act", "business law", "directors' duties", "directors duties", "shareholder*", "in-house counsel", "general counsel", "company secretar*", "corporate secretar*"],
+      "Commercial Law": ["commercial law", "commercial litigation", "commercial legal", "consumer law"],
+      "M&A Law": ["m&a law", "merger control", "legal due diligence", "share purchase", "takeover law"],
+      "Tax Law": ["tax law", "tax legislation", "tax court", "tax tribunal", "tax litigation"],
+      "Corporate Governance": ["corporate governance", "governance and compliance", "board governance", "board effectiveness", "company director*"],
+      "Regulatory and Compliance": ["regulatory", "regulator*", "regulation*", "compliance", "aml", "anti-money laundering", "counter-terrorism financing", "kyc", "sanctions compliance", "financial crime", "whistleblow*", "conduct risk", "ethics and compliance", "compliance officer*"],
+      "Securities Law": ["securities law", "securities regulation", "securities litigation", "listing rules", "insider trading", "market abuse", "prospectus", "capital markets law", "market conduct"],
+      "Banking and Finance Law": ["banking law", "finance law", "financial services law", "lending law", "project finance", "leveraged finance", "structured finance", "islamic finance", "derivatives law", "consumer credit law", "payments law"],
+      "Employment Law": ["employment law", "labour law", "labor law", "industrial relations", "workplace law", "workplace relations", "employment relations", "unfair dismissal", "wage theft", "employment contract*", "employee relations", "modern slavery"],
+      "Intellectual Property": ["intellectual property", "patent*", "trade mark*", "trademark*", "copyright*", "ip law", "ip rights", "ip licensing", "trade secret*", "design right*", "ip strategy"],
+      "Data Privacy and Protection": ["data privacy", "data protection", "privacy law", "privacy act", "privacy", "gdpr", "ccpa", "dpdp", "privacy compliance", "data breach*", "notifiable data breach*", "information privacy"],
+      "Technology and Cyber Law": ["cyber law", "technology law", "tech law", "it law", "cybersecurity law", "cyber security law", "cyber liability", "ai law", "ai regulation", "ai governance", "legal tech", "legaltech", "lawtech", "digital law", "e-discovery", "ediscovery", "online safety act"],
+      "Competition and Antitrust": ["competition law", "antitrust", "anti-trust", "competition and consumer", "accc", "competition commission", "cartel*", "competition policy", "unfair competition", "restrictive trade practice*"],
+      "Insolvency and Restructuring": ["insolvency", "insolvent", "bankruptcy", "liquidation", "liquidator*", "receivership", "debt restructuring", "corporate restructuring", "restructuring and insolvency", "chapter 11", "nclt", "creditor rights", "voluntary administration", "turnaround"],
+      "Dispute Resolution": ["dispute resolution", "arbitrat*", "mediat*", "litigation", "litigat*", "dispute*", "class action*", "expert determination", "conciliation", "commercial court", "tribunal", "court", "judicial", "judiciary", "judge*", "injunction*"],
+      "International Law": ["international law", "public international law", "private international law", "international trade law", "trade law", "sanctions", "export control*", "trade remedies", "wto", "treaty law", "human rights law", "international arbitration", "conflict of laws"],
+      "Real Estate Law": ["real estate law", "property law", "conveyancing", "land law", "planning law", "landlord and tenant", "leasing law", "construction law", "building law", "real property", "strata law"],
+      "ESG and Sustainability Law": ["sustainability law", "esg law", "environmental law", "climate law", "climate litigation", "energy law", "energy and resources law", "resources law", "environmental regulation", "greenwashing", "sustainability regulation", "csrd", "climate-related disclosure*"],
+      "Contract Law": ["contract law", "contract drafting", "contract management", "contract negotiation", "contractual dispute*", "legal drafting", "procurement law"],
+      "Foreign Investment Law": ["foreign investment", "fdi", "foreign direct investment", "firb", "investment screening", "foreign investment review", "fdi screening", "cfius", "outbound investment", "foreign ownership"]
+    },
+    "weak": ["ethics", "advocacy", "rights", "policy", "contract", "contracts", "appeal*", "restructuring", "licensing", "board", "directors", "procurement", "standards"]
+  }
+}
