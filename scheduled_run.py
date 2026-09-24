@@ -29,15 +29,25 @@ SUMMARY_PATH = "output/summaries/weekly_summary.json"
 FAILURES_LOGS = {c["label"]: c["failures_log"] for c in COUNTRIES}
 
 
-def run_scrape():
+def run_scrape(v2: bool = False):
+    command = [sys.executable, "weekly_full_run.py", "--engine", "free"] + (["--v2"] if v2 else [])
     result = subprocess.run(
-        [sys.executable, "weekly_full_run.py", "--engine", "free"],
+        command,
         cwd=os.path.dirname(os.path.abspath(__file__)) or ".",
     )
     return result.returncode
 
 
-def build_digest() -> str:
+QC_REPORT_PATH = "output/summaries/qc_report.txt"
+
+
+def build_digest(v2: bool = False) -> str:
+    if v2:
+        try:
+            with open(QC_REPORT_PATH, encoding="utf-8") as f:
+                return f.read()
+        except FileNotFoundError:
+            return "The v2 run finished but output/summaries/qc_report.txt was not found."
     try:
         with open(SUMMARY_PATH, encoding="utf-8") as f:
             summary = json.load(f)
@@ -108,7 +118,8 @@ def send_email(body: str):
 
 
 if __name__ == "__main__":
-    exit_code = run_scrape()
-    digest = build_digest()
+    use_v2 = "--v2" in sys.argv
+    exit_code = run_scrape(use_v2)
+    digest = build_digest(use_v2)
     send_email(digest)
     sys.exit(exit_code)

@@ -303,6 +303,27 @@ def parse_event_date_range(raw: str, today: datetime | None = None) -> tuple[dat
     return start_dt, end_dt
 
 
+def parse_strict_date_range(raw, today: datetime | None = None) -> tuple[datetime | None, datetime | None]:
+    """Like parse_event_date_range, but never guesses: the text must itself
+    name a month (or be a full numeric date), a day, AND a year. Anything
+    less returns (None, None) -- no "next upcoming occurrence" rollover, no
+    day borrowed from today's date. Used by the new extraction layer, where
+    a missing year means "date not stated", not "assume next year"."""
+    today = today or datetime.now()
+    text = str(raw).strip() if raw is not None else ""
+    if not text:
+        return None, None
+    has_month = re.search(rf"\b(?:{_MONTH_NAMES})[a-z]*\b", text, re.I) or _FULL_NUMERIC_DATE.search(text)
+    if not (has_month and has_explicit_year(text, today) and has_day_precision(text)):
+        return None, None
+    return parse_event_date_range(text, today)
+
+
+def format_display_date(dt: datetime) -> str:
+    """The one date format used in every sheet (e.g. 12-Oct-2026)."""
+    return dt.strftime("%d-%b-%Y")
+
+
 def is_past_event(raw: str, today: datetime | None = None) -> bool:
     """True only when the date is confidently in the past. Unparseable
     dates are treated as NOT past (we'd rather keep an event we can't

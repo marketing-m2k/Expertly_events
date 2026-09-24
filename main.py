@@ -198,6 +198,7 @@ def run(source: str, output: str, sheet: str, limit: int, start: int, failures_l
     total_updated = 0
     total_links_fixed = 0
     failures = []
+    org_counts = {}  # this run's per-site result, read by the site health check
     recent_events = []
     recent_log = []
     state = {
@@ -251,6 +252,7 @@ def run(source: str, output: str, sheet: str, limit: int, start: int, failures_l
                         raise RuntimeError(result["error"])
 
                     events = result["events"]
+                    org_counts[org["url"]] = {"organizer": org["organizer"], "events": len(events), "error": None}
                     links_fixed = result["links_fixed"]
                     total_links_fixed += links_fixed
 
@@ -279,6 +281,7 @@ def run(source: str, output: str, sheet: str, limit: int, start: int, failures_l
                 except Exception as exc:  # noqa: BLE001 - one bad org/event must never take down a 300+ site run
                     print(f"    FAILED: {org['organizer']}: {exc}")
                     failures.append({"organizer": org["organizer"], "url": org["url"], "error": str(exc)})
+                    org_counts[org["url"]] = {"organizer": org["organizer"], "events": 0, "error": str(exc)}
                     state["failures"] = len(failures)
                     recent_log.insert(0, f"[{i}/{len(orgs_all)}] {org['organizer']}: FAILED - {exc}")
 
@@ -299,6 +302,11 @@ def run(source: str, output: str, sheet: str, limit: int, start: int, failures_l
         state["status"] = "crashed"
         write_progress(PROGRESS_PATH, state)
         return 1
+
+    if not was_stopped:
+        counts_path = os.path.join(os.path.dirname(failures_log) or ".", f"org_counts_{sheet}.json")
+        with open(counts_path, "w", encoding="utf-8") as f:
+            json.dump(org_counts, f, indent=1)
 
     if failures:
         with open(failures_log, "w", newline="", encoding="utf-8") as f:

@@ -203,6 +203,57 @@ def _find_past_events_url(page, base_url: str) -> str | None:
     return None
 
 
+def fetch_detail_pages(urls: list[str], wait_ms: int = 1500, workers: int = 5,
+                        delay_s: float = 0.7) -> dict[str, dict]:
+    """Open each event's own page. Returns {url: {"html", "status", "error"}}.
+
+    Polite by design: URLs are grouped by website and each website is worked
+    through one page at a time with a short pause, so no site is ever hit by
+    several requests at once; up to `workers` different websites run in
+    parallel. A failure on one page never stops the others."""
+    from concurrent.futures import ThreadPoolExecutor
+    from urllib.parse import urlsplit
+    import time
+
+    by_host: dict[str, list[str]] = {}
+    for url in dict.fromkeys(urls):  # de-duplicated, order kept
+        by_host.setdefault(urlsplit(url).netloc.lower(), []).append(url)
+
+    def work(host_urls: list[str]) -> dict[str, dict]:
+        out = {}
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            page = browser.new_page(ignore_https_errors=True, user_agent=USER_AGENT,
+                                     viewport={"width": 1366, "height": 900})
+            page.set_extra_http_headers({"Accept-Language": "en-US,en;q=0.9"})
+            for url in host_urls:
+                try:
+                    try:
+                        response = page.goto(url, wait_until="load", timeout=20000)
+                    except Exception:
+                        response = page.goto(url, wait_until="commit", timeout=20000)
+                    page.wait_for_timeout(wait_ms)
+                    html = page.content()
+                    status = response.status if response else None
+                    if _looks_blocked(html):
+                        out[url] = {"html": None, "status": status, "error": "blocked by the site"}
+                    elif status is not None and status >= 400:
+                        out[url] = {"html": None, "status": status, "error": f"HTTP {status}"}
+                    else:
+                        out[url] = {"html": html, "status": status, "error": None}
+                except Exception as exc:  # noqa: BLE001 - one bad page must never stop the rest
+                    out[url] = {"html": None, "status": None, "error": str(exc)[:200]}
+                time.sleep(delay_s)
+            browser.close()
+        return out
+
+    results: dict[str, dict] = {}
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as executor:
+        for partial in executor.map(work, by_host.values()):
+            results.update(partial)
+    return results
+
+
 def fetch_html(url: str, wait_ms: int = 3000, max_pages: int = 12,
                 follow_past_events_link: bool = True) -> list[str]:
     """Return HTML snapshots: the initial page, then up to `max_pages` - 1

@@ -52,64 +52,13 @@ from scraper.date_utils import date_conflicts_with_text
 from scraper.excel_writer import FINAL_COLUMNS, format_sheet
 from scraper.load_sites import load_organizations
 
-# A handful of organizations run one global calendar but got entered into
-# several different country tabs of the Sources workbook (e.g. the
-# Association of Corporate Treasurers under both UK and UAE, ISDA under
-# both UK and USA) -- each tab re-scrapes the SAME page, so the same event
-# shows up once per tab it's listed under, tagged with whichever country
-# that tab happens to be, regardless of where the event is actually
-# happening. Separately, a genuinely single-tab org whose own calendar
-# covers events worldwide (e.g. LCIA under India, listing a Beijing summit)
-# gets every one of its events mislabeled with that one tab's country too.
-# These hints let build_master() correct the Country field from the
-# event's own Location text when it clearly disagrees, and only these --
-# no full country-name-as-substring matching, which false-positives on
-# things like "Indianapolis, IN" (contains "india") or "Dublin, OH".
-_US_STATES = {
-    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID",
-    "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
-    "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK",
-    "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
-    "WI", "WY", "DC",
-}
-_COUNTRY_LOCATION_HINTS = {
-    "USA": [r"\busa\b", r"\bunited states\b"] + [rf",\s*{s.lower()}\b" for s in _US_STATES],
-    "UK": [r"\bunited kingdom\b", r"\buk\b", r"\blondon\b"],
-    "India": [r"\bindia\b", r"\bmumbai\b", r"\bdelhi\b", r"\bbengaluru\b",
-              r"\bbangalore\b", r"\bkolkata\b", r"\bchennai\b", r"\bhyderabad\b",
-              r"\bpune\b"],
-    "UAE": [r"\bdubai\b", r"\babu dhabi\b", r"\buae\b", r"\bunited arab emirates\b"],
-    "AUS": [r"\baustralia\b", r"\bsydney\b", r"\bmelbourne\b", r"\bbrisbane\b", r"\bperth\b"],
-    "SG": [r"\bsingapore\b"],
-}
-# A confident location signal that names a country we don't even track --
-# not corrected to one of the 6 tracked labels (there's nothing to correct
-# it TO), but not left silently mislabeled either: routed to Needs Review
-# so a human decides whether it belongs on that country's list at all.
-_UNTRACKED_COUNTRY_HINTS = [
-    r"\bchina\b", r"\bbeijing\b", r"\bshanghai\b", r"\bhong kong\b",
-    r"\bjapan\b", r"\btokyo\b", r"\bosaka\b", r"\bcanada\b", r"\btoronto\b",
-    r"\bcalgary\b", r"\bgermany\b", r"\bfrance\b", r"\bparis\b",
-    r"\bswitzerland\b", r"\bgeneva\b", r"\bzurich\b", r"\bireland\b",
-    r"\bdublin,\s*ireland\b", r"\bnew zealand\b", r"\bsouth africa\b",
-]
-
-
-def _infer_country_from_location(location: str) -> str | None:
-    """A tracked country label if `location` unambiguously names it, else
-    None (including when it's blank, or names more than one -- ambiguous
-    beats wrong)."""
-    loc = (location or "").lower()
-    if not loc:
-        return None
-    matches = {country for country, patterns in _COUNTRY_LOCATION_HINTS.items()
-               if any(re.search(p, loc) for p in patterns)}
-    return matches.pop() if len(matches) == 1 else None
-
-
-def _location_names_untracked_country(location: str) -> bool:
-    loc = (location or "").lower()
-    return bool(loc) and any(re.search(p, loc) for p in _UNTRACKED_COUNTRY_HINTS)
+from scraper.country_rules import (  # noqa: F401 - re-exported for callers of this module
+    _COUNTRY_LOCATION_HINTS,
+    _UNTRACKED_COUNTRY_HINTS,
+    _US_STATES,
+    _infer_country_from_location,
+    _location_names_untracked_country,
+)
 
 
 def _row_fullness(row: list) -> int:
@@ -496,6 +445,86 @@ def run_all(engine: str = "free", llm_classify: bool = True) -> int:
     return exit_code or merge_rc
 
 
+def _reason_group(reason: str) -> str:
+    """Collapse specific values so the QC report can count the same kind of
+    problem together ("date 12-Oct-2026 has already passed" -> "date ... has already passed")."""
+    return re.sub(r"'[^']*'|\d{2}-[A-Za-z]{3}-\d{4}", "...", reason)
+
+
+def run_v2(labels: list[str] | None = None, skip_llm: bool = False, skip_list_scrape: bool = False,
+           enrich_limit: int = 0) -> int:
+    """The redesigned weekly run: list pages -> each event's own page ->
+    extraction with proof -> classify -> verify (re-scrape on failure) ->
+    update the ONE Master.xlsx in place -> Gemini review of Needs Review
+    only -> QC report. See DEPLOYMENT.md / the process document."""
+    from scraper.ai_review import review_needs_review
+    from scraper.enrich import enrich_country
+    from scraper.master_store import MasterData
+    from scraper.qc_report import write_qc_report
+    from scraper.site_health import assess_sites, healthy_sources, load_json, save_json
+
+    today = datetime.now()
+    state_dir = "output/state"
+    selected = [c for c in COUNTRIES if not labels or c["label"] in labels]
+    run = {"started_at": today.isoformat(), "countries": {}}
+    records_all: list[dict] = []
+    healthy: set[str] = set()
+    exit_code = 0
+
+    for country in selected:
+        label = country["label"]
+        if not skip_list_scrape:
+            print(f"\n=== {label}: finding events on every organization's list page ===")
+            rc = scraper_main.run(
+                source=SOURCE, output=country["raw_output"], sheet=country["raw_sheet"], limit=0, start=0,
+                failures_log=country["failures_log"], engine="free", resume=False,
+                source_sheet=country["source_sheet"],
+            )
+            if rc:
+                print(f"{label} list-page scrape failed (exit {rc}) -- its existing Master events are left untouched")
+                run["countries"][label] = {"scrape_status": "failed"}
+                exit_code = 1
+                continue
+
+        counts_path = os.path.join(os.path.dirname(country["failures_log"]), f"org_counts_{country['raw_sheet']}.json")
+        health_path = os.path.join(state_dir, f"health_{label}.json")
+        current = load_json(counts_path)
+        health = assess_sites(current, load_json(health_path))
+        save_json(health_path, current)
+        healthy |= healthy_sources(health)
+
+        print(f"=== {label}: opening each event's own page ===")
+        records = enrich_country(label, country["raw_output"], country["raw_sheet"], state_dir, today,
+                                 limit=enrich_limit)
+        records_all.extend(records)
+        run["countries"][label] = {
+            "scrape_status": "done", "site_health": health,
+            "event_status": dict(Counter(r["status"] for r in records)),
+            "fixed_by_rescrape": sum(1 for r in records if r["status"] == "verified" and r.get("attempts", 0) > 0),
+            "review_reasons": dict(Counter(_reason_group(x) for r in records if r["status"] == "needs_review"
+                                           for x in r.get("reasons", []))),
+        }
+
+    master = MasterData(MASTER_PATH, today).load()
+    for rec in records_all:
+        master.apply_record(rec)
+    master.apply_missing_and_past(healthy, {r["event_id"] for r in records_all})
+
+    ai = None
+    if not skip_llm:
+        try:
+            ai = review_needs_review(master, today)
+        except (RuntimeError, ImportError) as exc:  # e.g. no GEMINI_API_KEY -- the rest of the run still stands
+            print(f"AI review skipped: {exc}")
+    master.save()
+
+    run.update(master=master.stats, ai=ai, gemini_cost=get_total_cost(),
+               master_totals={"verified": len(master.verified), "review": len(master.review),
+                              "past": len(master.past), "rejected": len(master.rejected)})
+    print("\n" + write_qc_report(run))
+    return exit_code
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--engine", choices=["free", "gemini"], default="free",
@@ -509,7 +538,18 @@ if __name__ == "__main__":
                          help="skip scraping entirely and just rebuild Master.xlsx + weekly_summary.json "
                               "from each country's output/summaries/summary_<label>.json -- run this "
                               "after one or more --country runs")
+    parser.add_argument("--v2", action="store_true",
+                         help="use the redesigned pipeline (event pages, proof for every value, in-place Master, "
+                              "verification, Gemini review of Needs Review). Not the default until signed off.")
+    parser.add_argument("--skip-list-scrape", action="store_true",
+                         help="--v2 only: reuse the existing raw list-page data instead of re-scraping it")
+    parser.add_argument("--enrich-limit", type=int, default=0,
+                         help="--v2 only: open at most this many event pages per country (for small trials)")
     args = parser.parse_args()
+
+    if args.v2:
+        sys.exit(run_v2([args.country] if args.country else None, skip_llm=args.skip_llm,
+                        skip_list_scrape=args.skip_list_scrape, enrich_limit=args.enrich_limit))
 
     if args.merge_only:
         sys.exit(merge_and_finalize())
