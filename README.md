@@ -1,86 +1,125 @@
 # Expertly Event Scraper
 
-Visits each organization's events page (from `Tax_Legal_Finance_Events_Master_100_Organizations.xlsx`),
-extracts upcoming events, and writes them to an Excel sheet in the same
-format shown on the Expertly events page: Date, Category, Format
-(In Person/Virtual), Event Name, Description, Location, Country,
-Organizer, Register Link.
+Scrapes upcoming tax, legal and finance events from ~1,100 organization
+websites across six countries, filters them for relevance, and builds
+`output/Master.xlsx` — the verified event list used on the Expertly
+events page.
 
-## Two extraction engines
+| Country | Organizations |
+|---|---|
+| India | 208 |
+| USA | 289 |
+| UK | 186 |
+| SG | 199 |
+| UAE | 134 |
+| AUS | 107 |
 
-| | `--engine free` (default) | `--engine gemini` |
-|---|---|---|
-| Cost | $0, no API key needed | ~$0.02–0.10 per full run (Gemini 2.0 Flash) |
-| How it works | Regex date-matching + DOM structure heuristics | LLM reads the page and returns structured JSON |
-| Accuracy | Good on typical "event card" layouts, misses unusual ones, more false positives/negatives | Handles varied/messy layouts much better |
-| Needs | Nothing extra | `GEMINI_API_KEY` env var |
+The organization list lives in `Sources/Event_scrapper_-_Website_completed.xlsx`,
+one tab per country. That is the only file to edit when adding or removing
+organizations.
 
-Start with `free` — it costs nothing and works fine on standard listing
-pages. If too many of the 286 sites come back empty or wrong in
-`output/Events.xlsx`, switch that batch to `--engine gemini`.
+## Where it runs
 
-## How it works
+> **Never run this on GitHub Actions.** Scraping third-party sites from
+> Actions breaks GitHub's terms — it got the `marketing-m2k` account
+> suspended in Sept 2026. This repo is for code storage only; there is
+> deliberately no `.github/workflows/`.
 
-1. `scraper/load_sites.py` reads the 286 organizations + events-page URLs
-   from the master workbook.
-2. `scraper/fetch.py` renders each events page with headless Chromium
-   (Playwright), so JS-driven calendars load correctly.
-3. **Free engine**: `scraper/heuristic_extract.py` scans the rendered HTML
-   for date-like text, walks up to the surrounding card, and pulls a
-   title/link/location out of it with regex and DOM heuristics — no API
-   call at all.
-   **Gemini engine**: `scraper/extract.py` strips the page to readable
-   text, then `scraper/gemini_extract.py` sends it to Gemini with a fixed
-   JSON schema for structured extraction.
-4. `scraper/excel_writer.py` appends new events to `output/Events.xlsx`,
-   skipping ones already recorded (same event name + date + organizer).
+- **Now:** weekly on a local Windows PC via Task Scheduler, running
+  `run_weekly.bat` (logs go to `logs/run_YYYY-MM-DD.log`).
+- **Next:** a scheduled task on the M2K VPS via Coolify — see
+  [DEPLOYMENT.md](DEPLOYMENT.md). Pending Admin access to Coolify.
 
 ## Setup
 
 ```bash
-cd event-scraper
 pip install -r requirements.txt
 playwright install chromium
 ```
 
-Only if you plan to use `--engine gemini`, set a Gemini API key (free at
-aistudio.google.com/apikey):
+Copy `.env.example` to `.env` and set `GEMINI_API_KEY` (from
+aistudio.google.com/apikey). `.env` is gitignored and excluded from the
+Docker image — on Coolify, set it as an environment variable instead.
+
+## Running
 
 ```bash
-# PowerShell
-$env:GEMINI_API_KEY = "AIza..."
+# Full weekly run: every country, then rebuild Master.xlsx, then print/email a digest
+python scheduled_run.py
 
-# bash
-export GEMINI_API_KEY="AIza..."
+# Same run without the digest
+python weekly_full_run.py
+
+# One country only, then merge everything into Master.xlsx afterwards
+python weekly_full_run.py --country UK
+python weekly_full_run.py --merge-only
 ```
 
-## Run
+Options for `weekly_full_run.py`:
 
-Test on a handful of sites first (free, no setup needed beyond `pip install`):
+| Flag | Effect |
+|---|---|
+| `--engine gemini` | Use Gemini for extraction instead of the free heuristic engine |
+| `--skip-llm` | Skip the Gemini relevance-classification step during cleaning |
+| `--country X` | Scrape one country (`India`, `USA`, `UK`, `SG`, `UAE`, `AUS`) |
+| `--merge-only` | Skip scraping; rebuild `Master.xlsx` from existing per-country results |
 
-```bash
-python main.py --limit 5
-```
+For small tests, `main.py` scrapes a single tab directly, e.g.
+`python main.py --source-sheet UK --limit 5`.
 
-Check `output/Events.xlsx` and `output/failures.csv`, then run the rest:
+### Gemini cost guard
 
-```bash
-python main.py --start 5
-```
+Gemini calls are capped at **$2 per Python process** (`scraper/api_budget.py`);
+going over raises `BudgetExceededError` and stops the run. Because the cap
+is per process, running countries one at a time with `--country` gives
+each country its own $2 budget rather than one shared total.
 
-Re-running is safe — it skips events already in the sheet and only adds
-new ones. To use Gemini instead, add `--engine gemini` to either command.
+## How it works
+
+1. **Load** — `scraper/load_sites.py` reads each country's organizations
+   and events-page URLs from the Sources workbook.
+2. **Fetch** — `scraper/fetch.py` renders every events page in headless
+   Chromium (Playwright) so JavaScript calendars load.
+3. **Extract** — the free engine (`scraper/heuristic_extract.py`) finds
+   dates in the page and pulls the surrounding title, link and location.
+   The Gemini engine (`scraper/extract.py` + `scraper/gemini_extract.py`)
+   asks the model for structured JSON instead.
+4. **Upsert** — `scraper/excel_writer.py` writes to `output/raw/`. Every
+   run re-scrapes every organization, so an event whose date or venue was
+   missing last week is filled in once the site publishes it, without
+   creating duplicates.
+5. **Clean & classify** — `scraper/clean_events.py` dedupes, drops past
+   and junk entries, verifies links (`scraper/verify_links.py`) and uses
+   Gemini (`scraper/classify_relevance.py`) to filter for relevant
+   events, producing each country's final workbook.
+6. **Merge** — `weekly_full_run.py` combines every country's
+   *Upcoming - Verified* events into `output/Master.xlsx`.
+
+## Output
+
+| Path | Contents |
+|---|---|
+| `output/Master.xlsx` | **The deliverable.** Sheets: *Verified Events*, *Needs Review* (date disagrees with the event's own text), *Stats* |
+| `output/final/Events_<Country>_2026.xlsx` | Per-country review workbook: Summary, Upcoming - Verified, Upcoming - Incomplete, Past events, Flagged for Review (India's is `Events_2026.xlsx`) |
+| `output/raw/Events_<Country>.xlsx` | Raw scraped rows before cleaning |
+| `output/failures/` | Sites that failed to load this run (not committed) |
+| `output/summaries/` | Per-country and weekly JSON summaries used for the digest |
+
+`python -m scraper.resolve_needs_review` is an optional follow-up: it
+asks Gemini to settle the real date for each *Needs Review* row in
+`Master.xlsx`, moving confirmed upcoming events into *Verified Events*.
+
+## Other tools
+
+- `python gui.py` — desktop window for running and pausing a scrape.
+- `python server.py` — local dashboard at http://localhost:8765/dashboard.html
+  with start/stop controls and live progress.
 
 ## Known limitations
 
-- Sites that require login, heavy CAPTCHAs, or PDF-only calendars will
-  land in `output/failures.csv` for manual follow-up regardless of engine.
-- **Free engine**: relies on dates appearing as plain text near an event
-  title in the HTML. Sites using date-picker widgets, images-as-text, or
-  heavily nested/obfuscated markup will return few or no events. Expect
-  to spot-check results and possibly re-run problem sites with
-  `--engine gemini`.
-- **Gemini engine**: infers missing years/formats from context;
-  spot-check a sample of rows before trusting the sheet fully.
-- Both engines are rate-limited (1s between sites) to be polite to
-  target sites, so a full 286-site run takes a while either way.
+- Sites behind logins or CAPTCHAs, or with PDF-only calendars, fail and
+  are listed in `output/failures/` for manual follow-up.
+- The free engine needs dates written as plain text near the event
+  title; date-picker widgets and image-only calendars return few or no
+  events.
+- A full run takes several hours: every site is a real browser page load.

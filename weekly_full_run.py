@@ -504,11 +504,11 @@ if __name__ == "__main__":
                          help="skip the Gemini per-event relevance classification pass during cleaning")
     parser.add_argument("--country", default=None,
                          help="run only this one country's label (e.g. India) instead of all of them -- "
-                              "used by the parallel GitHub Actions matrix, one job per country")
+                              "useful for re-running one country or running countries in parallel")
     parser.add_argument("--merge-only", action="store_true",
                          help="skip scraping entirely and just rebuild Master.xlsx + weekly_summary.json "
-                              "from each country's output/summary_<label>.json -- used by the matrix's "
-                              "final merge job, after every per-country job has already run")
+                              "from each country's output/summaries/summary_<label>.json -- run this "
+                              "after one or more --country runs")
     args = parser.parse_args()
 
     if args.merge_only:
