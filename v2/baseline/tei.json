@@ -1,0 +1,324 @@
+{
+ "org": "Tax Executives Institute (TEI)",
+ "country": "USA",
+ "url": "https://www.tei.org/events-education/events",
+ "stated_total": 34,
+ "archive_present": false,
+ "expected_state": "discovery_complete",
+ "notes": "34 rows, each: title, start date, end date, venue, 'Read More'. Two 'New England Chapter: Ethics Training' rows on the same date are separate listings. Chapter 'Season Pass' rows span months.",
+ "events": [
+  {
+   "title": "2026 Tax Leadership Academy",
+   "date_text": "March 14, 2026 - October 17, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/tax-leadership-academy",
+   "note": ""
+  },
+  {
+   "title": "Chicago Chapter: Season Pass",
+   "date_text": "August 2, 2026 - June 30, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/chicago-chapter-season-pass",
+   "note": ""
+  },
+  {
+   "title": "Seattle Chapter: 2026-2027 Season Pass",
+   "date_text": "August 14, 2026 - December 31, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/seattle-chapter-2026-2027-season-pass",
+   "note": ""
+  },
+  {
+   "title": "Denver Chapter: 2026-2027 Season Pass",
+   "date_text": "September 17, 2026 - June 30, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/denver-chapter-2026-2027-season-pass",
+   "note": ""
+  },
+  {
+   "title": "Latin America Chapter: Tax Day in São Paulo - TEI and ANEFAC",
+   "date_text": "October 13, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.sympla.com.br/evento/tei-anefac-tax-day/3537153",
+   "note": ""
+  },
+  {
+   "title": "Seattle Chapter: Property Tax - Litigation Issues, Data Centers, and Intangible Asset Considerations (Virtual)",
+   "date_text": "October 15, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/seattle-chapter-property-tax-litigation-issues-data-centers-and-intangible",
+   "note": ""
+  },
+  {
+   "title": "New England Chapter: Ethics Training",
+   "date_text": "October 16, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/new-england-chapter-ethics-training",
+   "note": ""
+  },
+  {
+   "title": "New England Chapter: Ethics Training",
+   "date_text": "October 16, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/new-england-chapter-ethics-training-0",
+   "note": ""
+  },
+  {
+   "title": "2026 Annual Conference",
+   "date_text": "October 18, 2026 - October 21, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2026-annual-conference",
+   "note": ""
+  },
+  {
+   "title": "Denver Chapter: State Tax Hot Topics",
+   "date_text": "October 20, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/denver-chapter-state-tax-hot-topics",
+   "note": ""
+  },
+  {
+   "title": "Wisconsin Chapter: Oct Meeting - Indirect Tax / WI DOR",
+   "date_text": "October 20, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/wisconsin-chapter-oct-meeting-indirect-tax-wi-dor",
+   "note": ""
+  },
+  {
+   "title": "Carolinas Chapter: TEI Carolinas Fall Tax Update Seminar - Raleigh",
+   "date_text": "October 26, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/carolinas-chapter-tei-carolinas-fall-tax-update-seminar-raleigh-0",
+   "note": ""
+  },
+  {
+   "title": "2026 Federal Tax Course - Level 1 (Simulive Edition)",
+   "date_text": "October 26, 2026 - December 9, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2026-federal-tax-course-level-1-simulive-edition",
+   "note": ""
+  },
+  {
+   "title": "Portland Chapter: International Tax Day",
+   "date_text": "October 27, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/portland-chapter-international-tax-day-0",
+   "note": ""
+  },
+  {
+   "title": "Carolinas Chapter: TEI Carolinas Fall Tax Update Seminar - Charlotte",
+   "date_text": "October 27, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/carolinas-chapter-tei-carolinas-fall-tax-update-seminar-charlotte-0",
+   "note": ""
+  },
+  {
+   "title": "Region 1: Risk Management for Large Enterprises: Audits and AI, Director's Liability, and Transfer Pricing",
+   "date_text": "October 27, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/region-1-risk-management-large-enterprises-audits-and-ai-directors",
+   "note": ""
+  },
+  {
+   "title": "Virginia Chapter: TEI VA Chapter October 2026 Meeting",
+   "date_text": "October 27, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/virginia-chapter-tei-va-chapter-october-2026-meeting",
+   "note": ""
+  },
+  {
+   "title": "Nevada Chapter: Ethics plus ASC 740 Highlights and OBBBA SALT Conformity Update",
+   "date_text": "October 28, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/nevada-chapter-ethics-plus-asc-740-highlights-and-obbba-salt-conformity",
+   "note": ""
+  },
+  {
+   "title": "Nebraska Chapter: Top Golf Fall Social Event",
+   "date_text": "October 28, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/nebraska-chapter-top-golf-fall-social-event",
+   "note": ""
+  },
+  {
+   "title": "Detroit Chapter: November ASC 740 Meeting",
+   "date_text": "November 2, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/detroit-chapter-november-asc-740-meeting",
+   "note": ""
+  },
+  {
+   "title": "Indiana Chapter: TopGolf & Deloitte Tax Controversy/M&A (In-Person)",
+   "date_text": "November 5, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/indiana-chapter-topgolf-deloitte-tax-controversyma-person",
+   "note": ""
+  },
+  {
+   "title": "2026 TechTAXcelerate: Building Smarter Tax Functions Through Technology, Data & AI",
+   "date_text": "November 9, 2026 - November 13, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2026-techtaxcelerate-building-smarter-tax-functions-through-technology-data",
+   "note": ""
+  },
+  {
+   "title": "Rochester Chapter State Tax Update",
+   "date_text": "November 10, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/rochester-chapter-state-tax-update",
+   "note": ""
+  },
+  {
+   "title": "Connecticut Valley Chapter: Tax Education Day 2026",
+   "date_text": "November 12, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/connecticut-valley-chapter-tax-education-day-2026",
+   "note": ""
+  },
+  {
+   "title": "TEI NY Chapter Tax Symposium",
+   "date_text": "November 17, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/tei-ny-chapter-tax-symposium",
+   "note": ""
+  },
+  {
+   "title": "2026 US International Tax Course (Simulive Edition)",
+   "date_text": "January 21, 2027 - March 10, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2026-us-international-tax-course-simulive-edition",
+   "note": ""
+  },
+  {
+   "title": "2027 Midyear Conference",
+   "date_text": "March 21, 2027 - March 24, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2027-midyear-conference",
+   "note": ""
+  },
+  {
+   "title": "Region 10: 47th Annual Conference",
+   "date_text": "April 28, 2027 - April 30, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://events.tei.org/e/47th-tei-region-10-annual-conference",
+   "note": ""
+  },
+  {
+   "title": "2027 Tax Technology Seminar",
+   "date_text": "May 2, 2027 - May 5, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2027-tax-technology-seminar",
+   "note": ""
+  },
+  {
+   "title": "Region 8: 2027 Annual Conference",
+   "date_text": "June 9, 2027 - June 13, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events",
+   "note": ""
+  },
+  {
+   "title": "2027 Annual Conference",
+   "date_text": "October 24, 2027 - October 27, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2027-annual-conference",
+   "note": ""
+  },
+  {
+   "title": "2028 Midyear Conference",
+   "date_text": "March 19, 2028 - March 22, 2028",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2028-midyear-conference",
+   "note": ""
+  },
+  {
+   "title": "2028 Annual Conference",
+   "date_text": "October 22, 2028 - October 25, 2028",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2028-annual-conference",
+   "note": ""
+  },
+  {
+   "title": "2029 Midyear Conference",
+   "date_text": "March 18, 2029 - March 21, 2029",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tei.org/events-education/events/2029-midyear-conference",
+   "note": ""
+  }
+ ],
+ "slug": "tei",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/tei/)",
+ "true_event_count": 34
+}

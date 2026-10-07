@@ -1,0 +1,46 @@
+{
+ "org": "CFA Society India",
+ "country": "India",
+ "url": "https://cfasocietyindia.org/upcomingevents/",
+ "stated_total": 3,
+ "archive_present": true,
+ "archive_items_approx": 440,
+ "expected_state": "discovery_complete",
+ "notes": "3 upcoming events; below them a 'Past Event' archive with 37 numbered pages (about 440 past events) on the same page. The word 'Next' also appears inside a real event title ('The Next Era of Wealth Management...'), which a text-based 'next' click hits.",
+ "events": [
+  {
+   "title": "AI Is Not Just a Brain: Building an Operating Architecture for Reliable Research | Mumbai",
+   "date_text": "October 10, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://cfasocietyindia.org/events/ai-is-not-just-a-brain-building-an-operating-architecture-for-reliable-research-mumbai/",
+   "note": ""
+  },
+  {
+   "title": "Communication for Impact: Writing, Storytelling & Digital Content",
+   "date_text": "October 17, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://cfasocietyindia.org/events/communication-for-impact-writing-storytelling-digital-content/",
+   "note": ""
+  },
+  {
+   "title": "10th Value Investing Pioneers Summit | Delhi",
+   "date_text": "October 24, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://cfasocietyindia.org/events/10th-value-investing-pioneers-summit-delhi/",
+   "note": ""
+  }
+ ],
+ "slug": "cfa-india",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/cfa-india/)",
+ "true_event_count": 3
+}

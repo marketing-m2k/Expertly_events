@@ -1,0 +1,378 @@
+{
+ "org": "The Tax Institute",
+ "country": "AUS",
+ "url": "https://www.taxinstitute.com.au/events",
+ "stated_total": null,
+ "archive_present": false,
+ "expected_state": "discovery_complete",
+ "notes": "Sectioned page (Conferences & Forums / Conventions & Retreats / Masterclasses & Intensives / Local events). 'SA Tax Forum' shows '4 - 5 March 2026' on the card (before today): the event page decides. 'Next Gen Tax Discussion Group' contains the word 'Next' -- a text-based 'next' click navigates away into it.",
+ "events": [
+  {
+   "title": "National GST Conference",
+   "date_text": "15 - 16 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/national-gst",
+   "note": ""
+  },
+  {
+   "title": "National Superannuation Conference",
+   "date_text": "22 - 23 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/national-superannuation-conference",
+   "note": ""
+  },
+  {
+   "title": "Death & Taxes Conference",
+   "date_text": "28 - 29 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/death-taxes",
+   "note": ""
+  },
+  {
+   "title": "National Resources Tax Conference",
+   "date_text": "12-13 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/national-resources-taxation-conference",
+   "note": ""
+  },
+  {
+   "title": "SA Tax Forum",
+   "date_text": "4 - 5 March 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/SA-Tax-Forum",
+   "note": "date as printed on the card; may be a site typo"
+  },
+  {
+   "title": "WA Tax Forum",
+   "date_text": "11 - 12 March 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/wa-tax-forum",
+   "note": ""
+  },
+  {
+   "title": "Financial Services Taxation Conference",
+   "date_text": "11 - 12 March 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/financial-services-taxation-conference",
+   "note": ""
+  },
+  {
+   "title": "Tasmanian Convention",
+   "date_text": "15-16 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conventions-retreats/tasmanian-tax-convention",
+   "note": ""
+  },
+  {
+   "title": "Noosa Tax Convention",
+   "date_text": "18 - 20 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conventions-retreats/noosa-tax-convention",
+   "note": ""
+  },
+  {
+   "title": "Private Business Tax Retreat",
+   "date_text": "25 - 26 February 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conventions-retreats/private-business-tax-retreat",
+   "note": ""
+  },
+  {
+   "title": "Regional Masterclass",
+   "date_text": "8 - 9 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/regional-masterclass",
+   "note": ""
+  },
+  {
+   "title": "Property Intensive",
+   "date_text": "5 - 6 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/property-intensive",
+   "note": ""
+  },
+  {
+   "title": "Superannuation Intensive",
+   "date_text": "16 - 17 March 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/superannuation-intensive",
+   "note": ""
+  },
+  {
+   "title": "Estate Planning Intensive",
+   "date_text": "22 - 23 March 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/estate-planning-masterclass",
+   "note": ""
+  },
+  {
+   "title": "Infrastructure & Investments Tax Conference",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/national-infrastructure-conference",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "NSW Tax Forum",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/nsw-tax-forum",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "QLD Tax Forum",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/conferences-forums/queensland-tax-forum",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "Agribusiness Intensive",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/agribusiness-intensive",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "Tax Disputes Masterclass",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/tax-disputes-masterclass",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "Not-for-Profit Tax Intensive",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/not-for-profit-tax-intensive",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "Trusts Intensive",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/trusts-intensive",
+   "note": "OnDemand product; no event date"
+  },
+  {
+   "title": "Local Tax Club - Sydney",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-sydney",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Sydney Tax Discussion Group",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/nsw-discussion",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Women in Tax - NSW",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/women-in-tax-nsw-lunch",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Local Tax Club - Melbourne",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-melbourne",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Next Gen Tax Discussion Group",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/next-gen",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Local Tax Club - Geelong",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-geelong",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Melbourne Tax Discussion Group",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/vic-discussion",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Local Tax Club - Toowoomba",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-toowoomba",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Local Tax Club - Gold Coast",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-gold-coast",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Augustinian Tax Discussion Group",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/Augustinian-tax-discussion-group-brisbane",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Hobart Tax Discussion Group",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/tas-discussion-group",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Women in Tax Launceston",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/women-in-tax-tas",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Local Tax Club - Perth",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-perth",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Women in Tax - Perth",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/women-in-tax-wa-lunch",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Local Tax Club - Adelaide",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/local-tax-club-adelaide",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Women in Tax - Adelaide",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/women-in-tax-sa",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Canberra Tax Discussion Group",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/act-discussion",
+   "note": "local discussion group / club, no date"
+  },
+  {
+   "title": "Tax in Practice Part 2: Bendel - After the dust settles",
+   "date_text": "",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/tax-in-practice-brisbane",
+   "note": "local event listed with no date on the card; date only on its page"
+  },
+  {
+   "title": "Tax in Practice - Supercharge Strategies - Division 296",
+   "date_text": "",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/tax-in-practice-supercharge-strategies-div296",
+   "note": "local event listed with no date on the card; date only on its page"
+  }
+ ],
+ "slug": "taxinstitute",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/taxinstitute/)",
+ "true_event_count": 16
+}

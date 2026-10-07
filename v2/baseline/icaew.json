@@ -1,0 +1,189 @@
+{
+ "org": "ICAEW",
+ "country": "UK",
+ "url": "https://www.icaew.com/learning-and-development/events",
+ "stated_total": null,
+ "archive_present": false,
+ "expected_state": "discovery_complete",
+ "notes": "Configured URL is the 'ICAEW flagship events' page: 12 dated upcoming events (two already past by a few days but still listed) and 7 on-demand recordings. No pagination: v1's 'next' text click found nothing, harmlessly.",
+ "events": [
+  {
+   "title": "Farming and Rural Business Conference",
+   "date_text": "24 September 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": true,
+   "url": "https://www.icaew.com/learning-and-development/events/farming-conference",
+   "note": ""
+  },
+  {
+   "title": "Solicitors Conference",
+   "date_text": "6 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": true,
+   "url": "https://www.icaew.com/learning-and-development/events/solicitors-conference",
+   "note": ""
+  },
+  {
+   "title": "ICAEW Annual Conference",
+   "date_text": "16 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://annualconference.icaew.com/event/c82cf3f3-7895-4ff6-83d4-02bbfd01faa0/summary",
+   "note": ""
+  },
+  {
+   "title": "Global Ethics Day",
+   "date_text": "23 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://events.icaew.com/pd/33319/global-ethics-day-2026",
+   "note": ""
+  },
+  {
+   "title": "Internal Audit Conference",
+   "date_text": "5 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/internal-audit-conference",
+   "note": ""
+  },
+  {
+   "title": "ICAEW ASEAN Young Leaders Forum",
+   "date_text": "6-7 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/asean-young-leaders-forum",
+   "note": ""
+  },
+  {
+   "title": "ICAEW Sustainability Summit",
+   "date_text": "9-10 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/icaew-sustainability-summit",
+   "note": ""
+  },
+  {
+   "title": "Digital Assets Conference",
+   "date_text": "13 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/digital-assets-conference",
+   "note": ""
+  },
+  {
+   "title": "Forensic & Expert Witness Conference",
+   "date_text": "18 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/forensic-and-expert-witness-conference",
+   "note": ""
+  },
+  {
+   "title": "AI & Analytics Conference",
+   "date_text": "26 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "",
+   "note": ""
+  },
+  {
+   "title": "Public Sector Conference",
+   "date_text": "4 December 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/public-sector-conference",
+   "note": ""
+  },
+  {
+   "title": "Charity Conference",
+   "date_text": "21 & 22 January 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/charity-conference",
+   "note": ""
+  },
+  {
+   "title": "Changes to UK GAAP Conference 2026",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/corporate-reporting-conference",
+   "note": "recording; no event date"
+  },
+  {
+   "title": "CPD Conference 2026",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/cpd-conference",
+   "note": "recording; no event date"
+  },
+  {
+   "title": "Healthcare Conference 2026",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/healthcare-conference",
+   "note": "recording; no event date"
+  },
+  {
+   "title": "Forensic & Expert Witness Conference 2025",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/technical/trust-and-ethics/forensic-and-expert-witness",
+   "note": "recording; no event date"
+  },
+  {
+   "title": "Public Sector Conference 2025",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/technical/public-sector",
+   "note": "recording; no event date"
+  },
+  {
+   "title": "Restructuring & Insolvency Conference 2026",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/insolvency-conference",
+   "note": "recording; no event date"
+  },
+  {
+   "title": "Valuation Conference 2026",
+   "date_text": "",
+   "valid": false,
+   "kind": "on_demand",
+   "past_on_listing": false,
+   "url": "https://www.icaew.com/learning-and-development/events/valuation-conference",
+   "note": "recording; no event date"
+  }
+ ],
+ "slug": "icaew",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/icaew/)",
+ "true_event_count": 12
+}

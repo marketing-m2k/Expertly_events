@@ -1,0 +1,54 @@
+{
+ "org": "Chartered Institute of Taxation (CIOT)",
+ "country": "UK",
+ "url": "https://www.tax.org.uk/events",
+ "stated_total": null,
+ "archive_present": false,
+ "expected_state": "discovery_complete",
+ "notes": "Static page; each event is a title + a weekday date line only (no month-day pattern the v1 listing regex accepts: 'Tuesday 6 October 2026').",
+ "events": [
+  {
+   "title": "CIOT at Conservative Party Conference",
+   "date_text": "Tuesday 6 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tax.org.uk/conservative-party-conference-2026",
+   "note": ""
+  },
+  {
+   "title": "Tax Aid: OMB and Private Client Update Virtual Conference",
+   "date_text": "Monday 19 October 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tax.org.uk/OMB-Private-Client-Tax-Update",
+   "note": ""
+  },
+  {
+   "title": "Indirect Taxes Conference",
+   "date_text": "Thursday 12 November 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tax.org.uk/indirecttaxes2026",
+   "note": ""
+  },
+  {
+   "title": "CTA Admission Ceremony",
+   "date_text": "Wednesday 24 February 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.tax.org.uk/cta-admission-ceremony-2027",
+   "note": ""
+  }
+ ],
+ "slug": "ciot",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/ciot/)",
+ "true_event_count": 4
+}

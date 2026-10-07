@@ -1,0 +1,1411 @@
+{
+ "engine": "v2",
+ "mode": "ideal",
+ "aggregate": {
+  "orgs": 11,
+  "true_events": 101,
+  "discovered_total": 123,
+  "matched_valid": 101,
+  "missed": 0,
+  "duplicates": 0,
+  "extras": 1,
+  "past_extras": 0,
+  "recall_pct": 100.0,
+  "silent_empty_orgs": 0,
+  "states_correct": 10,
+  "states_checked": 11,
+  "failure_kinds": {},
+  "miss_reasons": {},
+  "drop_reasons": {
+   "weak_link_no_event_evidence": 22,
+   "archive_section": 112
+  },
+  "extraction_failures": 3,
+  "orgs_with_errors": 0
+ },
+ "orgs": [
+  {
+   "slug": "arita",
+   "org": "Australian Restructuring Insolvency & Turnaround Association (ARITA)",
+   "true_count": 13,
+   "discovered_count": 13,
+   "unique_count": 13,
+   "matched_valid": 13,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [],
+   "drop_reasons": {},
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 2,
+   "seconds": 0.3
+  },
+  {
+   "slug": "cfa-india",
+   "org": "CFA Society India",
+   "true_count": 3,
+   "discovered_count": 3,
+   "unique_count": 3,
+   "matched_valid": 3,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Newsletters",
+     "url": "https://cfasocietyindia.org/newsletters/",
+     "detail": "url score 0, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "weak_link_no_event_evidence",
+     "title": "CFA Program",
+     "url": "https://cfasocietyindia.org/cfa-program-2/",
+     "detail": "url score 3, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Gallery",
+     "url": "https://cfasocietyindia.org/videos/",
+     "detail": "url score 0, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "weak_link_no_event_evidence",
+     "title": "CFA Careers",
+     "url": "https://cfasocietyindia.org/cfa-careers/",
+     "detail": "url score 0, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Advocacy",
+     "url": "https://cfasocietyindia.org/india-insights/",
+     "detail": "url score 0, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Research Paper Discussion | The End of ESG",
+     "url": "https://cfasocietyindia.org/events/research-paper-discussion-the-end-of-esg/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Uncovering the Crane Industry with CEO of Trishakti Industries | Kolkata",
+     "url": "https://cfasocietyindia.org/events/uncovering-the-crane-industry-with-ceo-of-trishakti-industries-kolkata/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "From Statistics to Money: The Hidden Mathematics of Goals-Based Investing | Hyderabad",
+     "url": "https://cfasocietyindia.org/events/from-statistics-to-money-the-hidden-mathematics-of-goals-based-investing-hyderabad/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "11th India Wealth Management Conference",
+     "url": "https://cfasocietyindia.org/events/11th-india-wealth-management-conference/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "The Next Era of Wealth Management: AI, Behaviour & Judgment | Bengaluru",
+     "url": "https://cfasocietyindia.org/events/the-next-era-of-wealth-management-ai-behaviour-judgment-bengaluru/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Global Investment Opportunity and Risks | Delhi",
+     "url": "https://cfasocietyindia.org/events/global-investment-opportunity-and-risks-delhi/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Sustainable Finance Conference 2026",
+     "url": "https://cfasocietyindia.org/events/sustainable-finance-conference-2026/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Meet the Market Masters, Episode 4 | Chennai",
+     "url": "https://cfasocietyindia.org/events/meet-the-market-masters-episode-4-chennai/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Research Paper Discussion | Corporate Debt Pricing and the Determinants of Credit Risk",
+     "url": "https://cfasocietyindia.org/events/research-paper-discussion-corporate-debt-pricing-and-the-determinants-of-credit-risk/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "The Art of Long-Term Equity Investing | Kolkata",
+     "url": "https://cfasocietyindia.org/events/the-art-of-long-term-equity-investing-kolkata/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Emergence of Private Credit | Pune",
+     "url": "https://cfasocietyindia.org/events/emergence-of-private-credit-pune/",
+     "detail": "under 'Past Event'"
+    },
+    {
+     "org": "CFA Society India",
+     "listing_url": "https://cfasocietyindia.org/upcomingevents/",
+     "reason": "archive_section",
+     "title": "Member-Exclusive Webinar | Shaping Your Career Path",
+     "url": "https://cfasocietyindia.org/events/member-exclusive-webinar-shaping-your-career-path/",
+     "detail": "under 'Past Event'"
+    }
+   ],
+   "drop_reasons": {
+    "weak_link_no_event_evidence": 5,
+    "archive_section": 12
+   },
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.3
+  },
+  {
+   "slug": "ciot",
+   "org": "Chartered Institute of Taxation (CIOT)",
+   "true_count": 4,
+   "discovered_count": 4,
+   "unique_count": 4,
+   "matched_valid": 4,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [],
+   "drop_reasons": {},
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.1
+  },
+  {
+   "slug": "fta",
+   "org": "Federation of Tax Administrators (FTA)",
+   "true_count": 3,
+   "discovered_count": 3,
+   "unique_count": 3,
+   "matched_valid": 3,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [],
+   "drop_reasons": {},
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.2
+  },
+  {
+   "slug": "icaew",
+   "org": "ICAEW",
+   "true_count": 12,
+   "discovered_count": 15,
+   "unique_count": 15,
+   "matched_valid": 12,
+   "matched_neutral": 3,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [
+    {
+     "org": "ICAEW",
+     "listing_url": "https://www.icaew.com/learning-and-development/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "CPD Conference 2026",
+     "url": "https://www.icaew.com/learning-and-development/events/cpd-conference",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "ICAEW",
+     "listing_url": "https://www.icaew.com/learning-and-development/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Healthcare Conference 2026",
+     "url": "https://www.icaew.com/learning-and-development/events/healthcare-conference",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "ICAEW",
+     "listing_url": "https://www.icaew.com/learning-and-development/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Restructuring & Insolvency Conference 2026",
+     "url": "https://www.icaew.com/learning-and-development/events/insolvency-conference",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "ICAEW",
+     "listing_url": "https://www.icaew.com/learning-and-development/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Valuation Conference 2026",
+     "url": "https://www.icaew.com/learning-and-development/events/valuation-conference",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    }
+   ],
+   "drop_reasons": {
+    "weak_link_no_event_evidence": 4
+   },
+   "miss_reasons": {},
+   "extraction_failures": 3,
+   "pages_walked": 1,
+   "seconds": 0.8
+  },
+  {
+   "slug": "icsi",
+   "org": "ICSI",
+   "true_count": 0,
+   "discovered_count": 1,
+   "unique_count": 1,
+   "matched_valid": 0,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [
+    {
+     "title": "The Institute of Company Secretaries of India (ICSI)",
+     "url": "",
+     "date_hint": "07/10/2026"
+    }
+   ],
+   "past_extras": 0,
+   "recall": null,
+   "state_reported": "discovery_incomplete",
+   "state_expected": "discovery_failed",
+   "state_correct": false,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [],
+   "drop_reasons": {},
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.1
+  },
+  {
+   "slug": "isca-sg",
+   "org": "Institute of Singapore Chartered Accountants (ISCA)",
+   "true_count": 8,
+   "discovered_count": 8,
+   "unique_count": 8,
+   "matched_valid": 8,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [
+    {
+     "org": "Institute of Singapore Chartered Accountants (ISCA)",
+     "listing_url": "https://www.isca.org.sg/member-support/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "View Events",
+     "url": "https://www.isca.org.sg/member-support/course-listing?type=Event",
+     "detail": "url score 2, title confidence low, no date -- not enough to call it an event"
+    },
+    {
+     "org": "Institute of Singapore Chartered Accountants (ISCA)",
+     "listing_url": "https://www.isca.org.sg/member-support/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "ISCA Conference 2025 stats",
+     "url": "https://www.linkedin.com/posts/institute-of-singapore-chartered-accountants_after-months-in-the-making-isca-conference-activity-7394720747593691136-fmVu?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB6VqA8BIOHR2x5Esm1HZLRdKlrasTT1tvQ",
+     "detail": "url score 2, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "Institute of Singapore Chartered Accountants (ISCA)",
+     "listing_url": "https://www.isca.org.sg/member-support/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Charity Dinner",
+     "url": "https://www.linkedin.com/posts/institute-of-singapore-chartered-accountants_accountancy-isca-iscadinner2025-activity-7367451009511583744-HLCz?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB6VqA8BIOHR2x5Esm1HZLRdKlrasTT1tvQ",
+     "detail": "url score 2, title confidence medium, no date -- not enough to call it an event"
+    }
+   ],
+   "drop_reasons": {
+    "weak_link_no_event_evidence": 3
+   },
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.4
+  },
+  {
+   "slug": "picpa-dubai",
+   "org": "PICPA Dubai",
+   "true_count": 7,
+   "discovered_count": 7,
+   "unique_count": 7,
+   "matched_valid": 7,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [
+    {
+     "org": "PICPA Dubai",
+     "listing_url": "https://picpadubai.org/events/list/",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Sign in",
+     "url": "https://picpadubai.org/picpalogin/",
+     "detail": "url score 0, title confidence medium, no date -- not enough to call it an event"
+    }
+   ],
+   "drop_reasons": {
+    "weak_link_no_event_evidence": 1
+   },
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.3
+  },
+  {
+   "slug": "taxation-society-uae",
+   "org": "Taxation Society UAE",
+   "true_count": 1,
+   "discovered_count": 1,
+   "unique_count": 1,
+   "matched_valid": 1,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Global Tax Summit & Awards – UAE Edition",
+     "url": "https://taxationsociety.org/event-category/global-tax-summit-awards-uae-edition/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "FUTURE OF TAX & COMPLIANCE IN THE UAE",
+     "url": "https://taxationsociety.org/event-category/future-of-tax-title-partner-compliance-in-the-uae/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "E-Invoicing Compliance & Tax Technology Summit 2026 – Event Photos",
+     "url": "https://taxationsociety.org/event-category/e-invoicing-compliance-tax-technology-summit-2026-event-photos/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "The AI E-Invoicing Implementation Lab",
+     "url": "https://taxationsociety.org/event-category/the-ai-e-invoicing-implementation-lab/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 MONTHS UAE CORPORATE TAX & TRANSFER PRICING MASTERCLASS",
+     "url": "https://taxationsociety.org/event-category/3-months-uae-corporate-tax-transfer-pricing-masterclass/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE E-INVOICING LIVE DEMONSTRATION & NETWORKING BREAKFAST",
+     "url": "https://taxationsociety.org/event-category/uae-e-invoicing-live-demonstration-networking-breakfast-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "CONNECT. COMPLY. CAPITALIZE. CAPITALIZE. CAPITALIZE. AI • ESG • TAX • E-INVOICING • TRADE FINANCE",
+     "url": "https://taxationsociety.org/event-category/connect-comply-capitalize-capitalize-capitalize-ai-esg-tax-e-invoicing-trade-finance/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "FUTURE-READY UAE TAX & COMPLIANCE INTEGRATING UAE CT, TP, VAT & E-INVOICING, INTERNAL AUDIT & AML",
+     "url": "https://taxationsociety.org/event-category/future-ready-uae-tax-compliance-integrating-uae-ct-tp-vat-e-invoicing-internal-audit-aml/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "BLOOD DONATION CAMP",
+     "url": "https://taxationsociety.org/event-category/blood-donation-camp/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 MONTH MASTERCLASS ON IFRS-FINAL SESSION ON",
+     "url": "https://taxationsociety.org/event-category/3-month-masterclass-on-ifrs/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 MONTHS MASTERCLASS ON IFRS",
+     "url": "https://taxationsociety.org/event-category/3-months-masterclass-on-ifrs-13th-june-2026/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX – 3rd Anniversary",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-3rd-anniversary/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE E-INVOICING OPEN DAY",
+     "url": "https://taxationsociety.org/event-category/uae-e-invoicing-open-day/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE E-INVOICINGONE MANDATE. ONE DEADLINE.ONE CHANCE TO GET IT RIGHT.",
+     "url": "https://taxationsociety.org/event-category/uae-e-invoicingone-mandate-one-deadline-one-chance-to-get-it-right/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "BUILDING A RESILIENTTAXFRAMEWORKUAE CT, TP, PILLAR 2 & E-INVOICING",
+     "url": "https://taxationsociety.org/event-category/building-a-resilienttaxframeworkuae-ct-tp-pillar-2-e-invoicing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "INDIA DIALOGUE UNION BUDGET 2026-27",
+     "url": "https://taxationsociety.org/event-category/india-dialogue-union-budget-2026-27/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "THE CLOCK IS TICKING FOR UAE E-INVOICING",
+     "url": "https://taxationsociety.org/event-category/the-clock-is-ticking-for-uae-e-invoicing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "THE QUIET AI SHIFT FROM SPREADSHEETS TO TRUSTED CONTROLS",
+     "url": "https://taxationsociety.org/event-category/the-quiet-ai-shift-from-spreadsheets-to-trusted-controls-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "CFO Conclave",
+     "url": "https://taxationsociety.org/event-category/cfo-conclave/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Mastercourse on Professional Upskilling in Data & AI for Taxation Power BI to Chatbots",
+     "url": "https://taxationsociety.org/event-category/3-months-mastercourse-on-professional-upskilling-in-data-ai-for-taxation-power-bi-to-chatbots-6/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Mastercourse on Professional Upskilling in Data & AI for Taxation Power BI to Chatbots",
+     "url": "https://taxationsociety.org/event-category/3-months-mastercourse-on-professional-upskilling-in-data-ai-for-taxation-power-bi-to-chatbots-5/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Countdown to Compliance – UAE CT Return Filing and Transfer Pricing Practical Insights",
+     "url": "https://taxationsociety.org/event-category/countdown-to-compliance-uae-ct-return-filing-and-transfer-pricing-practical-insights/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "2025 UAE Tax Strategies: Integrating UAE CT, TP, VAT & E-invoicing",
+     "url": "https://taxationsociety.org/event-category/2025-uae-tax-strategies-integrating-uae-ct-tp-vat-e-invoicing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Mastercourse on Professional Upskilling in Data & AI for Taxation Power BI to Chatbots",
+     "url": "https://taxationsociety.org/event-category/3-months-mastercourse-on-professional-upskilling-in-data-ai-for-taxation-power-bi-to-chatbots-4/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Mastercourse on Professional Upskilling in Data & AI for Taxation Power BI to Chatbots",
+     "url": "https://taxationsociety.org/event-category/3-months-mastercourse-on-professional-upskilling-in-data-ai-for-taxation-power-bi-to-chatbots-3/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "The Next Big Tax RevolutionLearn the What, Why & How of UAE E-Invoicing",
+     "url": "https://taxationsociety.org/event-category/the-next-big-tax-revolutionlearn-the-what-why-how-of-uae-e-invoicing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Mastercourse on Professional Upskilling in Data & AI for Taxation Power BI to Chatbots",
+     "url": "https://taxationsociety.org/event-category/3-months-mastercourse-on-professional-upskilling-in-data-ai-for-taxation-power-bi-to-chatbots-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Mastercourse on Professional Upskilling in Data & AI for Taxation Power BI to Chatbots",
+     "url": "https://taxationsociety.org/event-category/3-months-mastercourse-on-professional-upskilling-in-data-ai-for-taxation-power-bi-to-chatbots/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CT Compliance for FreeZones: Practical Guidance for 2025",
+     "url": "https://taxationsociety.org/event-category/uae-ct-compliance-for-freezones-practical-guidance-for-2025/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "TP Readiness for UAE CT:Risk Management & Documentation Strategies",
+     "url": "https://taxationsociety.org/event-category/tp-readiness-for-uae-ctrisk-management-documentation-strategies/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "International Yoga Day",
+     "url": "https://taxationsociety.org/event-category/international-yoga-day/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "E-Invoicing – The Next BIG Tax Revolution",
+     "url": "https://taxationsociety.org/event-category/e-invoicing-the-next-big-tax-revolution/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Navigating The UAECorporate Tax Return Process, A Practical Guidance for 2025",
+     "url": "https://taxationsociety.org/event-category/navigating-the-uaecorporate-tax-return-process-a-practical-guidance-for-2025/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "3 Months Master course on Professional Upskilling in Data & AI",
+     "url": "https://taxationsociety.org/event-category/3-months-master-course-on-professional-upskilling-in-data-ai/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax Evolution – The Year 2 Perspective",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-evolution-the-year-2-perspective/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax Evolutionthe Year 2 Perspective, The Evolving Tax Landscape: From UAE Corporate Tax, Transfer Pricing to Global Pillar 2 &AI-Driven Compliance",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-evolutionthe-year-2-perspective-the-evolving-tax-landscape-from-uae-corporate-tax-transfer-pricing-to-global-pillar-2-ai-driven-compliance/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX &TRANSFER PRICINGMASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricingmaster-course-6/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX &TRANSFER PRICINGMASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricingmaster-course-5/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX &TRANSFER PRICINGMASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricingmaster-course-4/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX &TRANSFER PRICINGMASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricingmaster-course-3/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Decoding Tax Returns 2025:Insights, Strategies & Compliance",
+     "url": "https://taxationsociety.org/event-category/decoding-tax-returns-2025insights-strategies-compliance/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX &TRANSFER PRICINGMASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricingmaster-course-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX &TRANSFER PRICINGMASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricingmaster-course/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Power Moves: Elevate YourHealth & UAE Corporate Tax Insights",
+     "url": "https://taxationsociety.org/event-category/power-moves-elevate-yourhealth-uae-corporate-tax-insights/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Driving Excellence:Leadership and Taxation onInternational Women’s Day",
+     "url": "https://taxationsociety.org/event-category/driving-excellenceleadership-and-taxation-oninternational-womens-day/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax &Transfer Pricing -Year End Compliances& Checkpoint",
+     "url": "https://taxationsociety.org/event-category/corporate-tax-transfer-pricing-year-end-compliances-checkpoint/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "INDIAUNION BUDGET 2025:KEY INSIGHTS &CAPITAL MARKET OUTLOOK",
+     "url": "https://taxationsociety.org/event-category/indiaunion-budget-2025key-insights-capital-market-outlook/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "NAVIGATING THE INTERSECTION:IAS 12 & UAE CORPORATE TAXCOMPLIANCE",
+     "url": "https://taxationsociety.org/event-category/navigating-the-intersectionias-12-uae-corporate-taxcompliance/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "NAVIGATING UAE’SEVOLVING TAX LANDSCAPE:MINISTERIAL DECISION ONEXEMPTIONS & COMPLIANCESTRATEGIES FOR YEAR-END",
+     "url": "https://taxationsociety.org/event-category/navigating-uaesevolving-tax-landscapeministerial-decision-onexemptions-compliancestrategies-for-year-end/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Mastering UAE Tax Returns: Compliance made simple",
+     "url": "https://taxationsociety.org/event-category/mastering-uae-tax-returns-compliance-made-simple/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Achieving Outstanding PerformanceStrategic & LeadershipChallenges",
+     "url": "https://taxationsociety.org/event-category/achieving-outstanding-performancestrategic-leadershipchallenges/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Transfer Pricing: Navigating UAE Transfer Pricing Regulations: Compliance and Strategy",
+     "url": "https://taxationsociety.org/event-category/uae-transfer-pricing-navigating-uae-transfer-pricing-regulations-compliance-and-strategy/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "New Developments in UAE VAT Law: Implications for Businesses",
+     "url": "https://taxationsociety.org/event-category/new-developments-in-uae-vat-law-implications-for-businesses/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Adaptingto GlobalTax Standards:UAECorporate Tax& Pillar IIin Focus",
+     "url": "https://taxationsociety.org/event-category/adaptingto-globaltax-standardsuaecorporate-tax-pillar-iiin-focus/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Customs Master Course",
+     "url": "https://taxationsociety.org/event-category/uae-customs-master-course/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Excise Master Course",
+     "url": "https://taxationsociety.org/event-category/uae-excise-master-course/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE VAT Master Course",
+     "url": "https://taxationsociety.org/event-category/uae-vat-master-course-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax, VAT E-Invoicing & Power of Yoga As Medicine",
+     "url": "https://taxationsociety.org/event-category/corporate-tax-vat-e-invoicing-power-of-yoga-as-medicine/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE VAT Master Course",
+     "url": "https://taxationsociety.org/event-category/uae-vat-master-course/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "RECENT UAE CORPORATE TAX &UAE EMIRATISATION LAW UPDATES,COMPLIANCES, CHALLENGES &OPPORTUNITIES",
+     "url": "https://taxationsociety.org/event-category/recent-uae-corporate-tax-uae-emiratisation-law-updatescompliances-challenges-opportunities/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "E-Invoicing – Overview of What’s Coming & Open Q and A for UAE Corporate Tax",
+     "url": "https://taxationsociety.org/event-category/e-invoicing-overview-of-whats-coming-open-q-and-a-for-uae-corporate-tax/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Highlights of Indian Union Budget 2024-25",
+     "url": "https://taxationsociety.org/event-category/highlights-of-indian-union-budget-2024-25/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Master Course on Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/master-course-on-transfer-pricing-3/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Master Course on Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/master-course-on-transfer-pricing-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Master Course on Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/master-course-on-transfer-pricing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "From Implementation to Integration with other lawsCelebrating 1 year of UAE Corporate Tax",
+     "url": "https://taxationsociety.org/event-category/from-implementation-to-integration-with-other-lawscelebrating-1-year-of-uae-corporate-tax/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX & TRANSFER PRICING MASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricing-master-course-6/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX & TRANSFER PRICING MASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricing-master-course-5/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX & TRANSFER PRICING MASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricing-master-course-4/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX & TRANSFER PRICING MASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricing-master-course-3/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX & TRANSFER PRICING MASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricing-master-course-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE CORPORATE TAX & TRANSFER PRICING MASTER COURSE",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-transfer-pricing-master-course/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Beyond the Balance Sheet: Rethinking Corporate Tax Strategies",
+     "url": "https://taxationsociety.org/event-category/beyond-the-balance-sheet-rethinking-corporate-tax-strategies/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Inaugural Breakfast Meeting – Corporate Tax Registration Open Day",
+     "url": "https://taxationsociety.org/event-category/inaugural-breakfast-meeting-corporate-tax-registration-open-day/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Masterclass Mastering the FAQs: In-Depth Analysis of UAE Corporate Tax Through Official Guides and Examples",
+     "url": "https://taxationsociety.org/event-category/masterclass-mastering-the-faqs-in-depth-analysis-of-uae-corporate-tax-through-official-guides-and-examples-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Masterclass Mastering the FAQs: In-Depth Analysis of UAE Corporate Tax Through Official Guides and Examples",
+     "url": "https://taxationsociety.org/event-category/masterclass-mastering-the-faqs-in-depth-analysis-of-uae-corporate-tax-through-official-guides-and-examples/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Beyond Sanctions & Red Flags: Mastering the 6 Pillars of AML in general and for DNFBPs",
+     "url": "https://taxationsociety.org/event-category/beyond-sanctions-red-flags-mastering-the-6-pillars-of-aml-in-general-and-for-dnfbps/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Industry Experts Panel on UAE Corporate Tax & Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/industry-experts-panel-on-uae-corporate-tax-transfer-pricing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Freezone Corporate Tax Provisions Impact Analysis and Implementation",
+     "url": "https://taxationsociety.org/event-category/freezone-corporate-tax-provisions-impact-analysis-and-implementation/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Decoding UAE Corporate Tax and Transfer Pricing – Recent Updates",
+     "url": "https://taxationsociety.org/event-category/decoding-uae-corporate-tax-and-transfer-pricing-recent-updates/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax and Transfer Pricing Course",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-and-transfer-pricing-course-6/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax and Transfer Pricing Course",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-and-transfer-pricing-course-5/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax and Transfer Pricing Course",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-and-transfer-pricing-course-4/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax and Transfer Pricing Course",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-and-transfer-pricing-course-3/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax and Transfer Pricing Course",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-and-transfer-pricing-course-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Case studies, Practical scenarios, illustrations and simulations on UAE Corporate Tax & Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/case-studies-practical-scenarios-illustrations-and-simulations-on-uae-corporate-tax-transfer-pricing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "UAE Corporate Tax and Transfer Pricing Course",
+     "url": "https://taxationsociety.org/event-category/uae-corporate-tax-and-transfer-pricing-course/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Workshop on UAE Corporate Tax and Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/workshop-on-uae-corporate-tax-and-transfer-pricing-3/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Update on Corporate Tax & Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/update-on-corporate-tax-transfer-pricing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Workshop on UAE Corporate Tax and Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/workshop-on-uae-corporate-tax-and-transfer-pricing-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Workshop on UAE Corporate Tax and Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/workshop-on-uae-corporate-tax-and-transfer-pricing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax & Transfer Pricing Updates with experts",
+     "url": "https://taxationsociety.org/event-category/corporate-tax-transfer-pricing-updates-with-experts/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Masterclass on UAE Corporate Tax, Free zone & Real Estate",
+     "url": "https://taxationsociety.org/event-category/masterclass-on-uae-corporate-tax-free-zone-real-estate/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Masterclass on UAE Corporate Tax & Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/masterclass-on-uae-corporate-tax-transfer-pricing-2/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax Talks Insights by Professional and Industry Experts",
+     "url": "https://taxationsociety.org/event-category/corporate-tax-talks-insights-by-professional-and-industry-experts/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Masterclass on UAE Corporate Tax & Transfer Pricing",
+     "url": "https://taxationsociety.org/event-category/masterclass-on-uae-corporate-tax-transfer-pricing/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax",
+     "url": "https://taxationsociety.org/event-category/corporate-tax/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Workshop on Recent Updates on Corporate Tax",
+     "url": "https://taxationsociety.org/event-category/workshop-on-recent-updates-on-corporate-tax/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax Tax Grouping, Free Zones & Small Business Relief",
+     "url": "https://taxationsociety.org/event-category/corporate-tax-tax-grouping-free-zones-small-business-relief/",
+     "detail": "under 'Past Events'"
+    },
+    {
+     "org": "Taxation Society UAE",
+     "listing_url": "https://taxationsociety.org/events-conferences/",
+     "reason": "archive_section",
+     "title": "Corporate Tax Allowable & Disallowable expenses and Q & A",
+     "url": "https://taxationsociety.org/event-category/corporate-tax-allowable-disallowable-expenses-and-q-a/",
+     "detail": "under 'Past Events'"
+    }
+   ],
+   "drop_reasons": {
+    "archive_section": 100
+   },
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 1.2
+  },
+  {
+   "slug": "taxinstitute",
+   "org": "The Tax Institute",
+   "true_count": 16,
+   "discovered_count": 34,
+   "unique_count": 34,
+   "matched_valid": 16,
+   "matched_neutral": 18,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Masterclasses, Intensives & Workshops",
+     "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops",
+     "detail": "url score 2, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Local Tax Clubs, Discussion Groups & Networking Events",
+     "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events",
+     "detail": "url score 2, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "View our 2026 National Events Calendar",
+     "url": "https://www.taxinstitute.com.au/events/event-guidelines",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "OnDemand",
+     "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/agribusiness-intensive",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "OnDemand",
+     "url": "https://www.taxinstitute.com.au/events/masterclasses-intensives-workshops/trusts-intensive",
+     "detail": "url score 3, title confidence high, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Sydney Tax Discussion Group",
+     "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/nsw-discussion",
+     "detail": "url score 3, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Next Gen Tax Discussion Group",
+     "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/next-gen",
+     "detail": "url score 3, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Melbourne Tax Discussion Group",
+     "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/vic-discussion",
+     "detail": "url score 3, title confidence medium, no date -- not enough to call it an event"
+    },
+    {
+     "org": "The Tax Institute",
+     "listing_url": "https://www.taxinstitute.com.au/events",
+     "reason": "weak_link_no_event_evidence",
+     "title": "Canberra Tax Discussion Group",
+     "url": "https://www.taxinstitute.com.au/events/local-tax-clubs-discussion-groups-networking-events/act-discussion",
+     "detail": "url score 3, title confidence medium, no date -- not enough to call it an event"
+    }
+   ],
+   "drop_reasons": {
+    "weak_link_no_event_evidence": 9
+   },
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 1.2
+  },
+  {
+   "slug": "tei",
+   "org": "Tax Executives Institute (TEI)",
+   "true_count": 34,
+   "discovered_count": 34,
+   "unique_count": 34,
+   "matched_valid": 34,
+   "matched_neutral": 0,
+   "missed": [],
+   "duplicates": [],
+   "extras": [],
+   "past_extras": 0,
+   "recall": 100.0,
+   "state_reported": "discovery_complete",
+   "state_expected": "discovery_complete",
+   "state_correct": true,
+   "silently_empty": false,
+   "failure_kinds": [],
+   "errors": [],
+   "dropped": [],
+   "drop_reasons": {},
+   "miss_reasons": {},
+   "extraction_failures": 0,
+   "pages_walked": 1,
+   "seconds": 0.9
+  }
+ ]
+}

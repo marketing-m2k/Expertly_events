@@ -1,0 +1,162 @@
+{
+ "org": "Institute of Singapore Chartered Accountants (ISCA)",
+ "country": "SG",
+ "url": "https://www.isca.org.sg/member-support/events",
+ "stated_total": null,
+ "archive_present": false,
+ "expected_state": "discovery_complete",
+ "notes": "Landing page: 3 upcoming courses/talks (with session dates) + 5 flagship events (3 already past) + 7 undated 'signature event' series. The 'View Events' link leads to the full registration listing, which is outside the configured URL.",
+ "events": [
+  {
+   "title": "SCAQFRID2026: SCAQ Fridays",
+   "date_text": "9 Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://eservices.isca.org.sg/CourseDetailClone?courseMasterId=a0gfP00000L3FWHQA3",
+   "note": ""
+  },
+  {
+   "title": "BT2604: Deloitte Breakfast Talk",
+   "date_text": "22 Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://eservices.isca.org.sg/CourseDetailClone?courseMasterId=a0gfP00000LojqfQAB",
+   "note": ""
+  },
+  {
+   "title": "Techtalk 2608: Caseware TechTalk",
+   "date_text": "28 Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://eservices.isca.org.sg/CourseDetailClone?courseMasterId=a0gfP00000Lom5NQAR",
+   "note": ""
+  },
+  {
+   "title": "ISCA Dinner 2026",
+   "date_text": "3 July 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": true,
+   "url": "",
+   "note": ""
+  },
+  {
+   "title": "AccountanCity 2026",
+   "date_text": "17 & 18 July 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": true,
+   "url": "",
+   "note": ""
+  },
+  {
+   "title": "Tech & AI Fair",
+   "date_text": "28 August 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": true,
+   "url": "https://www.isca.org.sg/member-support/events/tech-fair-2025",
+   "note": ""
+  },
+  {
+   "title": "ISCA Run 2026",
+   "date_text": "17 Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "",
+   "note": ""
+  },
+  {
+   "title": "ISCA Conference 2026",
+   "date_text": "11 Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://www.isca.org.sg/member-support/events/isca-conference-2026",
+   "note": ""
+  },
+  {
+   "title": "Decision Maker's Luncheon",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "Board Nexus",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "Leaders at Crossings",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "TalkTank",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "Educators Connect",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "Practitioners Connect",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "Public Sector Connect",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  },
+  {
+   "title": "Women Connect",
+   "date_text": "",
+   "valid": false,
+   "kind": "series",
+   "past_on_listing": false,
+   "url": "",
+   "note": "standing programme, no date"
+  }
+ ],
+ "slug": "isca-sg",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/isca-sg/)",
+ "true_event_count": 8
+}
