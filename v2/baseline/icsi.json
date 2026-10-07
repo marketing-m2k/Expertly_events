@@ -1,0 +1,17 @@
+{
+ "org": "ICSI",
+ "country": "India",
+ "url": "https://www.icsi.edu/events/",
+ "stated_total": null,
+ "archive_present": false,
+ "expected_state": "discovery_failed",
+ "notes": "SOFT 404: the page renders the site's '404 - route doesn't exist' view (HTTP 200). The only event-like text is a homepage 'Latest Update' ticker. The correct outcome is discovery_failed (source URL broken) -- NOT 'organisation has no events'.",
+ "events": [],
+ "slug": "icsi",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/icsi/)",
+ "true_event_count": 0
+}

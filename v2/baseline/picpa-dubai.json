@@ -1,0 +1,81 @@
+{
+ "org": "PICPA Dubai",
+ "country": "UAE",
+ "url": "https://picpadubai.org/events/list/",
+ "stated_total": null,
+ "archive_present": true,
+ "expected_state": "discovery_complete",
+ "notes": "The Events Calendar (Tribe) list view with JSON-LD Event data; 7 upcoming events; 'Previous Events' archive link.",
+ "events": [
+  {
+   "title": "VAT Compliance, Audits & Risk Management in the UAE",
+   "date_text": "October 24, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/vat-compliance-audits-risk-management-in-the-uae/",
+   "note": ""
+  },
+  {
+   "title": "Tax Accounting under IAS 12 & Deferred Tax Complexities",
+   "date_text": "October 24, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/tax-accounting-under-ias-12-deferred-tax-complexities/",
+   "note": ""
+  },
+  {
+   "title": "IFRS 10 & 3 : Consolidation, Business Combinations & Group Reporting",
+   "date_text": "October 24, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/ifrs-10-3-consolidation-business-combinations-group-reporting/",
+   "note": ""
+  },
+  {
+   "title": "Financial Statement Analysis & Advanced Valuation Techniques",
+   "date_text": "October 24, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/financial-statement-analysis-advanced-valuation-techniques/",
+   "note": ""
+  },
+  {
+   "title": "Data Analytics & Visualization through Power BI",
+   "date_text": "November 28, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/data-analytics-visualization-through-power-bi/",
+   "note": ""
+  },
+  {
+   "title": "Budgeting & Forecasting | Treasury & Cash Management Best Practices",
+   "date_text": "December 12, 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/budgeting-forecasting/",
+   "note": ""
+  },
+  {
+   "title": "PICPAlaro Sportsfest",
+   "date_text": "February 27, 2027",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://picpadubai.org/event/picpalaro-sportsfest/",
+   "note": "sports/social event; in scope question for classification, not discovery"
+  }
+ ],
+ "slug": "picpa-dubai",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/picpa-dubai/)",
+ "true_event_count": 7
+}

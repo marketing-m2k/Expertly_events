@@ -1,0 +1,28 @@
+{
+ "org": "Taxation Society UAE",
+ "country": "UAE",
+ "url": "https://taxationsociety.org/events-conferences/",
+ "stated_total": 1,
+ "archive_present": true,
+ "archive_items_approx": 120,
+ "expected_state": "discovery_complete",
+ "notes": "1 upcoming event; about 120 past events listed under 'Past Events' on the same page (must not contaminate current discovery).",
+ "events": [
+  {
+   "title": "CFO Conclave 2026",
+   "date_text": "24-Oct-2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://taxationsociety.org/event-category/cfo-conclave-2026/",
+   "note": ""
+  }
+ ],
+ "slug": "taxation-society-uae",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/taxation-society-uae/)",
+ "true_event_count": 1
+}

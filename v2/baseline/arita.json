@@ -1,0 +1,136 @@
+{
+ "org": "Australian Restructuring Insolvency & Turnaround Association (ARITA)",
+ "country": "AUS",
+ "url": "https://arita.com.au/events",
+ "stated_total": 13,
+ "archive_present": false,
+ "expected_state": "discovery_complete",
+ "notes": "Numbered pagination (1,2); 9 events on page 1, 4 on page 2. Page 2 is only reachable by clicking '2'.",
+ "events": [
+  {
+   "title": "Vic/Tas Division Conference and Dinner 2026",
+   "date_text": "14th Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3VICCON26",
+   "note": ""
+  },
+  {
+   "title": "Qld Young Professionals Seminar: Litigation Funding",
+   "date_text": "22nd Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3YSEQL1026",
+   "note": ""
+  },
+  {
+   "title": "NSW/ACT Division Conference and Dinner 2026",
+   "date_text": "29th Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3NSWCON26",
+   "note": ""
+  },
+  {
+   "title": "NSW Young Professionals Seminar: Creditor activism - The good, the bad and the ugly",
+   "date_text": "29th Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3YSESY1026",
+   "note": ""
+  },
+  {
+   "title": "WA Forum: Views from the Bench",
+   "date_text": "29th Oct 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3FOPE1026",
+   "note": ""
+  },
+  {
+   "title": "Expert Series: Restructuring & Turnaround",
+   "date_text": "5th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3EXRT1126",
+   "note": ""
+  },
+  {
+   "title": "Expert Series: Bankruptcy",
+   "date_text": "17th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3EXBK1126",
+   "note": ""
+  },
+  {
+   "title": "Hunter Forum & EOY drinks: 2026 in review",
+   "date_text": "19th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3FOHU1126",
+   "note": ""
+  },
+  {
+   "title": "NSW Young Professionals End-of-year Social - Cruise",
+   "date_text": "19th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3YSOSY1126",
+   "note": ""
+  },
+  {
+   "title": "Vic/Tas Young Professionals EOY lawn bowls",
+   "date_text": "20th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3YSOME1126",
+   "note": ""
+  },
+  {
+   "title": "Expert Series: Insolvency",
+   "date_text": "26th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3EXIN1126",
+   "note": ""
+  },
+  {
+   "title": "WA Young Professionals End-of-year Social",
+   "date_text": "26th Nov 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3YSOPE1126",
+   "note": ""
+  },
+  {
+   "title": "Expert Series: Small Practice",
+   "date_text": "8th Dec 2026",
+   "valid": true,
+   "kind": "scheduled",
+   "past_on_listing": false,
+   "url": "https://arita.com.au/Event_Display.aspx?EventKey=3EXSM1226",
+   "note": ""
+  }
+ ],
+ "slug": "arita",
+ "snapshot_date": "2026-10-07",
+ "ideal_pages": [
+  "page_01.html",
+  "page_02.html"
+ ],
+ "verified_by": "manual: rendered page text read event-by-event on 2026-10-07 (see baseline/raw/arita/)",
+ "true_event_count": 13
+}
