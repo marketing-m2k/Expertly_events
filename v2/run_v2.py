@@ -37,7 +37,10 @@ except ImportError:
     pass
 
 import faulthandler  # noqa: E402
-faulthandler.dump_traceback_later(1200, repeat=True, file=open(os.path.join(HERE, 'data', 'watchdog_stacks.txt'), 'a') if os.path.isdir(os.path.join(HERE, 'data')) else sys.stderr)
+try:
+    faulthandler.dump_traceback_later(1200, repeat=True, file=open(os.path.join(HERE, 'data', 'watchdog_stacks.txt'), 'a') if os.path.isdir(os.path.join(HERE, 'data')) else sys.stderr)
+except (OSError, ValueError, AttributeError):
+    pass
 
 from pipeline.run import RunConfig, load_orgs, run_pipeline  # noqa: E402
 

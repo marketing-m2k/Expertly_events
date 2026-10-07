@@ -18,6 +18,8 @@ skipped; consent banners are dismissed with the most privacy-preserving button
 
 from __future__ import annotations
 
+import os
+
 import threading
 import time
 from dataclasses import dataclass, field
@@ -156,7 +158,7 @@ class BrowserSession:
         _BROWSER_SLOTS.acquire()
         try:
             self._pw = sync_playwright().start()
-            self._browser = self._pw.chromium.launch()
+            self._browser = self._pw.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH') or None)
             ctx = self._browser.new_context(user_agent=USER_AGENT, viewport={"width": 1366, "height": 900}, ignore_https_errors=True,
                                             extra_http_headers={"Accept-Language": "en-US,en;q=0.9"})
             self.page = ctx.new_page()
